@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e536af3a-d10a-4bb7-ab89-162247992e2a" name="Default Changelist" comment="Initial branch commit." />
+    <list default="true" id="e536af3a-d10a-4bb7-ab89-162247992e2a" name="Default Changelist" comment="Initial branch commit.">
+      <change beforePath="$PROJECT_DIR$/.idea/coinvestment-cryptocurrency-exchange.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/coinvestment-cryptocurrency-exchange.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/Customer.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/Customer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_Customer.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_Customer.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,8 +16,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Python Unit Test" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -33,15 +39,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/nikitakurup/Documents/MscCS/7047CEM_Software _Development_Project/UserAccountDemo&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/nikitakurup/Documents/MscCS/7047CEM_Software _Development_Project/UserAccountDemo",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
-  <component name="RunManager" selected="Python.coinvestment-cryptocurrency-exchange">
+}]]></component>
+  <component name="RunManager">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="UserAccountDemo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -236,7 +243,7 @@
       <workItem from="1663336322969" duration="2838000" />
       <workItem from="1663341383824" duration="50000" />
       <workItem from="1663670061806" duration="1721000" />
-      <workItem from="1663674987979" duration="755000" />
+      <workItem from="1663674987979" duration="12657000" />
     </task>
     <task id="LOCAL-00001" summary="Initial branch commit.">
       <created>1663675262796</created>
@@ -245,7 +252,14 @@
       <option name="project" value="LOCAL" />
       <updated>1663675262796</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Initial branch commit.">
+      <created>1663766559092</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663766559092</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,7 +276,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/complete_purchase" />
+                        <option value="complete_purchase" />
                       </list>
                     </value>
                   </entry>
@@ -280,6 +294,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/UserAccountDemo$Unittests_in_app_test_py.coverage" NAME="Unittests in app_test.py Coverage Results" MODIFIED="1663339189795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test" />
+    <SUITE FILE_PATH="coverage/coinvestment_cryptocurrency_exchange$.coverage" NAME=" Coverage Results" MODIFIED="1663767420665" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/UserAccountDemo$app.coverage" NAME="app Coverage Results" MODIFIED="1663341392693" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/coinvestment_cryptocurrency_exchange$app.coverage" NAME="app Coverage Results" MODIFIED="1663780031864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/coinvestment_cryptocurrency_exchange$Wallet.coverage" NAME="Wallet Coverage Results" MODIFIED="1663780020422" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/models" />
   </component>
 </project>

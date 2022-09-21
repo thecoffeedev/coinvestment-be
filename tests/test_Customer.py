@@ -13,7 +13,7 @@ class TestCredentials(unittest.TestCase):
 
     def test_walletAddress_is_none(self):
         newUser = Customer("p", "e", "name")
-        self.assertNotEqual(newUser.getUserID(), None)  # add assertion here
+        self.assertEqual(newUser.getUserID(), None)  # add assertion here
 
 
 if __name__ == '__main__':

@@ -1,7 +1,10 @@
 # importing flask module fro
-from flask import Flask, render_template, request
+import json
+
+from flask import Flask, render_template, request, make_response
 from flaskext.mysql import MySQL
 import requests  # for API example
+from models.Wallet import Wallet
 import urllib.parse  # for API example
 
 mysql = MySQL()
@@ -18,9 +21,15 @@ mysql.init_app(app)
 
 
 # decorating index function with the app.route with url as /login
-@app.route('/')
-def home():
-    return render_template('home.html')
+@app.route('/', methods=['POST'])
+def homeNikita():
+    data = request.get_json()
+    data["walletAddress"] = "modified data"
+    walletAddressObj = Wallet()
+    walletAddressObj.set_walletAddress("wallet address")
+    print(walletAddressObj.get_walletAddress())
+    data["walletAddress"] = walletAddressObj.get_walletAddress()
+    return make_response(json.dumps(walletAddressObj.__dict__))
 
 
 @app.route('/enternew')

@@ -2,6 +2,7 @@ import hashlib
 import time
 
 class Customer:
+
     def __init__(self, password, emailAddress, name):
         self.__userID = None
         self.__passwordHash = None

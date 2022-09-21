@@ -1,8 +1,9 @@
 # importing flask module fro
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flaskext.mysql import MySQL
 import requests  # for API example
 import urllib.parse  # for API example
+import string
 
 mysql = MySQL()
 
@@ -18,14 +19,25 @@ mysql.init_app(app)
 
 
 # decorating index function with the app.route with url as /login
-@app.route('/')
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
+
+@app.route('/sendme', methods=['POST'])
 def home():
-    return render_template('home.html')
+    # if request.method == 'POST':
+        print(request.headers)
+        # print(request.data)
+        data = request.get_json()
+        print(data)
+        # data['returned data'] = "this is the returned data in upper case: " + data['test data'].upper()
+        # print(data)
+        return make_response(data, 200)
 
-
-@app.route('/enternew')
+@app.route('/getme', methods=['GET'])
 def new_user():
-    return render_template('new.html')
+    if request.method == 'GET':
+        return make_response("this is a test json?", 200)
 
 
 @app.route('/view')

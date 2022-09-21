@@ -1,11 +1,9 @@
 # importing flask module fro
-import json
-
 from flask import Flask, render_template, request, make_response
 from flaskext.mysql import MySQL
 import requests  # for API example
-from models.Wallet import Wallet
 import urllib.parse  # for API example
+import string
 
 mysql = MySQL()
 
@@ -21,20 +19,25 @@ mysql.init_app(app)
 
 
 # decorating index function with the app.route with url as /login
-@app.route('/', methods=['POST'])
-def homeNikita():
-    data = request.get_json()
-    data["walletAddress"] = "modified data"
-    walletAddressObj = Wallet()
-    walletAddressObj.set_walletAddress("wallet address")
-    print(walletAddressObj.get_walletAddress())
-    data["walletAddress"] = walletAddressObj.get_walletAddress()
-    return make_response(json.dumps(walletAddressObj.__dict__))
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
 
+@app.route('/sendme', methods=['POST'])
+def home():
+    # if request.method == 'POST':
+        print(request.headers)
+        # print(request.data)
+        data = request.get_json()
+        print(data)
+        # data['returned data'] = "this is the returned data in upper case: " + data['test data'].upper()
+        # print(data)
+        return make_response(data, 200)
 
-@app.route('/enternew')
+@app.route('/getme', methods=['GET'])
 def new_user():
-    return render_template('new.html')
+    if request.method == 'GET':
+        return make_response("this is a test json?", 200)
 
 
 @app.route('/view')

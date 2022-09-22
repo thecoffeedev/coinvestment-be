@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/coinvestment-cryptocurrency-exchange.iml" filepath="$PROJECT_DIR$/.idea/coinvestment-cryptocurrency-exchange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/coinvestment-be.iml" filepath="$PROJECT_DIR$/.idea/coinvestment-be.iml" />
     </modules>
   </component>
 </project>

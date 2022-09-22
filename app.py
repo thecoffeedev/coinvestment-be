@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
 import requests  # for API example
 import urllib.parse  # for API example
+from decouple import config  # for environment variables
 
 mysql = MySQL()
 
@@ -10,10 +11,10 @@ mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'Example'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
+app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
+app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
+app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
 mysql.init_app(app)
 
 
@@ -66,7 +67,8 @@ def addrec():
             url = "http://worldtimeapi.org/api/timezone/Europe/London"
             response = requests.get(url).json()
             print("" + str(response))  # response details
-            date_time = response["datetime"]  # retrieve response details form the attribute, datetime
+            # retrieve response details form the attribute, datetime
+            date_time = response["datetime"]
             # -------------------------------------------------------------------------------------------------
 
             con = mysql.connect()
@@ -123,7 +125,8 @@ def updaterec():
                         (email, username, password))
             con.commit()
 
-            cur.execute('SELECT username, email FROM User WHERE username=%s', username)
+            cur.execute(
+                'SELECT username, email FROM User WHERE username=%s', username)
             rows = cur.fetchall()
             con.commit()
 
@@ -147,7 +150,8 @@ def removerec():
                         (username, password))
             con.commit()
 
-            cur.execute('SELECT username, email FROM User WHERE username=%s', username)
+            cur.execute(
+                'SELECT username, email FROM User WHERE username=%s', username)
             rows = cur.fetchall()
             con.commit()
 

@@ -1,9 +1,8 @@
 import random
 import string
-import passlib
+from passlib.hash import bcrypt
 import time
 
-import passlib.hash
 
 class Utility:
 
@@ -15,10 +14,11 @@ class Utility:
             raise ValueError("Password must not be none")
         elif type(password) != str:
             raise TypeError("Password must be a string")
+
         if len(password) < 8 or len(password) > 72:
             raise ValueError("Password must be between 8 and 72 characters")
 
-        return passlib.hash.bcrypt.hash(password)
+        return bcrypt.hash(password)
 
     # Returns True if the password is verified
     @staticmethod
@@ -29,18 +29,19 @@ class Utility:
             raise TypeError("Password must be a string")
         elif type(passwordHash) != str:
             raise TypeError("Password hash must be a string")
-        elif len(password) < 8 or len(password) > 72:
+        elif len(str(password).strip()) < 8 or len(str(password).strip()) > 72:
             raise ValueError("Password must be between 8 and 72 characters")
         elif len(passwordHash) != 60:
             raise ValueError("Password has must be 60 characters")
 
-        return passlib.hash.bcrypt.verify(password, passwordHash)
+        return bcrypt.verify(password, passwordHash)
 
     @staticmethod
-    def generateNewCustomerID():
+    def generateRandomID():
         characters = string.ascii_letters + string.digits
         return "".join(random.choice(characters) for i in range(20))
 
     @staticmethod
-    def generateDatetime():
+    def unixTimestampToString(unixTimestamp):
+        #return time.time()
         pass

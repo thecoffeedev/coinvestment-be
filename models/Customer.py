@@ -1,9 +1,10 @@
+import re
+
 class Customer:
 
-    def __init__(self, customerID=None, passwordHash=None, registerDatetime = None, emailAddress=None,
-                 previousSignInDatetime=None, currentSignInDatetime=None, name=None):
-        # self.__customerID = Customer.generateNewCustomerID()
-        # self.setCustomerID(customerID)
+    def __init__(self, customerID=None, passwordHash=None, registerDatetime = None,
+                 emailAddress=None, previousSignInDatetime=None, currentSignInDatetime=None,
+                 name=None):
         self.__customerID = customerID
         self.__passwordHash = passwordHash
         self.__registerDatetime = registerDatetime
@@ -17,10 +18,10 @@ class Customer:
 
     def setCustomerID(self, customerID):
         if customerID is None:
-            raise ValueError("Customer ID must not be none")
+            raise TypeError("Customer ID must not be none")
         elif type(customerID) != str:
             raise TypeError("Customer ID must be alphanumeric string")
-        elif len(customerID) != 20:
+        elif len(str(customerID).strip()) != 20:
             raise ValueError("Customer ID must be exactly 20 characters")
         # If no customer ID exists (could be a new customer) then generate one and set it
         else:
@@ -33,10 +34,10 @@ class Customer:
 
     def setPasswordHash(self, passwordHash):
         if passwordHash is None:
-            raise ValueError("Password hash must not be none")
+            raise TypeError("Password hash must not be none")
         elif type(passwordHash) != str:
             raise TypeError("Password hash must be a string")
-        elif len(passwordHash) != 60:
+        elif len(str(passwordHash).strip()) != 60:
             raise ValueError("Password hash must be 60 characters")
         else:
             self.__passwordHash = passwordHash
@@ -46,31 +47,61 @@ class Customer:
 
     def setRegisterDatetime(self, registerDatetime):
         if registerDatetime is None:
-            raise ValueError("Register datetime must not be none")
+            raise TypeError("Register datetime must not be none")
+        elif type(registerDatetime) != float:
+            raise TypeError("Time must be in unix time format")
+        else:
+            self.__registerDatetime = registerDatetime
 
     def getEmailAddress(self):
         return self.__emailAddress
 
-    def setEmailAddress(self):
-        pass
+    def setEmailAddress(self, emailAddress):
+        emailPattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+        if emailAddress is None:
+            raise TypeError("Email address must not be none")
+        elif type(emailAddress) != str:
+            raise TypeError("Email address must be a string")
+
+        if re.fullmatch(emailPattern, emailAddress):
+            self.__emailAddress = emailAddress
+        else:
+            raise ValueError("Email address entered is not valid")
 
     def getPreviousSignInDatetime(self):
         return self.__previousSignInDatetime
 
-    def setPreviousSignInDatetime(self):
-        pass
+    def setPreviousSignInDatetime(self, previousSignInDatetime):
+        if previousSignInDatetime is None:
+            raise TypeError("Register datetime must not be none")
+        elif type(previousSignInDatetime) != float:
+            raise TypeError("Time must be in unix time format")
+        else:
+            self.__previousSignInDatetime = previousSignInDatetime
 
     def getCurrentSignInDatetime(self):
         return self.__currentSignInDatetime
 
-    def setCurrentSignInDatetime(self):
-        pass
+    def setCurrentSignInDatetime(self, currentSignInDatetime):
+        if currentSignInDatetime is None:
+            raise TypeError("Register datetime must not be none")
+        elif type(currentSignInDatetime) != float:
+            raise TypeError("Time must be in unix time format")
+        else:
+            self.__currentSignInDatetime = currentSignInDatetime
 
     def getName(self):
         return self.__name
 
-    def setName(self):
-        pass
+    def setName(self, name):
+        if name is None:
+            raise TypeError("Register datetime must not be none")
+        elif type(name) != str:
+            raise TypeError("Name must be a string")
+        elif len(str(name).strip()) < 2:
+            raise ValueError("Name must be more than two characters")
+        else:
+            self.__name = name
 
 
 

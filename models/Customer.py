@@ -23,11 +23,8 @@ class Customer:
             raise TypeError("Customer ID must be alphanumeric string")
         elif len(str(customerID).strip()) != 20:
             raise ValueError("Customer ID must be exactly 20 characters")
-        # If no customer ID exists (could be a new customer) then generate one and set it
         else:
             self.__customerID = customerID
-
-        # raise ValueError("Customer ID must not be set to None")
 
     def getPasswordHash(self):
         return self.__passwordHash
@@ -102,10 +99,3 @@ class Customer:
             raise ValueError("Name must be more than two characters")
         else:
             self.__name = name
-
-
-
-
-
-
-

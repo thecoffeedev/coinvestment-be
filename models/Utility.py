@@ -58,4 +58,3 @@ class Utility:
 
         t = datetime.fromtimestamp(unixTimestamp)
         return [t.strftime("%d-%m-%Y"), t.strftime("%H:%M:%S")]
-

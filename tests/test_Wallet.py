@@ -5,427 +5,344 @@ from models.Utility import Utility
 class TestWalletAddress(unittest.TestCase):
 
     def setUp(self):
-        self.newUser = Wallet()
+        self.newWallet = Wallet()
 
     def tearDown(self):
         pass
 
     def test_must_not_be_none_if_not_set(self):
-        self.assertIsNone(self.newUser.getWalletAddress())
+        self.assertIsNone(self.newWallet.getWalletAddress())
 
     def test_must_not_be_none_when_set(self):
-        self.newUser.setWalletAddress("randomstringoftwenty")
-        self.assertIsNotNone(self.newUser.getWalletAddress())
+        self.newWallet.setWalletAddress("randomstringoftwenty")
+        self.assertIsNotNone(self.newWallet.getWalletAddress())
 
     def test_must_not_be_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(12345678901234567890)
+            self.newWallet.setWalletAddress(12345678901234567890)
 
     def test_must_not_be_zero(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(0)
+            self.newWallet.setWalletAddress(0)
 
     def test_must_not_be_a_negative_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(-1)
+            self.newWallet.setWalletAddress(-1)
 
     def test_must_not_be_a_negative_float(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(-0.01)
+            self.newWallet.setWalletAddress(-0.01)
 
     def test_must_not_be_a_positive_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(1.00)
+            self.newWallet.setWalletAddress(1.00)
 
     def test_must_not_be_a_negative_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(-1.00)
+            self.newWallet.setWalletAddress(-1.00)
 
     def test_must_not_be_a_true_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(True)
+            self.newWallet.setWalletAddress(True)
 
     def test_must_not_be_a_false_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setWalletAddress(False)
+            self.newWallet.setWalletAddress(False)
 
     def test_must_be_string(self):
-        self.newUser.setWalletAddress("rjidsfou32r3ij98vslf")
-        self.assertIsInstance(self.newUser.getWalletAddress(), str)
+        self.newWallet.setWalletAddress("rjidsfou32r3ij98vslf")
+        self.assertIsInstance(self.newWallet.getWalletAddress(), str)
 
     def test_must_throw_error_when_one_character(self):
         with self.assertRaises(ValueError):
-            self.newUser.setWalletAddress("r")
+            self.newWallet.setWalletAddress("r")
 
     def test_must_throw_error_when_less_than_twenty_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setWalletAddress("rjidsfou32r3ij98")
+            self.newWallet.setWalletAddress("rjidsfou32r3ij98")
 
     def test_must_throw_error_when_more_than_twenty_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setWalletAddress("rjidsfou32r3ij98ou32r3ij98")
+            self.newWallet.setWalletAddress("rjidsfou32r3ij98ou32r3ij98")
 
     def test_must_throw_error_when_zero_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setWalletAddress("")
+            self.newWallet.setWalletAddress("")
 
     def test_must_be_generated_when_not_set_or_provided_in_initilization(self):
-        self.newUser.setWalletAddress(Utility.generateRandomID())
-        self.assertIsNotNone(self.newUser.getWalletAddress())
+        self.newWallet.setWalletAddress(Utility.generateRandomID())
+        self.assertIsNotNone(self.newWallet.getWalletAddress())
 
     def test_must_not_be_an_empty_string(self):
-        self.newUser.setWalletAddress(Utility.generateRandomID())
-        self.assertTrue(self.newUser.getWalletAddress())
+        self.newWallet.setWalletAddress(Utility.generateRandomID())
+        self.assertTrue(self.newWallet.getWalletAddress())
 
     def test_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newUser = Wallet("9jDo34hLdfJdsRdsFN29")
-        self.assertEqual(self.newUser.getWalletAddress(), "9jDo34hLdfJdsRdsFN29")
+        self.newWallet = Wallet("9jDo34hLdfJdsRdsFN29")
+        self.assertEqual(self.newWallet.getWalletAddress(), "9jDo34hLdfJdsRdsFN29")
 
 class TestCustomerID(unittest.TestCase):
 
     def setUp(self):
-        self.newUser = Wallet()
+        self.newWallet = Wallet()
 
     def tearDown(self):
         pass
 
     def test_must_not_be_none_if_not_set(self):
-        self.assertIsNone(self.newUser.getCustomerID())
+        self.assertIsNone(self.newWallet.getCustomerID())
 
     def test_must_not_be_none_when_set(self):
-        self.newUser.setCustomerID("randomstringoftwenty")
-        self.assertIsNotNone(self.newUser.getCustomerID())
+        self.newWallet.setCustomerID("randomstringoftwenty")
+        self.assertIsNotNone(self.newWallet.getCustomerID())
 
     def test_must_not_be_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(12345678901234567890)
+            self.newWallet.setCustomerID(12345678901234567890)
 
     def test_must_not_be_zero(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(0)
+            self.newWallet.setCustomerID(0)
 
     def test_must_not_be_a_negative_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-1)
+            self.newWallet.setCustomerID(-1)
 
     def test_must_not_be_a_negative_float(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-0.01)
+            self.newWallet.setCustomerID(-0.01)
 
     def test_must_not_be_a_positive_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(1.00)
+            self.newWallet.setCustomerID(1.00)
 
     def test_must_not_be_a_negative_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-1.00)
+            self.newWallet.setCustomerID(-1.00)
 
     def test_must_not_be_a_true_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(True)
+            self.newWallet.setCustomerID(True)
 
     def test_must_not_be_a_false_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(False)
+            self.newWallet.setCustomerID(False)
 
     def test_must_be_string(self):
-        self.newUser.setCustomerID("rjidsfou32r3ij98vslf")
-        self.assertIsInstance(self.newUser.getCustomerID(), str)
+        self.newWallet.setCustomerID("rjidsfou32r3ij98vslf")
+        self.assertIsInstance(self.newWallet.getCustomerID(), str)
 
     def test_must_throw_error_when_one_character(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("r")
+            self.newWallet.setCustomerID("r")
 
     def test_must_throw_error_when_less_than_twenty_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("rjidsfou32r3ij98")
+            self.newWallet.setCustomerID("rjidsfou32r3ij98")
 
     def test_must_throw_error_when_more_than_twenty_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("rjidsfou32r3ij98ou32r3ij98")
+            self.newWallet.setCustomerID("rjidsfou32r3ij98ou32r3ij98")
 
     def test_must_throw_error_when_zero_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("")
+            self.newWallet.setCustomerID("")
 
     def test_must_be_generated_when_not_set_or_provided_in_initilization(self):
-        self.newUser.setCustomerID(Utility.generateNewCustomerID())
-        self.assertIsNotNone(self.newUser.getCustomerID())
+        self.newWallet.setCustomerID(Utility.generateRandomID())
+        self.assertIsNotNone(self.newWallet.getCustomerID())
 
     def test_must_not_be_an_empty_string(self):
-        self.newUser.setCustomerID(Utility.generateNewCustomerID())
-        self.assertTrue(self.newUser.getCustomerID())
+        self.newWallet.setCustomerID(Utility.generateRandomID())
+        self.assertTrue(self.newWallet.getCustomerID())
 
     def test_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newUser = Wallet(customerID="9jDo34hLdfJdsRdsFN29")
-        self.assertEqual(self.newUser.getCustomerID(), "9jDo34hLdfJdsRdsFN29")
+        self.newWallet = Wallet(customerID="9jDo34hLdfJdsRdsFN29")
+        self.assertEqual(self.newWallet.getCustomerID(), "9jDo34hLdfJdsRdsFN29")
 
 class TestInitialBalance(unittest.TestCase):
 
     def setUp(self):
-        self.newUser = Wallet()
+        self.newWallet = Wallet()
 
     def tearDown(self):
         pass
 
     def test_initialBalance_must_throw_error_when_none(self):
         with self.assertRaises(ValueError):
-            self.newUser.setInitialBalance(None)
+            self.newWallet.setInitialBalance(None)
 
     def test_initialBalance_must_not_be_none_when_set(self):
-        self.newUser.setInitialBalance(5)
-        self.assertIsNotNone(self.newUser.getInitialBalance())
+        self.newWallet.setInitialBalance(5)
+        self.assertIsNotNone(self.newWallet.getInitialBalance())
 
     def test_initialBalance_must_not_be_str(self):
         with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance("12345678901234567890")
+            self.newWallet.setInitialBalance("12345678901234567890")
 
     def test_initialBalance_must_not_be_zero(self):
         with self.assertRaises(ValueError):
-            self.newUser.setInitialBalance(0)
+            self.newWallet.setInitialBalance(0)
 
     def test_initialBalance_must_not_be_a_negative_int(self):
         with self.assertRaises(ValueError):
-            self.newUser.setInitialBalance(-1)
+            self.newWallet.setInitialBalance(-1)
 
     def test_initialBalance_must_not_be_a_negative_float(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance(-0.01)
-
-    def test_initialBalance_must_not_be_a_positive_float_whole_number(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance(1.00)
+        with self.assertRaises(ValueError):
+            self.newWallet.setInitialBalance(-0.01)
 
     def test_initialBalance_must_not_be_a_negative_float_whole_number(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance(-1.00)
+        with self.assertRaises(ValueError):
+            self.newWallet.setInitialBalance(-1.00)
 
     def test_initialBalance_must_not_be_a_true_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance(True)
+            self.newWallet.setInitialBalance(True)
 
     def test_initialBalance_must_not_be_a_false_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setInitialBalance(False)
+            self.newWallet.setInitialBalance(False)
 
     def test_initialBalance_must_be_int(self):
-        self.newUser.setInitialBalance(1)
-        self.assertIsInstance(self.newUser.getInitialBalance(), int)
+        self.newWallet.setInitialBalance(1)
+        self.assertIsInstance(self.newWallet.getInitialBalance(), int)
 
     def test_InitialBalance_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newUser = Wallet(initialBalance=5)
-        self.assertEqual(self.newUser.getInitialBalance(), 5)
+        self.newWallet = Wallet(initialBalance=5)
+        self.assertEqual(self.newWallet.getInitialBalance(), 5)
 
 
 class TestCurrentBalance(unittest.TestCase):
 
     def setUp(self):
-        self.newUser = Wallet()
+        self.newWallet = Wallet()
 
     def tearDown(self):
         pass
 
     def test_currentBalance_must_throw_error_when_none(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCurrentBalance(None)
+            self.newWallet.setCurrentBalance(None)
 
     def test_currentBalance_must_not_be_none_when_set(self):
-        self.newUser.setCurrentBalance(5)
-        self.assertIsNotNone(self.newUser.getCurrentBalance())
+        self.newWallet.setCurrentBalance(5)
+        self.assertIsNotNone(self.newWallet.getCurrentBalance())
 
     def test_currentBalance_must_not_be_str(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance("12345678901234567890")
+            self.newWallet.setCurrentBalance("12345678901234567890")
 
     def test_currentBalance_must_not_be_a_negative_int(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCurrentBalance(-1)
+            self.newWallet.setCurrentBalance(-1)
 
     def test_currentBalance_must_not_be_a_negative_float(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance(-0.01)
+            self.newWallet.setCurrentBalance(-0.01)
 
     def test_currentBalance_must_not_be_a_positive_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance(1.00)
+            self.newWallet.setCurrentBalance(1.00)
 
     def test_currentBalance_must_not_be_a_negative_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance(-1.00)
+            self.newWallet.setCurrentBalance(-1.00)
 
     def test_currentBalance_must_not_be_a_true_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance(True)
+            self.newWallet.setCurrentBalance(True)
 
     def test_currentBalance_must_not_be_a_false_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCurrentBalance(False)
+            self.newWallet.setCurrentBalance(False)
 
     def test_currentBalance_must_be_int(self):
-        self.newUser.setCurrentBalance(1)
-        self.assertIsInstance(self.newUser.getCurrentBalance(), int)
+        self.newWallet.setCurrentBalance(1)
+        self.assertIsInstance(self.newWallet.getCurrentBalance(), int)
 
     def test_currentBalance_must_be_set_correctly_at_initilization_when_provided_zero(self):
-        self.newUser = Wallet(currentBalance=0)
-        self.assertEqual(self.newUser.getCurrentBalance(), 0)
+        self.newWallet = Wallet(currentBalance=0)
+        self.assertEqual(self.newWallet.getCurrentBalance(), 0)
 
     def test_currentBalance_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newUser = Wallet(currentBalance=5)
-        self.assertEqual(self.newUser.getCurrentBalance(), 5)
+        self.newWallet = Wallet(currentBalance=5)
+        self.assertEqual(self.newWallet.getCurrentBalance(), 5)
 
 class TestCryptocurrencyCode(unittest.TestCase):
 
     def setUp(self):
-        self.newUser = Wallet()
+        self.newWallet = Wallet()
 
     def tearDown(self):
         pass
 
     def test_cryptocurrencyCode_must_not_be_none_if_not_set(self):
-        self.assertIsNone(self.newUser.getCryptocurrencyCode())
+        self.assertIsNone(self.newWallet.getCryptocurrencyCode())
 
     def test_cryptocurrencyCode_must_not_be_only_spaces(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCryptocurrencyCode(" ")
+            self.newWallet.setCryptocurrencyCode(" ")
 
     def test_cryptocurrencyCode_must_not_be_none_when_set(self):
-        self.newUser.setCryptocurrencyCode("vbfhdyroeu")
-        self.assertIsNotNone(self.newUser.getCryptocurrencyCode())
+        self.newWallet.setCryptocurrencyCode("vbfhdyroeu")
+        self.assertIsNotNone(self.newWallet.getCryptocurrencyCode())
 
     def test_cryptocurrencyCode_must_not_be_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(12345678901234567890)
+            self.newWallet.setCryptocurrencyCode(12345678901234567890)
 
     def test_cryptocurrencyCode_must_not_be_zero(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(0)
+            self.newWallet.setCryptocurrencyCode(0)
 
     def test_cryptocurrencyCode_must_not_be_a_negative_int(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(-1)
+            self.newWallet.setCryptocurrencyCode(-1)
 
     def test_cryptocurrencyCode_must_not_be_a_negative_float(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(-0.01)
+            self.newWallet.setCryptocurrencyCode(-0.01)
 
     def test_cryptocurrencyCode_must_not_be_a_positive_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(1.00)
+            self.newWallet.setCryptocurrencyCode(1.00)
 
     def test_cryptocurrencyCode_must_not_be_a_negative_float_whole_number(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(-1.00)
+            self.newWallet.setCryptocurrencyCode(-1.00)
 
     def test_cryptocurrencyCode_must_not_be_a_true_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(True)
+            self.newWallet.setCryptocurrencyCode(True)
 
     def test_cryptocurrencyCode_must_not_be_a_false_bool(self):
         with self.assertRaises(TypeError):
-            self.newUser.setCryptocurrencyCode(False)
+            self.newWallet.setCryptocurrencyCode(False)
 
     def test_cryptocurrencyCode_must_be_string(self):
-        self.newUser.setCryptocurrencyCode("vbfhdyroeu")
-        self.assertIsInstance(self.newUser.getCryptocurrencyCode(), str)
+        self.newWallet.setCryptocurrencyCode("vbfhdyroeu")
+        self.assertIsInstance(self.newWallet.getCryptocurrencyCode(), str)
 
     def test_cryptocurrencyCode_must_throw_error_when_one_character(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCryptocurrencyCode("r")
+            self.newWallet.setCryptocurrencyCode("r")
 
     def test_cryptocurrencyCode_must_throw_error_when_less_than_ten_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCryptocurrencyCode("vbfhdyro")
+            self.newWallet.setCryptocurrencyCode("vbfhdyro")
 
     def test_cryptocurrencyCode_must_throw_error_when_more_than_ten_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCryptocurrencyCode("vbfhdyroeuvnbejkr")
+            self.newWallet.setCryptocurrencyCode("vbfhdyroeuvnbejkr")
 
     def test_cryptocurrencyCode_must_throw_error_when_zero_characters(self):
         with self.assertRaises(ValueError):
-            self.newUser.setCryptocurrencyCode("")
+            self.newWallet.setCryptocurrencyCode("")
 
     def test_cryptocurrencyCode_must_be_equal_to_the_set_value(self):
-        self.newUser = Wallet(cryptocurrencyCode="vbfhdyroeu")
-        self.assertEqual(self.newUser.getCryptocurrencyCode(), "vbfhdyroeu")
-
-class TestCustomerID(unittest.TestCase):
-
-    def setUp(self):
-        self.newUser = Wallet()
-
-    def tearDown(self):
-        pass
-
-    def test_must_not_be_none_if_not_set(self):
-        self.assertIsNone(self.newUser.getCustomerID())
-
-    def test_must_not_be_none_when_set(self):
-        self.newUser.setCustomerID("randomstringoftwenty")
-        self.assertIsNotNone(self.newUser.getCustomerID())
-
-    def test_must_not_be_int(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(12345678901234567890)
-
-    def test_must_not_be_zero(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(0)
-
-    def test_must_not_be_a_negative_int(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-1)
-
-    def test_must_not_be_a_negative_float(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-0.01)
-
-    def test_must_not_be_a_positive_float_whole_number(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(1.00)
-
-    def test_must_not_be_a_negative_float_whole_number(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(-1.00)
-
-    def test_must_not_be_a_true_bool(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(True)
-
-    def test_must_not_be_a_false_bool(self):
-        with self.assertRaises(TypeError):
-            self.newUser.setCustomerID(False)
-
-    def test_must_be_string(self):
-        self.newUser.setCustomerID("rjidsfou32r3ij98vslf")
-        self.assertIsInstance(self.newUser.getCustomerID(), str)
-
-    def test_must_throw_error_when_one_character(self):
-        with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("r")
-
-    def test_must_throw_error_when_less_than_twenty_characters(self):
-        with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("rjidsfou32r3ij98")
-
-    def test_must_throw_error_when_more_than_twenty_characters(self):
-        with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("rjidsfou32r3ij98ou32r3ij98")
-
-    def test_must_throw_error_when_zero_characters(self):
-        with self.assertRaises(ValueError):
-            self.newUser.setCustomerID("")
-
-    def test_must_be_generated_when_not_set_or_provided_in_initilization(self):
-        self.newUser.setCustomerID(Utility.generateRandomID())
-        self.assertIsNotNone(self.newUser.getCustomerID())
-
-    def test_must_not_be_an_empty_string(self):
-        self.newUser.setCustomerID(Utility.generateRandomID())
-        self.assertTrue(self.newUser.getCustomerID())
-
-    def test_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newUser = Wallet(customerID="9jDo34hLdfJdsRdsFN29")
-        self.assertEqual(self.newUser.getCustomerID(), "9jDo34hLdfJdsRdsFN29")
+        self.newWallet = Wallet(cryptocurrencyCode="vbfhdyroeu")
+        self.assertEqual(self.newWallet.getCryptocurrencyCode(), "vbfhdyroeu")
 
 
 class TestHoldingPeriod(unittest.TestCase):

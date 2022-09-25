@@ -3,7 +3,8 @@ import string
 
 class Wallet:
 
-    def __init__(self, walletAddress=None, customerID=None, initialBalance=0, currentBalance=0, cryptocurrencyCode=None, holdingPeriod=0):
+    def __init__(self, walletAddress=None, customerID=None, initialBalance=0,
+                 currentBalance=0, cryptocurrencyCode=None, holdingPeriod=0):
         self.__walletAddress = walletAddress
         self.__customerID = customerID
         self.__initialBalance = initialBalance
@@ -45,8 +46,8 @@ class Wallet:
     def setInitialBalance(self, initialBalance):
         if initialBalance is None:
             raise ValueError("Initial Balance must not be none")
-        if type(initialBalance) != int:
-            raise TypeError("Initial Balance must be an integer")
+        if type(initialBalance) != float and type(initialBalance) != int:
+            raise TypeError("Initial Balance must be a float")
         elif initialBalance <= 0:
             raise ValueError("Initial Balance must be greater than zero")
         else:

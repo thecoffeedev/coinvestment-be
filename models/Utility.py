@@ -1,7 +1,7 @@
 import random
 import string
 from passlib.hash import bcrypt
-import time
+from datetime import datetime
 
 
 class Utility:
@@ -20,7 +20,10 @@ class Utility:
 
         return bcrypt.hash(password)
 
-    # Returns True if the password is verified
+    """
+    Returns True if the password is verified
+    Return False if the password is unverified
+    """
     @staticmethod
     def verifyPassword(password, passwordHash):
         if password is None or passwordHash is None:
@@ -41,7 +44,18 @@ class Utility:
         characters = string.ascii_letters + string.digits
         return "".join(random.choice(characters) for i in range(20))
 
+    """
+    unixTimestamp argument can be a float or int.
+    Use time.time() to generate timestamp.
+    Returns a list. Element 0 is the date (D-M-Y). Element 1 is the time (H:M:S).
+    """
     @staticmethod
-    def unixTimestampToString(unixTimestamp):
-        #return time.time()
-        pass
+    def unixTimestampToStrings(unixTimestamp):
+        if unixTimestamp is None:
+            raise ValueError("Timestamp must not be none")
+        elif type(unixTimestamp) != float and type(unixTimestamp) != int:
+            raise TypeError("Timestamp must be a float or int")
+
+        t = datetime.fromtimestamp(unixTimestamp)
+        return [t.strftime("%d-%m-%Y"), t.strftime("%H:%M:%S")]
+

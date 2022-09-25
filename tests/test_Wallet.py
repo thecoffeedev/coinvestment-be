@@ -70,11 +70,11 @@ class TestWalletAddress(unittest.TestCase):
             self.newUser.setWalletAddress("")
 
     def test_walletAddress_must_be_generated_when_not_set_or_provided_in_initilization(self):
-        self.newUser.setWalletAddress(Utility.generateNewCustomerID())
+        self.newUser.setWalletAddress(Utility.generateRandomID())
         self.assertIsNotNone(self.newUser.getWalletAddress())
 
     def test_walletAddress_must_not_be_an_empty_string(self):
-        self.newUser.setWalletAddress(Utility.generateNewCustomerID())
+        self.newUser.setWalletAddress(Utility.generateRandomID())
         self.assertTrue(self.newUser.getWalletAddress())
 
     def test_walletAddress_must_be_set_correctly_at_initilization_when_provided(self):
@@ -416,11 +416,11 @@ class TestCustomerID(unittest.TestCase):
             self.newUser.setCustomerID("")
 
     def test_customerID_must_be_generated_when_not_set_or_provided_in_initilization(self):
-        self.newUser.setCustomerID(Utility.generateNewCustomerID())
+        self.newUser.setCustomerID(Utility.generateRandomID())
         self.assertIsNotNone(self.newUser.getCustomerID())
 
     def test_customerID_must_not_be_an_empty_string(self):
-        self.newUser.setCustomerID(Utility.generateNewCustomerID())
+        self.newUser.setCustomerID(Utility.generateRandomID())
         self.assertTrue(self.newUser.getCustomerID())
 
     def test_customerID_must_be_set_correctly_at_initilization_when_provided(self):

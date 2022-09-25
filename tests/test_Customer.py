@@ -18,63 +18,63 @@ class TestCustomerID(unittest.TestCase):
         self.newUser.setCustomerID("randomstringoftwenty")
         self.assertIsNotNone(self.newUser.getCustomerID())
 
-    def test_customerID_must_not_be_int(self):
+    def test_customerID_must_throw_error_for_int_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(12345678901234567890)
 
-    def test_customerID_must_not_be_zero(self):
+    def test_customerID_must_throw_error_for_0_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(0)
 
-    def test_customerID_must_not_be_a_negative_int(self):
+    def test_customerID_must_throw_error_for_negative_int_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(-1)
 
-    def test_customerID_must_not_be_a_negative_float(self):
+    def test_customerID_must_throw_error_for_negative_float_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(-0.01)
 
-    def test_customerID_must_not_be_a_positive_float_whole_number(self):
+    def test_customerID_must_throw_error_for_positive_float_whole_number_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(1.00)
 
-    def test_customerID_must_not_be_a_negative_float_whole_number(self):
+    def test_customerID_must_throw_error_for_negative_float_whole_number_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(-1.00)
 
-    def test_customerID_must_not_be_a_true_boolean(self):
+    def test_customerID_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(True)
 
-    def test_customerID_must_not_be_a_false_boolean(self):
+    def test_customerID_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(False)
 
-    def test_customerID_must_not_be_an_string_of_space(self):
+    def test_customerID_must_throw_error_for_string_of_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID(" ")
 
-    def test_customerID_must_not_be_an_string_of_multiple_space(self):
+    def test_customerID_must_throw_error_for_string_of_multiple_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID("      ")
 
-    def test_customerID_must_be_string(self):
+    def test_customerID_must_be_set_string(self):
         self.newUser.setCustomerID("rjidsfou32r3ij98vslf")
         self.assertIsInstance(self.newUser.getCustomerID(), str)
 
-    def test_customerID_must_throw_error_when_one_character(self):
+    def test_customerID_must_throw_error_for_1_character_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID("r")
 
-    def test_customerID_must_throw_error_when_less_than_twenty_characters(self):
+    def test_customerID_must_throw_error_for_less_than_20_characters_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID("rjidsfou32r3ij98")
 
-    def test_customerID_must_throw_error_when_more_than_twenty_characters(self):
+    def test_customerID_must_throw_error_for_more_than_20_characters_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID("rjidsfou32r3ij98ou32r3ij98")
 
-    def test_customerID_must_throw_error_when_zero_characters(self):
+    def test_customerID_must_throw_error_for_empty_string_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setCustomerID("")
 
@@ -102,62 +102,62 @@ class TestPasswordHash(unittest.TestCase):
     def test_passwordHash_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getPasswordHash())
 
-    def test_passwordHash_must_not_accept_none_argument(self):
+    def test_passwordHash_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(None)
 
-    def test_passwordHash_must_not_be_true_boolean(self):
+    def test_passwordHash_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(True)
 
-    def test_password_must_not_be_false_boolean(self):
+    def test_password_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(False)
 
-    def test_passwordHash_must_not_be_int(self):
+    def test_passwordHash_must_throw_error_for_int_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(123)
 
-    def test_passwordHash_must_not_be_zero(self):
+    def test_passwordHash_must_throw_error_for_0_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(0)
 
-    def test_passwordHash_must_not_be_a_negative_int(self):
+    def test_passwordHash_must_throw_error_for_negative_int_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(-1)
 
-    def test_passwordHash_must_not_be_a_negative_float(self):
+    def test_passwordHash_must_throw_error_for_negative_float_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCustomerID(-0.01)
 
-    def test_passwordHash_must_not_be_a_positive_float_whole_number(self):
+    def test_passwordHash_must_throw_error_for_positive_float_whole_number_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(1.00)
 
-    def test_passwordHash_must_not_be_a_negative_float_whole_number(self):
+    def test_passwordHash_must_throw_error_for_negative_float_whole_number_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPasswordHash(-1.00)
 
-    def test_passwordHash_must_not_be_an_string_of_space(self):
+    def test_passwordHash_must_throw_error_for_string_of_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash(" ")
 
-    def test_passwordHash_must_not_be_an_string_of_multiple_space(self):
+    def test_passwordHash_must_throw_error_for_string_of_multiple_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash("      ")
 
-    def test_passwordHash_must_throw_error_when_one_character(self):
+    def test_passwordHash_must_throw_error_for_one_character_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash("r")
-    def test_passwordHash_must_throw_error_when_less_than_sixty_characters(self):
+    def test_passwordHash_must_throw_error_for_less_than_60_characters_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash("rjidsfou32r3ij98")
 
-    def test_passwordHash_must_throw_error_when_more_than_sixty_characters(self):
+    def test_passwordHash_must_throw_error_for_more_than_60_characters_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash("rjidsfou32r3ij98ou32r3ij98")
 
-    def test_passwordHash_must_throw_error_when_empty_string(self):
+    def test_passwordHash_must_throw_error_for_empty_string_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setPasswordHash("")
 
@@ -173,19 +173,19 @@ class TestRegisterDatetime(unittest.TestCase):
     def test_registerDatetime_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getRegisterDatetime())
 
-    def test_registerDatetime_must_not_accept_none_argument(self):
+    def test_registerDatetime_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setRegisterDatetime(None)
 
-    def test_registerDatetime_must_not_be_a_string(self):
+    def test_registerDatetime_must_throw_error_for_string_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setRegisterDatetime("1232434334.3843943")
 
-    def test_registerDatetime_must_not_be_a_false_boolean(self):
+    def test_registerDatetime_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setRegisterDatetime(False)
 
-    def test_registerDatetime_must_not_be_a_true_boolean(self):
+    def test_registerDatetime_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setRegisterDatetime(True)
 
@@ -205,39 +205,39 @@ class TestEmailAddress(unittest.TestCase):
     def test_email_address_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getEmailAddress())
 
-    def test_email_address_must_not_accept_none_argument(self):
+    def test_email_address_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setEmailAddress(None)
 
-    def test_email_address_must_not_be_a_zero(self):
+    def test_email_address_must_throw_error_for_a_0_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setEmailAddress(0)
 
-    def test_email_address_must_not_be_an_int(self):
+    def test_email_address_must_throw_error_for_int_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setEmailAddress(1)
 
-    def test_email_address_must_not_be_a_float(self):
+    def test_email_address_must_throw_error_for_float_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setEmailAddress(1.01)
 
-    def test_email_address_must_not_be_an_string_of_space(self):
+    def test_email_address_must_throw_error_for_string_of_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setEmailAddress(" ")
 
-    def test_email_address_must_not_be_an_string_of_multiple_space(self):
+    def test_email_address_must_throw_error_for_string_of_multiple_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setEmailAddress("      ")
 
-    def test_email_address_must_not_accept_a_single_character(self):
+    def test_email_address_must_throw_error_for_a_1_character_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setEmailAddress("a")
 
-    def test_email_address_must_not_accept_a_single_at_character(self):
+    def test_email_address_must_throw_error_for_a_1_at_character_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setEmailAddress("@")
 
-    def test_email_address_must_not_accept_just_at_dot_characters(self):
+    def test_email_address_must_throw_error_for_just_at_dot_characters_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setEmailAddress("@.")
 
@@ -265,19 +265,19 @@ class TestPreviousSignInDatetime(unittest.TestCase):
     def test_previousSignInDatetime_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getPreviousSignInDatetime())
 
-    def test_previousSignInDatetime_must_not_accept_none_argument(self):
+    def test_previousSignInDatetime_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPreviousSignInDatetime(None)
 
-    def test_previousSignInDatetime_must_not_be_a_string(self):
+    def test_previousSignInDatetime_must_throw_error_for_a_string_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPreviousSignInDatetime("1232434334.3843943")
 
-    def test_previousSignInDatetime_must_not_be_a_false_boolean(self):
+    def test_previousSignInDatetime_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPreviousSignInDatetime(False)
 
-    def test_previousSignInDatetime_must_not_be_a_true_boolean(self):
+    def test_previousSignInDatetime_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setPreviousSignInDatetime(True)
 
@@ -297,19 +297,19 @@ class TestCurrentSignInDatetime(unittest.TestCase):
     def test_currentSignInDatetime_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getCurrentSignInDatetime())
 
-    def test_currentSignInDatetime_must_not_accept_none_argument(self):
+    def test_currentSignInDatetime_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCurrentSignInDatetime(None)
 
-    def test_currentSignInDatetime_must_not_be_a_string(self):
+    def test_currentSignInDatetime_must_throw_error_for_a_string_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCurrentSignInDatetime("1232434334.3843943")
 
-    def test_currentSignInDatetime_must_not_be_a_false_boolean(self):
+    def test_currentSignInDatetime_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCurrentSignInDatetime(False)
 
-    def test_currentSignInDatetime_must_not_be_a_true_boolean(self):
+    def test_currentSignInDatetime_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setCurrentSignInDatetime(True)
 
@@ -329,43 +329,43 @@ class TestName(unittest.TestCase):
     def test_currentSignInDatetime_must_be_none_if_not_set(self):
         self.assertIsNone(self.newUser.getName())
 
-    def test_name_must_not_accept_none_argument(self):
+    def test_name_must_throw_error_for_none_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(None)
 
-    def test_name_must_not_accept_an_int_argument(self):
+    def test_name_must_throw_error_for_int_argument_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(1)
 
-    def test_name_must_not_be_zero(self):
+    def test_name_must_throw_error_for_0_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(0)
 
-    def test_name_must_not_be_float(self):
+    def test_name_must_throw_error_for_float_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(0.01)
 
-    def test_name_must_not_be_true_boolean(self):
+    def test_name_must_throw_error_for_true_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(True)
 
-    def test_name_must_not_be_false_boolean(self):
+    def test_name_must_throw_error_for_false_boolean_argument(self):
         with self.assertRaises(TypeError):
             self.newUser.setName(False)
 
-    def test_name_must_not_be_an_string_of_space(self):
+    def test_name_must_throw_error_for_string_of_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setName(" ")
 
-    def test_name_must_not_be_an_string_of_multiple_space(self):
+    def test_name_must_throw_error_for_string_of_multiple_space_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setName("      ")
 
-    def test_name_must_not_be_empty_string(self):
+    def test_name_must_throw_error_for_empty_string_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setName("")
 
-    def test_name_must_not_be_a_single_character(self):
+    def test_name_must_throw_error_for_single_character_argument(self):
         with self.assertRaises(ValueError):
             self.newUser.setName("a")
 

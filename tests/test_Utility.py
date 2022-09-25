@@ -50,6 +50,22 @@ class TestGeneratePasswordHash(unittest.TestCase):
         with self.assertRaises(ValueError):
             Utility.generatePasswordHash("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 
+    def test_generatePasswordHash_must_return_a_string_of_printable_characters(self):
+        passwordHash = Utility.generatePasswordHash("password")
+        self.assertTrue(passwordHash.isprintable())
+
+    def test_generatePasswordHash_must_not_return_a_string_of_alphanumeric_characters(self):
+        passwordHash = Utility.generatePasswordHash("password")
+        self.assertFalse(passwordHash.isalnum())
+
+    def test_generatePasswordHash_must_return_a_string_of_ascii_characters(self):
+        passwordHash = Utility.generatePasswordHash("password")
+        self.assertTrue(passwordHash.isascii())
+
+    def test_generatePasswordHash_must_not_return_a_string_of_space_characters(self):
+        passwordHash = Utility.generatePasswordHash("password")
+        self.assertFalse(passwordHash.isspace())
+
 
 class TestVerifyPassword(unittest.TestCase):
 
@@ -161,13 +177,51 @@ class TestVerifyPassword(unittest.TestCase):
 class TestGenerateRandomID(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.randomID = Utility.generateRandomID()
 
     def tearDown(self):
         pass
 
+    def test_generateRandomID_must_not_return_int(self):
+        self.assertNotIsInstance(self.randomID, int)
+    def test_generateRandomID_must_not_return_float(self):
+        self.assertNotIsInstance(self.randomID, float)
+
+    def test_generateRandomID_must_not_return_boolean(self):
+        self.assertNotIsInstance(self.randomID, bool)
+    def test_generateRandomID_must_not_return_dict(self):
+        self.assertNotIsInstance(self.randomID, dict)
+
+    def test_generateRandomID_must_not_return_tuple(self):
+        self.assertNotIsInstance(self.randomID, tuple)
+
+    def test_generateRandomID_must_not_return_bytes(self):
+        self.assertNotIsInstance(self.randomID, bytes)
+
+    def test_generateRandomID_must_not_return_set(self):
+        self.assertNotIsInstance(self.randomID, set)
+
+    def test_generateRandomID_must_return_a_string(self):
+        self.assertIsInstance(self.randomID, str)
+
+    def test_generateRandomID_must_not_return_a_string_of_19_characters(self):
+        self.assertNotEqual(len(self.randomID), 19)
+
+    def test_generateRandomID_must_not_return_a_string_of_21_characters(self):
+        self.assertNotEqual(len(self.randomID), 21)
+
     def test_generateRandomID_must_return_a_string_of_20_characters(self):
-        Utility.generateRandomID()
+        self.assertEqual(len(self.randomID), 20)
+
+    def test_generateRandomID_must_return_a_string_of_printable_characters(self):
+        self.assertTrue(self.randomID.isprintable())
+
+    def test_generateRandomID_must_return_a_string_of_alphanumeric_characters(self):
+        self.assertTrue(self.randomID.isalnum())
+
+    def test_generateRandomID_must_return_a_string_of_ascii_characters(self):
+        self.assertTrue(self.randomID.isascii())
+
 
 class TestUnixTimestampToString(unittest.TestCase):
 

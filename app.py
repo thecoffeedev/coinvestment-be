@@ -1,9 +1,10 @@
-# importing flask module fro
+import flask
 from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
-import requests  # for API example
-import urllib.parse  # for API example
-from decouple import config  # for environment variables
+# import requests
+import json
+import urllib.parse
+# from decouple import config  # for environment variables
 
 mysql = MySQL()
 
@@ -11,47 +12,53 @@ mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
-app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
-app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
-app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
+# app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
+# app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
+# app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
+# app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
 mysql.init_app(app)
 
 
 # decorating index function with the app.route with url as /login
-@app.route('/')
+@app.route('/', methods=["GET"])
 def home():
-    return render_template('home.html')
+    return flask.make_response("test")
 
-# @app.route('/', methods=['POST'])
-# def homeNikita():
-#     data = request.get_json()
-#     data["walletAddress"] = "modified data"
-#     walletAddressObj = Wallet()
-#     walletAddressObj.set_walletAddress("wallet address")
-#     print(walletAddressObj.get_walletAddress())
-#     data["walletAddress"] = walletAddressObj.get_walletAddress()
-#     return make_response(json.dumps(walletAddressObj.__dict__))
+@app.route('/sign-up', methods=["POST"])
+def sign_up():
+    data = request.get_json()
+    print(data["email address"])
+    response = \
+    {
+        "status":
+        {
+            "status code": "SUCCESS",
+            "status message": "Successfully signed up."
+        },
+        "name": data["name"],
+        "email address": data["email address"]
+    }
+    return flask.make_response(response)
 
+@app.route('/sign-in', methods=["POST"])
+def sign_in():
+    data = request.get_json()
+    print(data["email address"])
+    print(data["password"])
+    response = \
+    {
+        "status":
+        {
+            "status code": "SUCCESS",
+            "status message": "Successfully signed in."
+        },
+        "name": "Welcome user"
+    }
+    return flask.make_response(response)
 
-@app.route('/enternew')
-def new_user():
-    return render_template('new.html')
-
-
-@app.route('/view')
-def view_user():
+@app.route('/view-cryptocurrencies', methods=["GET"])
+def view_cryptocurrencies():
     return render_template('search.html')
-
-
-@app.route('/updatenew')
-def update_user():
-    return render_template('update.html')
-
-
-@app.route('/remove')
-def remove_user():
-    return render_template('remove.html')
 
 
 @app.route('/addrec', methods=['POST', 'GET'])

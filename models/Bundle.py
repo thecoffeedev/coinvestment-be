@@ -58,7 +58,7 @@ class Bundle:
     def setAmount(self, amount):
         if amount is None:
             raise ValueError("Amount must not be none")
-        elif type(amount) != float and type(amount) != int:
+        elif type(amount) != float:
             raise TypeError("Amount must be a float")
         elif amount <= 0:
             raise ValueError("Amount must be greater than 0")
@@ -97,14 +97,7 @@ class Bundle:
             raise TypeError("Status must not be none")
         elif type(status) != str:
             raise TypeError("Status must be a string")
-        elif str(status).lower() != "active" and str(status).lower() != "inactive":
-            raise ValueError("Status must be 'active' or 'inactive'")
+        elif str(status).upper() != 'ACTIVE' and str(status).upper() != 'INACTIVE':
+            raise ValueError("Status must be 'ACTIVE' or 'INACTIVE'")
         else:
-            self.__status = status
-
-
-
-
-
-
-
+            self.__status = str(status).upper();

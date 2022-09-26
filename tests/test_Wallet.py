@@ -173,7 +173,7 @@ class TestInitialBalance(unittest.TestCase):
             self.newWallet.setInitialBalance(None)
 
     def test_initialBalance_must_not_be_none_when_set(self):
-        self.newWallet.setInitialBalance(5)
+        self.newWallet.setInitialBalance(5.0)
         self.assertIsNotNone(self.newWallet.getInitialBalance())
 
     def test_initialBalance_must_not_be_str(self):
@@ -182,10 +182,10 @@ class TestInitialBalance(unittest.TestCase):
 
     def test_initialBalance_must_not_be_zero(self):
         with self.assertRaises(ValueError):
-            self.newWallet.setInitialBalance(0)
+            self.newWallet.setInitialBalance(0.0)
 
     def test_initialBalance_must_not_be_a_negative_int(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.newWallet.setInitialBalance(-1)
 
     def test_initialBalance_must_not_be_a_negative_float(self):
@@ -204,9 +204,9 @@ class TestInitialBalance(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newWallet.setInitialBalance(False)
 
-    def test_initialBalance_must_be_int(self):
-        self.newWallet.setInitialBalance(1)
-        self.assertIsInstance(self.newWallet.getInitialBalance(), int)
+    def test_initialBalance_must_be_float(self):
+        self.newWallet.setInitialBalance(1.0)
+        self.assertIsInstance(self.newWallet.getInitialBalance(), float)
 
     def test_InitialBalance_must_be_set_correctly_at_initilization_when_provided(self):
         self.newWallet = Wallet(initialBalance=5)
@@ -226,7 +226,7 @@ class TestCurrentBalance(unittest.TestCase):
             self.newWallet.setCurrentBalance(None)
 
     def test_currentBalance_must_not_be_none_when_set(self):
-        self.newWallet.setCurrentBalance(5)
+        self.newWallet.setCurrentBalance(5.0)
         self.assertIsNotNone(self.newWallet.getCurrentBalance())
 
     def test_currentBalance_must_not_be_str(self):
@@ -234,19 +234,19 @@ class TestCurrentBalance(unittest.TestCase):
             self.newWallet.setCurrentBalance("12345678901234567890")
 
     def test_currentBalance_must_not_be_a_negative_int(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.newWallet.setCurrentBalance(-1)
 
     def test_currentBalance_must_not_be_a_negative_float(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             self.newWallet.setCurrentBalance(-0.01)
 
-    def test_currentBalance_must_not_be_a_positive_float_whole_number(self):
-        with self.assertRaises(TypeError):
-            self.newWallet.setCurrentBalance(1.00)
+    # def test_currentBalance_must_not_be_a_positive_float_whole_number(self):
+    #     with self.assertRaises(TypeError):
+    #         self.newWallet.setCurrentBalance(1.00)
 
     def test_currentBalance_must_not_be_a_negative_float_whole_number(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             self.newWallet.setCurrentBalance(-1.00)
 
     def test_currentBalance_must_not_be_a_true_bool(self):
@@ -257,17 +257,17 @@ class TestCurrentBalance(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newWallet.setCurrentBalance(False)
 
-    def test_currentBalance_must_be_int(self):
-        self.newWallet.setCurrentBalance(1)
-        self.assertIsInstance(self.newWallet.getCurrentBalance(), int)
+    def test_currentBalance_must_throw_an_error_for_int_argument(self):
+        with self.assertRaises(TypeError):
+            self.newWallet.setCurrentBalance(8)
 
     def test_currentBalance_must_be_set_correctly_at_initilization_when_provided_zero(self):
-        self.newWallet = Wallet(currentBalance=0)
-        self.assertEqual(self.newWallet.getCurrentBalance(), 0)
+        self.newWallet = Wallet(currentBalance=0.0)
+        self.assertEqual(self.newWallet.getCurrentBalance(), 0.0)
 
     def test_currentBalance_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newWallet = Wallet(currentBalance=5)
-        self.assertEqual(self.newWallet.getCurrentBalance(), 5)
+        self.newWallet = Wallet(currentBalance=5.0)
+        self.assertEqual(self.newWallet.getCurrentBalance(), 5.0)
 
 class TestCryptocurrencyCode(unittest.TestCase):
 

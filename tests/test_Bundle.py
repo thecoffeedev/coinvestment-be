@@ -244,7 +244,7 @@ class TestAmount(unittest.TestCase):
             self.newBundle.setAmount(None)
 
     def test_must_not_be_none_when_set(self):
-        self.newBundle.setAmount(5)
+        self.newBundle.setAmount(5.0)
         self.assertIsNotNone(self.newBundle.getAmount())
 
     def test_must_not_be_str(self):
@@ -252,11 +252,11 @@ class TestAmount(unittest.TestCase):
             self.newBundle.setAmount("12345678901234567890")
 
     def test_must_not_be_zero(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.newBundle.setAmount(0)
 
     def test_must_not_be_a_negative_int(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.newBundle.setAmount(-1)
 
     def test_must_not_be_a_negative_float(self):
@@ -275,9 +275,9 @@ class TestAmount(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newBundle.setAmount(False)
 
-    def test_must_be_int(self):
-        self.newBundle.setAmount(1)
-        self.assertIsInstance(self.newBundle.getAmount(), int)
+    def test_must_raise_an_error_for_int_argument(self):
+        with self.assertRaises(TypeError):
+            self.newBundle.setAmount(1)
 
     def test_must_be_set_correctly_at_initilization_when_provided(self):
         self.newBundle = Bundle(amount=5)
@@ -428,17 +428,28 @@ class TestStatus(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.newBundle.setStatus("")
 
-    def test_must_be_provded_when_not_set_or_provided_in_initilization(self):
-        self.newBundle.setStatus("active")
-        self.assertIsNotNone(self.newBundle.getStatus())
+    def test_must_be_set_correctly_at_initilization_when_provided(self):
+        with self.assertRaises(ValueError):
+            self.newBundle.setStatus("9jDo34hLdfJdsRdsFN29")
 
     def test_must_not_be_an_empty_string(self):
         with self.assertRaises(ValueError):
             self.newBundle.setStatus("")
+    def test_must_be_set_as_upper_case_for_active_status(self):
+        self.newBundle.setStatus("active")
+        self.assertEqual(self.newBundle.getStatus(), "ACTIVE")
 
-    def test_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newBundle = Bundle(status="9jDo34hLdfJdsRdsFN29")
-        self.assertEqual(self.newBundle.getStatus(), "9jDo34hLdfJdsRdsFN29")
+    def test_must_be_set_as_upper_case_for_inactive_status(self):
+        self.newBundle.setStatus("inactive")
+        self.assertEqual(self.newBundle.getStatus(), "INACTIVE")
+
+    def test_must_not_be_set_as_lower_case_for_active_status(self):
+        self.newBundle.setStatus("active")
+        self.assertNotEqual(self.newBundle.getStatus(), "active")
+
+    def test_must_not_be_set_as_lower_case_for_inactive_status(self):
+        self.newBundle.setStatus("inactive")
+        self.assertNotEqual(self.newBundle.getStatus(), "inactive")
 
 
 if __name__ == '__main__':

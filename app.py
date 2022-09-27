@@ -1,9 +1,10 @@
-# importing flask module fro
+import flask
 from flask import Flask, render_template, request
 from flaskext.mysql import MySQL
-import requests  # for API example
-import urllib.parse  # for API example
-from decouple import config  # for environment variables
+import requests # for making API calls
+import json
+import urllib.parse
+# from decouple import config  # for environment variables
 
 mysql = MySQL()
 
@@ -11,49 +12,217 @@ mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
-app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
-app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
-app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
+# app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
+# app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
+# app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
+# app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
 mysql.init_app(app)
 
 
-# decorating index function with the app.route with url as /login
-@app.route('/')
+@app.route('/', methods=["GET"])
 def home():
-    return render_template('home.html')
-
-# @app.route('/', methods=['POST'])
-# def homeNikita():
-#     data = request.get_json()
-#     data["walletAddress"] = "modified data"
-#     walletAddressObj = Wallet()
-#     walletAddressObj.set_walletAddress("wallet address")
-#     print(walletAddressObj.get_walletAddress())
-#     data["walletAddress"] = walletAddressObj.get_walletAddress()
-#     return make_response(json.dumps(walletAddressObj.__dict__))
+    return flask.make_response("test")
 
 
-@app.route('/enternew')
-def new_user():
-    return render_template('new.html')
+@app.route('/sign-up', methods=["POST"])
+def sign_up():
+    data = request.get_json()
+    print(data["email address"])
+    response = \
+    {
+        "status":
+        {
+            "status code": "SUCCESS",
+            "status message": "Successfully signed up"
+        },
+        "name": data["name"],
+        "email address": data["email address"]
+    }
+    return flask.make_response(response)
 
 
-@app.route('/view')
-def view_user():
-    return render_template('search.html')
+@app.route('/sign-in', methods=["POST"])
+def sign_in():
+    data = request.get_json()
+    print(data["email address"])
+    print(data["password"])
+    response = \
+    {
+        "status":
+        {
+            "status code": "SUCCESS",
+            "status message": "Successfully signed in"
+        },
+        "name": "Welcome <name>"
+    }
+    return flask.make_response(response)
 
 
-@app.route('/updatenew')
-def update_user():
-    return render_template('update.html')
+@app.route('/view-available-cryptocurrencies', methods=["GET"])
+def view_available_cryptocurrencies():
+    url = "https://api.coingecko.com/api/v3/search/trending"
+    trendingCoins = requests.get(url).json()
+    availableCryptocurrencies = []
+    for coin in trendingCoins["coins"]:
+        x = {
+            "cryptocurrency code": coin["item"]["symbol"],
+            "cryptocurrency name": coin["item"]["name"],
+            "iconPNG": coin["item"]["large"]
+        }
+        availableCryptocurrencies.append(x)
+    print(availableCryptocurrencies)
+    response = \
+        {
+            "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "List of coins with code, name and symbol"
+            },
+            "available cryptocurrencies": availableCryptocurrencies
+        }
+
+    return flask.make_response(response)
 
 
-@app.route('/remove')
-def remove_user():
-    return render_template('remove.html')
+@app.route('/view-available-bundles', methods=["GET"])
+def view_available_bundles():
+    availableBundles = [
+                            {
+                                "Low risk":
+                                {
+                                    "Minimum holding period": 6,
+                                    "Bundles":
+                                    [
+                                        {
+                                            "cryptocurrency code": "btc",
+                                            "cryptocurrency name": "Bitcoin",
+                                            "percentage": 50
+                                        },
+                                        {
+                                            "cryptocurrency code": "eth",
+                                            "cryptocurrency name": "Ethereum",
+                                            "percentage": 50
+                                        }
+                                    ]
+                                },
+                                "Medium risk":
+                                {
+                                    "Minimum holding period": 12,
+                                    "Bundles":
+                                    [
+                                        {
+                                            "cryptocurrency code": "btc",
+                                            "cryptocurrency name": "Bitcoin",
+                                            "percentage": 25
+                                        },
+                                        {
+                                            "cryptocurrency code": "eth",
+                                            "cryptocurrency name": "Ethereum",
+                                            "percentage": 15
+                                        },
+                                        {
+                                            "cryptocurrency code": "xrp",
+                                            "cryptocurrency name": "Ripple",
+                                            "percentage": 15
+                                        },
+                                        {
+                                            "cryptocurrency code": "ltc",
+                                            "cryptocurrency name": "Litecoin",
+                                            "percentage": 25
+                                        },
+                                        {
+                                            "cryptocurrency code": "xmr",
+                                            "cryptocurrency name": "Monero",
+                                            "percentage": 20
+                                        }
+                                    ]
+                                },
+                                "High risk":
+                                {
+                                    "Minimum holding period": 12,
+                                    "Bundles":
+                                    [
+                                        {
+                                            "cryptocurrency code": "doge",
+                                            "cryptocurrency name": "Dogecoin",
+                                            "percentage": 20
+                                        },
+                                        {
+                                            "cryptocurrency code": "shib",
+                                            "cryptocurrency name": "Shiba Inu",
+                                            "percentage": 20
+                                        },
+                                        {
+                                            "cryptocurrency code": "etc",
+                                            "cryptocurrency name": "Ethereum Classic",
+                                            "percentage": 30
+                                        },
+                                        {
+                                            "cryptocurrency code": "ape",
+                                            "cryptocurrency name": "ApeCoin",
+                                            "percentage": 30
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+
+    response = {
+                    "status":
+                    {
+                        "status code": "SUCCESS",
+                        "status message": "List of bundles with code, name and percentage"
+                    },
+                    "available bundles": availableBundles
+        }
+
+    return flask.make_response(response)
 
 
+@app.route('/account', methods=["GET"])
+def account():
+    response = {
+                    "status":
+                    {
+                        "status code": "SUCCESS",
+                        "status message": "View customer account and purchased wallets and bundles"
+                    }
+                }
+
+    return flask.make_response(response)
+
+
+@app.route('/bundle/<bundleAddress>', methods=["GET"])
+def view_bundle(bundleAddress):
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for bundle " + bundleAddress
+            }
+    }
+    # return the data for that bundle address
+    return flask.make_response(response)
+
+
+@app.route('/wallet/<walletAddress>', methods=["GET"])
+def view_bundle(walletAddress):
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for wallet " + walletAddress
+            }
+    }
+    # return the data for that wallet address
+    return flask.make_response(response)
+
+
+"""
 @app.route('/addrec', methods=['POST', 'GET'])
 def addrec():
     date_time = ""
@@ -161,7 +330,7 @@ def removerec():
         finally:
             return render_template("view.html", rows=rows)
             con.close()
-
+"""
 
 if __name__ == "__main__":
     app.run()

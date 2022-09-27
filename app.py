@@ -19,10 +19,10 @@ app = Flask(__name__)
 mysql.init_app(app)
 
 
-# decorating index function with the app.route with url as /login
 @app.route('/', methods=["GET"])
 def home():
     return flask.make_response("test")
+
 
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
@@ -33,12 +33,13 @@ def sign_up():
         "status":
         {
             "status code": "SUCCESS",
-            "status message": "Successfully signed up."
+            "status message": "Successfully signed up"
         },
         "name": data["name"],
         "email address": data["email address"]
     }
     return flask.make_response(response)
+
 
 @app.route('/sign-in', methods=["POST"])
 def sign_in():
@@ -50,11 +51,12 @@ def sign_in():
         "status":
         {
             "status code": "SUCCESS",
-            "status message": "Successfully signed in."
+            "status message": "Successfully signed in"
         },
-        "name": "Welcome user"
+        "name": "Welcome <name>"
     }
     return flask.make_response(response)
+
 
 @app.route('/view-available-cryptocurrencies', methods=["GET"])
 def view_available_cryptocurrencies():
@@ -80,6 +82,7 @@ def view_available_cryptocurrencies():
         }
 
     return flask.make_response(response)
+
 
 @app.route('/view-available-bundles', methods=["GET"])
 def view_available_bundles():
@@ -170,10 +173,11 @@ def view_available_bundles():
                         "status code": "SUCCESS",
                         "status message": "List of bundles with code, name and percentage"
                     },
-            "available bundles": availableBundles
+                    "available bundles": availableBundles
         }
 
     return flask.make_response(response)
+
 
 @app.route('/account', methods=["GET"])
 def account():
@@ -181,11 +185,42 @@ def account():
                     "status":
                     {
                         "status code": "SUCCESS",
-                        "status message": "View customer account and purchased wallets and bundles."
+                        "status message": "View customer account and purchased wallets and bundles"
                     }
                 }
 
     return flask.make_response(response)
+
+
+@app.route('/bundle/<bundleAddress>', methods=["GET"])
+def view_bundle(bundleAddress):
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for bundle " + bundleAddress
+            }
+    }
+    # return the data for that bundle address
+    return flask.make_response(response)
+
+
+@app.route('/wallet/<walletAddress>', methods=["GET"])
+def view_bundle(walletAddress):
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for wallet " + walletAddress
+            }
+    }
+    # return the data for that wallet address
+    return flask.make_response(response)
+
 
 """
 @app.route('/addrec', methods=['POST', 'GET'])

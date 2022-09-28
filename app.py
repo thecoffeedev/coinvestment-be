@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 # from flaskext.mysql import MySQL
 import requests  # for making API calls
 import json
@@ -7,12 +7,14 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
-import requests
-
+from flask_session import Session
 # mysql = MySQL()
 
 # initializing a variable of Flask
 app = Flask(__name__)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "firestore"
+Session(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -31,6 +33,10 @@ Test route.
 
 @app.route('/', methods=["GET"])
 def home():
+    print('Inside home')
+    print(session)
+    print(session["Token"])
+    print(session["CustomerID"])
     return flask.make_response("test")
 
 
@@ -96,14 +102,26 @@ Response JSON:
 @app.route('/sign-in', methods=["POST"])
 def sign_in():
     data = request.get_json()
+    print(request)
     print(data)
     print(data["emailAddress"])
     print(data["password"])
     response = cCustomer.customerSignIn(data)
     print(response)
+    print(response["status"])
+    print(response["status"]["status code"])
+    Session(app)
+    resp = flask.make_response(response)
 
-    if response["status code"] == 'SUCCESS':
-        session = requests.Session()
+    if response["status"]["status code"] == 'FAILURE':
+        # session = flask.session.
+        # session.__setattr__("Token",request.headers["Authorization"].strip("Bearer "))
+        # session.__setattr__("CustomerID", "ABCD12345")
+        session["Token"] = request.headers["Authorization"].strip("Bearer ")
+        session["CustomerID"] = "ABCD12345"
+        print(session)
+        # resp.headers['Authorization'] = 'Bearer 12345'
+        print(resp.headers)
 
 
     # response = \
@@ -115,7 +133,7 @@ def sign_in():
     #             },
     #         "name": "Welcome <name>"
     #     }
-    return flask.make_response(response)
+    return resp #flask.make_response(response)
 
 
 @app.route('/view-available-cryptocurrencies', methods=["GET"])

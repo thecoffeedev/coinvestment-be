@@ -4,19 +4,19 @@ from flaskext.mysql import MySQL
 import requests # for making API calls
 import json
 import urllib.parse
-# from decouple import config  # for environment variables
+
 
 mysql = MySQL()
 
 # initializing a variable of Flask
 app = Flask(__name__)
 
-# MySQL configurations
+# # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
 # app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
 # app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
 # app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
-mysql.init_app(app)
+# mysql.init_app(app)
 
 
 @app.route('/', methods=["GET"])
@@ -208,7 +208,7 @@ def view_bundle(bundleAddress):
 
 
 @app.route('/wallet/<walletAddress>', methods=["GET"])
-def view_bundle(walletAddress):
+def view_wallet(walletAddress):
     data = request.get_json()
     print(data)
     response = {

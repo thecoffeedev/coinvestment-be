@@ -31,6 +31,7 @@ Test route.
 
 @app.route('/', methods=["GET"])
 def home():
+    cWallet.dayZeroData()
     return flask.make_response("test")
 
 

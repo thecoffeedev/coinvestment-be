@@ -17,4 +17,13 @@ Nikita Kurup
 | Shashant Dudam |        12975572 |
 
 ### Required packages:
+```commandline
+pip install -r requirements.txt
+```
+
+* Flask==2.2.2
+* Flask-MySQL==1.5.2
+* passlib==1.7.4
+* python-decouple==3.6
+* requests~=2.25.1
 

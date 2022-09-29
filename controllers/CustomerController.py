@@ -1,31 +1,43 @@
 from data_access.CustomerDataAccess import CustomerDataAccess
 from models.Customer import Customer
-from models.Utility import  Utility
+from models.Utility import Utility
 
 
 class CustomerController:
 
     def __init__(self, app):
-        self.da = CustomerDataAccess(app)
-        print(type(app))
+        self.CDA = CustomerDataAccess(app)
 
-    def customerSignIn(self, jsonData):
+    def createTables(self):
+        self.CDA.createTables()
+
+    def customerSignIn(self, jsonReqData):
         try:
-            print("Inside customerSignIn")
-            customer = Customer()
-            customer.setEmailAddress(jsonData["emailAddress"])
-            customer.setPasswordHash(Utility.generatePasswordHash(jsonData["password"]))
+            if not jsonReqData.get("emailAddress"):
+                raise ValueError("Email address not provided in request JSON")
+            if not jsonReqData.get("password"):
+                raise ValueError("Password not provided in request JSON")
+
+            if not self.isExist():
+                raise ValueError("Account not found: not registered")
+            else:
+                customer = Customer()
+                customer.setEmailAddress(jsonReqData["emailAddress"])
+                customer.setPasswordHash(Utility.generatePasswordHash(jsonReqData["password"]))
+
+
         except Exception as e:
-            print(e)
             response = \
                 {
-                    "status":
-                        {
-                            "status code": "FAILURE",
-                            "status message": e.args[0]
-                        },
+                    "status": {
+                        "statusCode": "FAILURE",
+                        "statusMessage": e.args[0]
+                    }
                 }
             return response
+
+    def isExist(self):
+        return self.CDA.isExisting("aff")
 
 
 

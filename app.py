@@ -7,6 +7,7 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
+from controllers.BundleController import BundleController
 import requests
 
 # mysql = MySQL()
@@ -23,6 +24,7 @@ app = Flask(__name__)
 
 cWallet = WalletController(app)
 cCustomer = CustomerController(app)
+cBundle = BundleController(app)
 
 """
 Test route.
@@ -31,7 +33,7 @@ Test route.
 
 @app.route('/', methods=["GET"])
 def home():
-    cWallet.dayZeroData()
+    cBundle.generateDayZeroData()
     return flask.make_response("test")
 
 

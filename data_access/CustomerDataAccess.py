@@ -50,9 +50,16 @@ class CustomerDataAccess:
         customerTwo.setCurrentSignInDatetime(1664538380.8241487)
         customerTwo.setName("Frank Whittle")
 
-        self.insertCustomer(customerOne)
-        self.insertCustomer(customerTwo)
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute()
 
+        # If the table exists and is empty, insert the customer models
+        cur.execute("SELECT EXISTS (SELECT * FROM Customer)")
+
+        if not cur.fetchall():
+            self.insertCustomer(customerOne)
+            self.insertCustomer(customerTwo)
 
     def insertCustomer(self, customerObj):
         con = self.mysql.connect()

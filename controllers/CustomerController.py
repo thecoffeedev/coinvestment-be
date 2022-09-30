@@ -9,9 +9,13 @@ class CustomerController:
     def __init__(self, app):
         self.CDA = CustomerDataAccess(app)
         # Call createTables here?
+        # Insert day zero data here?
 
     def createTables(self):
         self.CDA.createTables()
+
+    def insertDayZeroData(self):
+        self.CDA.insertDayZeroData()
 
     def registerNewCustomer(self, jsonReqData):
         # Set previous sign in, current sign in, and register date the same

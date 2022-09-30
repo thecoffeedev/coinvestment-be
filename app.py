@@ -7,14 +7,14 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
-from flask_session import Session
+# from flask_session import Session
 # mysql = MySQL()
 
 # initializing a variable of Flask
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "firestore"
-Session(app)
+# Session(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -31,10 +31,11 @@ Test route.
 """
 @app.route('/', methods=["GET"])
 def home():
-    print('Inside home')
-    print(session)
-    print(session["Token"])
-    print(session["CustomerID"])
+    # print('Inside home')
+    # print(session)
+    # print(session["Token"])
+    # print(session["CustomerID"])
+
     return flask.make_response("test")
 
 """
@@ -102,7 +103,7 @@ def sign_in():
     print(response)
     print(response["status"])
     print(response["status"]["status code"])
-    Session(app)
+    # Session(app)
     resp = flask.make_response(response)
 
     if response["status"]["status code"] == 'FAILURE':
@@ -395,7 +396,7 @@ def account_wallets(customerID):
         "status":
             {
                 "status code": "SUCCESS",
-                "status message": "View details for bundle " + bundleAddress
+                "status message": "View wallets for customer " + customerID
             }
     }
     # return the data for that bundle address
@@ -429,14 +430,14 @@ Response JSON:
 }
 """
 @app.route('/account/bundles', methods=["GET"])
-def account_bundles(customerID):
+def account_bundles():
     data = request.get_json()
     print(data)
     response = {
         "status":
             {
                 "status code": "SUCCESS",
-                "status message": "View details for wallet " + walletAddress
+                "status message": "View bundles for: "
             }
     }
     # return the data for that wallet address
@@ -479,8 +480,8 @@ Response JSON:
     ]
 }
 """
-@app.route('/account/wallets/<wallet_adddress>', methods=["GET"])
-def account_walletdetails(customerID, walletAddress):
+@app.route('/account/wallets/<walletAddress>', methods=["GET"])
+def account_walletdetails(walletAddress):
     data = request.get_json()
     print(data)
     response = {
@@ -530,14 +531,14 @@ Response JSON:
 }
 """
 @app.route('/account/bundles/<bundle_address>', methods=["GET"])
-def account_bundledetails(customerID, bundleAddress):
+def account_bundledetails(bundleAddress):
     data = request.get_json()
     print(data)
     response = {
         "status":
             {
                 "status code": "SUCCESS",
-                "status message": "View details for wallet " + walletAddress
+                "status message": "View details for wallet " + bundleAddress
             }
     }
     # return the data for that wallet address
@@ -608,14 +609,14 @@ Response JSON:
 }
 """
 @app.route('/account', methods=["GET"])
-def account(customerID):
+def account():
     data = request.get_json()
     print(data)
     response = {
         "status":
             {
                 "status code": "SUCCESS",
-                "status message": "View details for wallet " + walletAddress
+                "status message": "View details for user "
             }
     }
     # return the data for that wallet address

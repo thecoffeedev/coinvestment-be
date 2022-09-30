@@ -31,8 +31,8 @@ class TransactionHistory:
     def setTransactionDateTime(self, transactionDateTime):
         if transactionDateTime is None:
             raise TypeError("Transaction datetime must not be none")
-        elif type(transactionDateTime) != float:
-            raise TypeError("Transaction datetime must be in unix time format")
+        elif type(transactionDateTime) != int:
+            raise TypeError("Transaction datetime must be in unix time format, int")
         else:
             self._transactionDateTime = transactionDateTime
 

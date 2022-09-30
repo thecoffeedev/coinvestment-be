@@ -7,13 +7,16 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
+
 # from flask_session import Session
-# mysql = MySQL()
+
+from controllers.BundleController import BundleController
+import requests
 
 # initializing a variable of Flask
 app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "firestore"
+#app.config["SESSION_PERMANENT"] = False
+#app.config["SESSION_TYPE"] = "firestore"
 # Session(app)
 
 # MySQL configurations
@@ -25,18 +28,22 @@ app.config["SESSION_TYPE"] = "firestore"
 
 cWallet = WalletController(app)
 cCustomer = CustomerController(app)
+cBundle = BundleController(app)
 
 """
 Test route.
 """
 @app.route('/', methods=["GET"])
 def home():
+
     # print('Inside home')
     # print(session)
     # print(session["Token"])
     # print(session["CustomerID"])
 
+    cBundle.generateDayZeroData()
     return flask.make_response("test")
+
 
 """
 Request JSON:
@@ -304,7 +311,7 @@ Response JSON:
     ],
     "availableBundles": [
         {
-            "bundleName": "Low Risk",
+            "bundleName": "lowRisk",
             "bundleCryptocurrencies": [
                 {
                     "cryptocurrencyCode": "code",

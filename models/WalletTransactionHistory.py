@@ -6,6 +6,7 @@ class WalletTransactionHistory(TransactionHistory):
                  action=None, cardNumber=None, expiry=None, walletAddress=None, unitsSold=None):
         super().__init__(transactionID, transactionDateTime, chargeApplied, amount,
                          action, cardNumber, expiry)
+
         self.__walletAddress = walletAddress
         self.__unitsSold = unitsSold
 

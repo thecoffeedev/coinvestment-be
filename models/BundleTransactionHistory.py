@@ -7,6 +7,7 @@ class BundleTransactionHistory(TransactionHistory):
                  amount=0.0, action=None, cardNumber=None, expiry=None, bundleAddress=None):
         super().__init__(transactionID, transactionDateTime, chargeApplied,
                          amount, action, cardNumber, expiry)
+
         self.__bundleAddress = bundleAddress
 
     def getBundleAddress(self):

@@ -2,6 +2,7 @@ venv
 .env
 .vscode
 .DS_Store
+flask_session/
 
 # Pycharm specific
 .idea

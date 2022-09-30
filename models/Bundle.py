@@ -84,8 +84,8 @@ class Bundle:
     def setPurchaseDatetime(self, purchaseDatetime):
         if purchaseDatetime is None:
             raise TypeError("Purchase datetime must not be none")
-        elif type(purchaseDatetime) != float:
-            raise TypeError("Purchase datetime must be in unix time format")
+        elif type(purchaseDatetime) != int:
+            raise TypeError("Purchase datetime must be in unix time format, int")
         else:
             self.__purchaseDatetime = purchaseDatetime
 

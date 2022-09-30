@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 # from flaskext.mysql import MySQL
 import requests  # for making API calls
 import json
@@ -7,13 +7,17 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
+
+# from flask_session import Session
+
 from controllers.BundleController import BundleController
 import requests
 
-# mysql = MySQL()
-
 # initializing a variable of Flask
 app = Flask(__name__)
+#app.config["SESSION_PERMANENT"] = False
+#app.config["SESSION_TYPE"] = "firestore"
+# Session(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -29,10 +33,14 @@ cBundle = BundleController(app)
 """
 Test route.
 """
-
-
 @app.route('/', methods=["GET"])
 def home():
+
+    # print('Inside home')
+    # print(session)
+    # print(session["Token"])
+    # print(session["CustomerID"])
+
     cBundle.generateDayZeroData()
     return flask.make_response("test")
 
@@ -48,15 +56,13 @@ Request JSON:
 Response JSON:
 {
     "status": {
-        "status code": "SUCCESS/FAILURE",
-        "status message": "<Success or failure message to be displayed to the user.>"
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "<Success or failure message to be displayed to the user.>"
     },
     "name": "<name>",
     "emailAddress": "<emailAddress>"
 }
 """
-
-
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
     data = request.get_json()
@@ -84,31 +90,38 @@ Request JSON:
 Response JSON:
 {
     "status": {
-        "status code": "SUCCESS/FAILURE",
-        "status message": "<Success or failure message to be displayed to the user.>"
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "<Success or failure message to be displayed to the user.>"
     },
     "name": "<name>",
     "emailAddress": "<emailAddress>",
     "currentSignInDatetime":"<currentSignInDatetime>",
     "previousSignInDatetime":"<previousSignInDatetime>",
-
 }
 """
-
-
 @app.route('/sign-in', methods=["POST"])
 def sign_in():
     data = request.get_json()
+    print(request)
     print(data)
     print(data["emailAddress"])
     print(data["password"])
     response = cCustomer.customerSignIn(data)
     print(response)
+    print(response["status"])
+    print(response["status"]["status code"])
+    # Session(app)
+    resp = flask.make_response(response)
 
-    if response["status code"] == 'SUCCESS':
-        session = requests.Session()
-
-
+    if response["status"]["status code"] == 'FAILURE':
+        # session = flask.session.
+        # session.__setattr__("Token",request.headers["Authorization"].strip("Bearer "))
+        # session.__setattr__("CustomerID", "ABCD12345")
+        session["Token"] = request.headers["Authorization"].strip("Bearer ")
+        session["CustomerID"] = "ABCD12345"
+        print(session)
+        # resp.headers['Authorization'] = 'Bearer 12345'
+        print(resp.headers)
     # response = \
     #     {
     #         "status":
@@ -118,11 +131,25 @@ def sign_in():
     #             },
     #         "name": "Welcome <name>"
     #     }
-    return flask.make_response(response)
+    return resp #flask.make_response(response)
 
-
-@app.route('/view-available-cryptocurrencies', methods=["GET"])
-def view_available_cryptocurrencies():
+"""
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show the message to the user in case of FAILURE"
+    },
+    "availableCryptocurrencies": [
+        {
+            "cryptocurrencyCode": "btc",
+            "cryptocurrencyName": "name"
+        }
+    ]
+}
+"""
+@app.route('/list/all/cryptocurrencies', methods=["GET"])
+def list_all_cryptocurrencies():
     url = "https://api.coingecko.com/api/v3/search/trending"
     trendingCoins = requests.get(url).json()
     availableCryptocurrencies = []
@@ -146,9 +173,36 @@ def view_available_cryptocurrencies():
 
     return flask.make_response(response)
 
-
-@app.route('/view-available-bundles', methods=["GET"])
-def view_available_bundles():
+"""
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "availableCryptocurrencies": [
+        {
+            "cryptocurrencyCode": "btc",
+            "cryptocurrencyName": "name"
+        }
+    ],
+    "availableBundles": [
+        {
+            "bundleName": "Low Risk",
+            "bundleCryptocurrencies": [
+                {
+                    "cryptocurrencyCode": "code",
+                    "cryptocurrencyName": "name",
+                    "percentage": 30
+                }
+            ],
+            "minimumHoldingPeriod": 5
+        }
+    ]
+}
+"""
+@app.route('/list/all/bundles', methods=["GET"])
+def list_all_bundles():
     availableBundles = [
         {
             "Low risk":
@@ -242,8 +296,69 @@ def view_available_bundles():
     return flask.make_response(response)
 
 
-@app.route('/account', methods=["GET"])
-def account():
+"""
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "availableCryptocurrencies": [
+        {
+            "cryptocurrencyCode": "btc",
+            "cryptocurrencyName": "name"
+        }
+    ],
+    "availableBundles": [
+        {
+            "bundleName": "lowRisk",
+            "bundleCryptocurrencies": [
+                {
+                    "cryptocurrencyCode": "code",
+                    "cryptocurrencyName": "name",
+                    "percentage": 30
+                }
+            ],
+            "minimumHoldingPeriod": 5
+        }
+    ]
+}
+"""
+@app.route('/list/all', methods=["GET"])
+def list_all():
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View customer account and purchased wallets and bundles"
+            }
+    }
+    return flask.make_response(response)
+
+
+"""
+Route: /account/customerdetails
+Request JSON:
+{
+    "customerID": "customerID"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "customerID": "customerID",
+    "registerDatetime": "registerDatetime",
+    "emailAddress": "emailAddress",
+    "previousSignInDatetime": "previousSignInDatetime",
+    "currentSignInDatetime": "currentSignInDatetime",
+    "name": "name"
+}
+"""
+@app.route('/account/customerdetails', methods=["GET"])
+def account_customerdetails(customerID):
     response = {
         "status":
             {
@@ -255,23 +370,125 @@ def account():
     return flask.make_response(response)
 
 
-@app.route('/bundle/<bundleAddress>', methods=["GET"])
-def view_bundle(bundleAddress):
+"""
+Route: /account/wallets
+Request JSON:
+{
+    "customerID": "customerID"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "wallets": [
+        {
+            "walletAddress": "walletAddress",
+            "customerID": "customerID",
+            "initialBalance": "initialBalance",
+            "currentBalance": "currentBalance",
+            "cryptocurrencyCode": "cryptocurrencyCode",
+            "holdingPeriod": "holdingPeriod"
+        }
+    ]
+}
+"""
+@app.route('/account/wallets', methods=["GET"])
+def account_wallets(customerID):
     data = request.get_json()
     print(data)
     response = {
         "status":
             {
                 "status code": "SUCCESS",
-                "status message": "View details for bundle " + bundleAddress
+                "status message": "View wallets for customer " + customerID
             }
     }
     # return the data for that bundle address
     return flask.make_response(response)
 
 
-@app.route('/wallet/<walletAddress>', methods=["GET"])
-def view_wallet(walletAddress):
+"""
+Route: /account/bundles
+Request JSON:
+{
+    "customerID": "customerID"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "bundles": [
+        {
+            "bundleAddress": "bundleAddress",
+            "bundleID": "bundleID",
+            "customerID": "customerID",
+            "amount": "amount",
+            "holdingPeriod": "holdingPeriod",
+            "purchaseDatetime": "purchaseDatetime",
+            "status": "status"
+        }
+    ]
+}
+"""
+@app.route('/account/bundles', methods=["GET"])
+def account_bundles():
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View bundles for: "
+            }
+    }
+    # return the data for that wallet address
+    return flask.make_response(response)
+
+
+"""
+Route: /account/wallets/<wallet_adddress>
+Request JSON:
+{
+    "customerID": "customerID",
+    "walletAddress": "walletAddress"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "wallets": {
+        "walletAddress": "walletAddress",
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "currentBalance": "currentBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransactions": [
+        {
+            "transactionID": "transactionID",
+            "transactionDateTime": "transactionDateTime",
+            "chargeApplied": "chargeApplied",
+            "amount": "amount",
+            "action": "action",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry",
+            "unitsSold": "unitsSold"
+        }
+    ]
+}
+"""
+@app.route('/account/wallets/<walletAddress>', methods=["GET"])
+def account_walletdetails(walletAddress):
     data = request.get_json()
     print(data)
     response = {
@@ -279,6 +496,134 @@ def view_wallet(walletAddress):
             {
                 "status code": "SUCCESS",
                 "status message": "View details for wallet " + walletAddress
+            }
+    }
+    # return the data for that wallet address
+    return flask.make_response(response)
+
+"""
+Route: /account/bundles/<bundle_address>
+Request JSON:
+{
+    "customerID": "customerID",
+    "bundleAddress": "bundleAddress"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "bundles": {
+        "bundleAddress": "bundleAddress",
+        "bundleID": "bundleID",
+        "customerID": "customerID",
+        "amount": "amount",
+        "holdingPeriod": "holdingPeriod",
+        "purchaseDatetime": "purchaseDatetime",
+        "status": "status"
+    },
+    "bundleTransactions": [ 
+        {
+            "transactionID": "transactionID",
+            "transactionDateTime": "transactionDateTime",
+            "chargeApplied": "chargeApplied",
+            "amount": "amount",
+            "action": "action",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry"
+        }
+    ]
+}
+"""
+@app.route('/account/bundles/<bundle_address>', methods=["GET"])
+def account_bundledetails(bundleAddress):
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for wallet " + bundleAddress
+            }
+    }
+    # return the data for that wallet address
+    return flask.make_response(response)
+
+
+"""
+Route: /account/bundles/<bundle_address>
+Request JSON:
+{
+    "customerID": "customerID"
+}
+
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "customer": {
+        "customerID": "customerID",
+        "registerDatetime": "registerDatetime",
+        "emailAddress": "emailAddress",
+        "previousSignInDatetime": "previousSignInDatetime",
+        "currentSignInDatetime": "currentSignInDatetime",
+        "name": "name"
+    },
+    "wallets": {
+        "walletAddress": "walletAddress",
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "currentBalance": "currentBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod",
+        "walletTransactions": [
+            {
+                "transactionID": "transactionID",
+                "transactionDateTime": "transactionDateTime",
+                "chargeApplied": "chargeApplied",
+                "amount": "amount",
+                "action": "action",
+                "cardNumber": "cardNumber",
+                "expiry": "expiry",
+                "unitsSold": "unitsSold"
+            }
+        ]
+    },
+    "bundles": {
+        "bundleAddress": "bundleAddress",
+        "bundleID": "bundleID",
+        "customerID": "customerID",
+        "amount": "amount",
+        "holdingPeriod": "holdingPeriod",
+        "purchaseDatetime": "purchaseDatetime",
+        "status": "status",
+        "bundleTransactions": [ 
+            {
+                "transactionID": "transactionID",
+                "transactionDateTime": "transactionDateTime",
+                "chargeApplied": "chargeApplied",
+                "amount": "amount",
+                "action": "action",
+                "cardNumber": "cardNumber",
+                "expiry": "expiry"
+            }
+        ]
+    }
+}
+"""
+@app.route('/account', methods=["GET"])
+def account():
+    data = request.get_json()
+    print(data)
+    response = {
+        "status":
+            {
+                "status code": "SUCCESS",
+                "status message": "View details for user "
             }
     }
     # return the data for that wallet address

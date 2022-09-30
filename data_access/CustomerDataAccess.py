@@ -1,7 +1,6 @@
 from flaskext.mysql import MySQL
 from decouple import config  # for environment variables
 from models.Customer import Customer
-from models.Utility import Utility
 
 
 class CustomerDataAccess:
@@ -19,10 +18,10 @@ class CustomerDataAccess:
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
                             "PasswordHash VARCHAR(60), " \
-                            "RegisterDatetime FLOAT(53), " \
+                            "RegisterDatetime FLOAT(24,4), " \
                             "EmailAddress VARCHAR(256), " \
-                            "PreviousSignInDatetime FLOAT(53), " \
-                            "CurrentSignInDatetime FLOAT(53), " \
+                            "PreviousSignInDatetime FLOAT(24,4), " \
+                            "CurrentSignInDatetime FLOAT(24,4), " \
                             "Name VARCHAR(256)" \
                             ")"
 
@@ -32,7 +31,30 @@ class CustomerDataAccess:
         cur.close()
         con.close()
 
-    def createCustomer(self, customerObj):
+    def insertDayZeroData(self):
+        customerOne = Customer()
+        customerOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+        customerOne.setPasswordHash("$2b$12$hilgtAM2h/10jUiOGpA.IuTq2vieG3A4o95kNiaUvsOnBjindoKMa")
+        customerOne.setRegisterDatetime(1664471892)
+        customerOne.setEmailAddress("beatrice.shilling@hotmail.com")
+        customerOne.setPreviousSignInDatetime(1664567871)
+        customerOne.setCurrentSignInDatetime(1664567244)
+        customerOne.setName("Beatrice Shilling")
+
+        customerTwo = Customer()
+        customerTwo.setCustomerID("Debo32tKqJBeZwHHgkvx")
+        customerTwo.setPasswordHash("$2b$12$GCq529ew5SSOUINxa.nxSOI27Ir1vIvww5X7go9eKysksavMCUL4a")
+        customerTwo.setRegisterDatetime(1664281967)
+        customerTwo.setEmailAddress("frank.whittle@yahoomail.com")
+        customerTwo.setPreviousSignInDatetime(1664460752)
+        customerTwo.setCurrentSignInDatetime(1664538380.8241487)
+        customerTwo.setName("Frank Whittle")
+
+        self.insertCustomer(customerOne)
+        self.insertCustomer(customerTwo)
+
+
+    def insertCustomer(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute('INSERT INTO Customer (CustomerID, PasswordHash, RegisterDatetime '
@@ -45,7 +67,6 @@ class CustomerDataAccess:
         cur.close()
         con.commit()
         con.close()
-
 
     def isExisting(self, emailAddress):
         con = self.mysql.connect()
@@ -79,6 +100,8 @@ class CustomerDataAccess:
         customer.setPreviousSignInDatetime(result[4])
         customer.setCurrentSignInDatetime(result[5])
         customer.setName(result[6])
+
+        return customer
 
     def updateCustomer(self, customerObj):
         pass

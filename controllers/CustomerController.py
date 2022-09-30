@@ -21,7 +21,6 @@ class CustomerController:
         # Set previous sign in, current sign in, and register date the same
         pass
 
-
     def customerSignIn(self, jsonReqData):
         try:
             if not jsonReqData.get("emailAddress"):
@@ -39,7 +38,7 @@ class CustomerController:
                 if Utility.verifyPassword(jsonReqData["password"], customerDA.getPasswordHash()):
                     # Update the sign in times
                     customerDA.setPreviousSignInDatetime = customerDA.getCurrentSignInDatetime()
-                    customerDA.setCurrentSignDatetime = time.time()
+                    customerDA.setCurrentSignDatetime = int(time.time())
                     # THen update the customer entry previous and current sign in datetimes
 
 

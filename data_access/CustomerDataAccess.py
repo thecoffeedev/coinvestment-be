@@ -13,15 +13,17 @@ class CustomerDataAccess:
         app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
         app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
         self.mysql.init_app(app)
+        self.createTables()
+        self.insertDayZeroData()
 
     def createTables(self):
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
                             "PasswordHash VARCHAR(60), " \
-                            "RegisterDatetime FLOAT(24,4), " \
+                            "RegisterDatetime INT, " \
                             "EmailAddress VARCHAR(256), " \
-                            "PreviousSignInDatetime FLOAT(24,4), " \
-                            "CurrentSignInDatetime FLOAT(24,4), " \
+                            "PreviousSignInDatetime INT, " \
+                            "CurrentSignInDatetime INT, " \
                             "Name VARCHAR(256)" \
                             ")"
 
@@ -47,30 +49,35 @@ class CustomerDataAccess:
         customerTwo.setRegisterDatetime(1664281967)
         customerTwo.setEmailAddress("frank.whittle@yahoomail.com")
         customerTwo.setPreviousSignInDatetime(1664460752)
-        customerTwo.setCurrentSignInDatetime(1664538380.8241487)
+        customerTwo.setCurrentSignInDatetime(1664538380)
         customerTwo.setName("Frank Whittle")
 
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute()
 
         # If the table exists and is empty, insert the customer models
         cur.execute("SELECT EXISTS (SELECT * FROM Customer)")
 
-        if not cur.fetchall():
+        if not cur.fetchone()[0]:
             self.insertCustomer(customerOne)
             self.insertCustomer(customerTwo)
+
+        cur.close()
+        con.commit()
+        con.close()
 
     def insertCustomer(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute('INSERT INTO Customer (CustomerID, PasswordHash, RegisterDatetime '
-                    'EmailAddress, PreviousSignInDatetime, CurrentSignInDatetime, Name) '
-                    'VALUES(%s,  %s, %s, %s,  %s, %s, %s)',
-                    (customerObj.getCustomerID(), customerObj.getPasswordHash(),
-                     customerObj.getRegisterDatetime, customerObj.getEmailAddress(),
-                     customerObj.getPreviousSignInDatetime(), customerObj.getCurrentSignInDatetime(),
-                     customerObj.getName()))
+        insertQuery = "INSERT INTO Customer (" \
+                "CustomerID, PasswordHash, RegisterDatetime, EmailAddress, PreviousSignInDatetime, " \
+                "CurrentSignInDatetime, Name) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+
+        cur.execute(insertQuery, (customerObj.getCustomerID(), customerObj.getPasswordHash(),
+                                  customerObj.getRegisterDatetime(), customerObj.getEmailAddress(),
+                                  customerObj.getPreviousSignInDatetime(), customerObj.getCurrentSignInDatetime(),
+                                  customerObj.getName()))
+
         cur.close()
         con.commit()
         con.close()
@@ -110,8 +117,30 @@ class CustomerDataAccess:
 
         return customer
 
-    def updateCustomer(self, customerObj):
-        pass
+    def updateCustomerPassword(self, customerObj):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("UPDATE Customer SET PasswordHash = %s "
+                    "WHERE CustomerID = %s",
+                    (customerObj.getPasswordHash(),
+                     customerObj.getCustomerID()))
+
+        cur.close()
+        con.commit()
+        con.close()
+
+    def updateCustomerPassword(self, customerObj):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("UPDATE Customer SET PasswordHash = %s "
+                    "WHERE CustomerID = %s",
+                    (customerObj.getPasswordHash(),
+                     customerObj.getCustomerID()))
+
+        result = cur.fetchone()
+        cur.close()
+        con.commit()
+        con.close()
 
 
 

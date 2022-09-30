@@ -35,8 +35,6 @@ def home():
     # print(session)
     # print(session["Token"])
     # print(session["CustomerID"])
-    cCustomer.createTables()
-    cCustomer.isExist()
 
     return flask.make_response("test")
 

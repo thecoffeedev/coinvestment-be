@@ -27,3 +27,12 @@ pip install -r requirements.txt
 * python-decouple==3.6
 * requests~=2.25.1
 
+### Test data
+
+| **Email address**                 | **Password** |
+|:----------------------------------|-------------:|
+| beatrice.shilling@hotmail.com     |     password |
+| frank.whittle@yahoomail.com       |    password2 |
+
+
+

@@ -45,8 +45,8 @@ class Customer:
     def setRegisterDatetime(self, registerDatetime):
         if registerDatetime is None:
             raise TypeError("Register datetime must not be none")
-        elif type(registerDatetime) != float:
-            raise TypeError("Time must be in unix time format")
+        elif type(registerDatetime) != int:
+            raise TypeError("Time must be in unix time format, int")
         else:
             self.__registerDatetime = registerDatetime
 
@@ -71,8 +71,8 @@ class Customer:
     def setPreviousSignInDatetime(self, previousSignInDatetime):
         if previousSignInDatetime is None:
             raise TypeError("Register datetime must not be none")
-        elif type(previousSignInDatetime) != float:
-            raise TypeError("Time must be in unix time format")
+        elif type(previousSignInDatetime) != int:
+            raise TypeError("Time must be in unix time format, int")
         else:
             self.__previousSignInDatetime = previousSignInDatetime
 
@@ -82,8 +82,8 @@ class Customer:
     def setCurrentSignInDatetime(self, currentSignInDatetime):
         if currentSignInDatetime is None:
             raise TypeError("Register datetime must not be none")
-        elif type(currentSignInDatetime) != float:
-            raise TypeError("Time must be in unix time format")
+        elif type(currentSignInDatetime) != int:
+            raise TypeError("Time must be in unix time format, int")
         else:
             self.__currentSignInDatetime = currentSignInDatetime
 

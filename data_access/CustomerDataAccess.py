@@ -1,6 +1,7 @@
 from flaskext.mysql import MySQL
 from decouple import config  # for environment variables
 from models.Customer import Customer
+from models.Utility import Utility
 
 
 class CustomerDataAccess:
@@ -15,7 +16,7 @@ class CustomerDataAccess:
         self.mysql.init_app(app)
 
     def createTables(self):
-        createTableQuery =  "CREATE TABLE IF NOT EXISTS Customer (" \
+        createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
                             "PasswordHash VARCHAR(60), " \
                             "RegisterDatetime FLOAT(53), " \
@@ -29,6 +30,20 @@ class CustomerDataAccess:
         cur = con.cursor()
         cur.execute(createTableQuery)
         cur.close()
+        con.close()
+
+    def createCustomer(self, customerObj):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute('INSERT INTO Customer (CustomerID, PasswordHash, RegisterDatetime '
+                    'EmailAddress, PreviousSignInDatetime, CurrentSignInDatetime, Name) '
+                    'VALUES(%s,  %s, %s, %s,  %s, %s, %s)',
+                    (customerObj.getCustomerID(), customerObj.getPasswordHash(),
+                     customerObj.getRegisterDatetime, customerObj.getEmailAddress(),
+                     customerObj.getPreviousSignInDatetime(), customerObj.getCurrentSignInDatetime(),
+                     customerObj.getName()))
+        cur.close()
+        con.commit()
         con.close()
 
 
@@ -47,25 +62,35 @@ class CustomerDataAccess:
             # If not existing return False
             return False
 
-    def fetchCustomer(self, customerObj):
+    def readCustomer(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("SELECT * FROM Customer WHERE emailAddress = %s", customerObj.getEmailAddress())
-        entry = cur.fetchall()
+        result = cur.fetchone()
         cur.close()
         con.commit()
         con.close()
 
-        customerObj.setCustomerID(entry.customerID)
+        customer = Customer()
+        customer.setCustomerID(result[0])
+        customer.setPasswordHash(result[1])
+        customer.setRegisterDatetime(result[2])
+        customer.setEmailAddress(result[3])
+        customer.setPreviousSignInDatetime(result[4])
+        customer.setCurrentSignInDatetime(result[5])
+        customer.setName(result[6])
+
+    def updateCustomer(self, customerObj):
+        pass
 
 
 
 
-
-"""cur.execute('INSERT INTO user (username, email, password)VALUES( %s,  %s, %s)',
+"""
+        cur.execute('INSERT INTO user (username, email, password)VALUES( %s,  %s, %s)',
                         (username, email, password))
 
-            con.commit()
-            msg = "You have signed up today (UK Time)"
+        con.commit()
+
 """
 

@@ -16,6 +16,13 @@ class CustomerDataAccess:
         self.createTables()
         self.insertDayZeroData()
 
+        c = Customer()
+        c.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+        c.setCurrentSignInDatetime(12345)
+        c.setPreviousSignInDatetime(67890)
+        self.updateCustomerSignInDatetimes(c)
+
+
     def createTables(self):
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
@@ -129,15 +136,18 @@ class CustomerDataAccess:
         con.commit()
         con.close()
 
-    def updateCustomerPassword(self, customerObj):
+    def updateCustomerSignInDatetimes(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("UPDATE Customer SET PasswordHash = %s "
+        cur.execute("UPDATE Customer SET PreviousSignInDatetime = %s, "
+                    "CurrentSignInDatetime = %s "
                     "WHERE CustomerID = %s",
-                    (customerObj.getPasswordHash(),
-                     customerObj.getCustomerID()))
+                    (customerObj.getPreviousSignInDatetime(),
+                     customerObj.getCurrentSignInDatetime(),
+                    customerObj.getCustomerID()))
 
         result = cur.fetchone()
+        print(result)
         cur.close()
         con.commit()
         con.close()

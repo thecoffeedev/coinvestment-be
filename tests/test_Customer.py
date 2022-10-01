@@ -190,9 +190,9 @@ class TestRegisterDatetime(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newUser.setRegisterDatetime(True)
 
-    def test_must_return_a_float(self):
-        self.newUser.setRegisterDatetime(632432525.232)
-        self.assertIsInstance(self.newUser.getRegisterDatetime(), float)
+    def test_must_return_an_int(self):
+        self.newUser.setRegisterDatetime(632432525)
+        self.assertIsInstance(self.newUser.getRegisterDatetime(), int)
 
 
 class TestEmailAddress(unittest.TestCase):
@@ -282,9 +282,9 @@ class TestPreviousSignInDatetime(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newUser.setPreviousSignInDatetime(True)
 
-    def test_must_return_a_float(self):
-        self.newUser.setPreviousSignInDatetime(632432525.232)
-        self.assertIsInstance(self.newUser.getPreviousSignInDatetime(), float)
+    def test_must_return_an_int(self):
+        self.newUser.setPreviousSignInDatetime(632432525)
+        self.assertIsInstance(self.newUser.getPreviousSignInDatetime(), int)
 
 
 class TestCurrentSignInDatetime(unittest.TestCase):
@@ -314,9 +314,9 @@ class TestCurrentSignInDatetime(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newUser.setCurrentSignInDatetime(True)
 
-    def test_must_return_a_float(self):
-        self.newUser.setCurrentSignInDatetime(632432525.232)
-        self.assertIsInstance(self.newUser.getCurrentSignInDatetime(), float)
+    def test_must_return_an_int(self):
+        self.newUser.setCurrentSignInDatetime(632432525)
+        self.assertIsInstance(self.newUser.getCurrentSignInDatetime(), int)
 
 
 class TestName(unittest.TestCase):

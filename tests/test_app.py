@@ -1,7 +1,7 @@
 import unittest
 from app import app
 
-
+"""
 class BasicTestsSetup(unittest.TestCase):
 
     def setUp(self):
@@ -39,3 +39,4 @@ class TestCaseExamples(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+"""

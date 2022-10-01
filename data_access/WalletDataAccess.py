@@ -1,6 +1,7 @@
 from flaskext.mysql import MySQL
 from models.Wallet import Wallet
 from models.Utility import Utility
+from models.WalletTransactionHistory import WalletTransactionHistory
 from decouple import config
 
 
@@ -14,12 +15,8 @@ class WalletDataAccess:
         app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
         self.mysql.init_app(app)
         # self.mysqlDB = MySQL()
-
-        self.generateDayZeroData()
-        self.createWallet()
-        self.insertDayZeroWalletData()
-        self.readWalletFromWalletAddress("UazgXbwu2tloBcajCPb8")
-        self.readWalletFromCustomerID("Debo32tKqJBeZwHHgkvx")
+        # self.readWalletFromWalletAddress("UazgXbwu2tloBcajCPb8")
+        # self.readWalletFromCustomerID("Debo32tKqJBeZwHHgkvx")
 
     def generateDayZeroData(self):
         # Create the table if it does not exist
@@ -87,6 +84,28 @@ class WalletDataAccess:
         con.close()
         print("createWallet exit")
 
+    def createWalletTransactionHistory(self):
+        print("createWallet entry")
+        createTableQuery = "CREATE TABLE IF NOT EXISTS WalletTransactionHistory (" \
+                           "TransactionID VARCHAR(20), " \
+                           "WalletAddress VARCHAR(20), " \
+                           "UnitsSold VARCHAR(20), " \
+                           "TransactionDatetime INT, " \
+                           "ChargeApplied FLOAT(53), " \
+                           "Amount FLOAT(53), " \
+                           "Action VARCHAR(10), " \
+                           "CardNumber VARCHAR(20), " \
+                           "Expiry VARCHAR(20), " \
+                           "InitialRate FLOAT(53)" \
+                           ")"
+
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute(createTableQuery)
+        cur.close()
+        con.close()
+        print("createWallet exit")
+
 
     def insertDayZeroWalletData(self):
         print("insertDayZeroWalletData entry")
@@ -124,6 +143,8 @@ class WalletDataAccess:
 
 
     def insertWallet(self, walletObj):
+        print("insertWallet entry")
+        print("walletObj :", walletObj.__dict__)
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("INSERT INTO Wallet (WalletAddress, CustomerID, InitialBalance, CurrentBalance, " \
@@ -133,11 +154,41 @@ class WalletDataAccess:
         cur.close()
         con.commit()
         con.close()
+        print("Insert successful.")
+        print("insertWallet exit")
 
-    def readWalletFromWalletAddress(self, walletObj):
+    def insertWalletTransactionHistory(self, walletTransactionObj):
+        print("insertWalletTransactionHistory entry")
+        print("walletTransactionObj :", walletTransactionObj.__dict__)
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Wallet where WalletAddress = '"+walletObj.getWalletAddress()+"'")
+        cur.execute("INSERT INTO WalletTransactionHistory" \
+                    " (TransactionID, TransactionDateTime, ChargeApplied, Amount," \
+                    " Action, CardNumber, Expiry, WalletAddress, UnitsSold, InitialRate) " \
+                    " VALUES(%s, %s, %s, %s,  %s, %s, %s, %s, %s, %s)",
+                    (walletTransactionObj.getTransactionID(),
+                    walletTransactionObj.getTransactionDateTime(),
+                    walletTransactionObj.getChargeApplied(),
+                    walletTransactionObj.getAmount(),
+                    walletTransactionObj.getAction(),
+                    walletTransactionObj.getCardNumber(),
+                    walletTransactionObj.getExpiry(),
+                    walletTransactionObj.getWalletAddress(),
+                    walletTransactionObj.getUnitsSold(),
+                    walletTransactionObj.getInitialRate()))
+        cur.close()
+        con.commit()
+        con.close()
+        print("Insert successful.")
+        print("insertWalletTransactionHistory exit")
+
+
+    def readWalletFromWalletAddress(self, walletAddress):
+        print("readWalletFromWalletAddress entry")
+        print("walletAddress : ", walletAddress)
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Wallet where WalletAddress = '"+walletAddress+"'")
 
         result = cur.fetchall()
         cur.close()
@@ -149,17 +200,21 @@ class WalletDataAccess:
             walletOne = Wallet()
             walletOne.setCustomerID(wallet[1])
             walletOne.setWalletAddress(wallet[0])
-            print("wallet address ", wallet[0])
             walletOne.setInitialBalance(wallet[2])
             walletOne.setCurrentBalance(wallet[3])
             walletOne.setCryptocurrencyCode(wallet[4])
             walletOne.setHoldingPeriod(wallet[5])
-            print(walletOne)
+            print(" walletOne : ", wallet.__dict__)
+        print("readWalletFromWalletAddress exit")
+        return walletOne
 
-    def readWalletFromCustomerID(self, walletObj):
+    def readWalletFromCustomerID(self, customerID):
+        print("readWalletFromWalletAddress entry")
+        print("customerID : ", customerID)
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Wallet where customerID = '"+walletObj.getCurrentBalance()+"'")
+        cur.execute("SELECT * FROM Wallet where customerID = '"+customerID+"'")
 
         result = cur.fetchall()
         cur.close()
@@ -179,8 +234,45 @@ class WalletDataAccess:
             print(walletOne.__dict__)
             walletsList.append(walletOne)
         print(walletsList)
+        return walletsList
+
+    def readWalletTransactionsFromWalletAddress(self, walletAddress):
+        print("readWalletTransactionsFromWalletAddress entry")
+        print("walletAddress : ", walletAddress)
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM WalletTransactionHistory where WalletAddress = '"+walletAddress+"'")
+
+        result = cur.fetchall()
+        cur.close()
+        con.commit()
+        con.close()
+
+        walletTransactionsList = list()
+        for walletTransaction in result:
+            print(walletTransaction)
+            walletTransactionObj = WalletTransactionHistory()
+            walletTransactionObj.setTransactionID(walletTransaction[0])
+            walletTransactionObj.setWalletAddress(walletTransaction[1])
+            walletTransactionObj.setUnitsSold(Utility.roundDecimals(walletTransaction[2]))
+            walletTransactionObj.setTransactionDateTime(Utility.unixTimestampToStrings(walletTransaction[3]))
+            walletTransactionObj.setChargeApplied(Utility.roundDecimals(walletTransaction[4]))
+            walletTransactionObj.setAmount(Utility.roundDecimals(walletTransaction[5]))
+            walletTransactionObj.setAction(walletTransaction[6])
+            walletTransactionObj.setCardNumber(walletTransaction[7])
+            walletTransactionObj.setExpiry(walletTransaction[8])
+            walletTransactionObj.setInitialRate(Utility.roundDecimals(walletTransaction[9]))
+            print(" walletTransactionObj :", walletTransactionObj.__dict__)
+            walletTransactionsList.append(walletTransactionObj)
+
+        print("walletTransactionsList : ", walletTransactionsList)
+        print("readWalletTransactionsFromWalletAddress exit")
+        return walletTransactionsList
+
 
     def updateWalletCurrentBalance(self, walletObj):
+        print("updateWalletCurrentBalance entry")
+        print("walletObj : ", walletObj.__dict__)
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("UPDATE Wallet set CurrentBalance = '"+walletObj.getCurrentBalance()+
@@ -190,3 +282,5 @@ class WalletDataAccess:
         cur.close()
         con.commit()
         con.close()
+        print("Update Successful")
+        print("updateWalletCurrentBalance exit")

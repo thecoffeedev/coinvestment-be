@@ -482,7 +482,8 @@ Response JSON:
             "action": "action",
             "cardNumber": "cardNumber",
             "expiry": "expiry",
-            "unitsSold": "unitsSold"
+            "unitsSold": "unitsSold",
+            "initialRate": "initialRate"
         }
     ]
 }
@@ -532,7 +533,8 @@ Response JSON:
             "amount": "amount",
             "action": "action",
             "cardNumber": "cardNumber",
-            "expiry": "expiry"
+            "expiry": "expiry",
+            "initialRate": "initialRate"
         }
     ]
 }
@@ -589,7 +591,8 @@ Response JSON:
                 "action": "action",
                 "cardNumber": "cardNumber",
                 "expiry": "expiry",
-                "unitsSold": "unitsSold"
+                "unitsSold": "unitsSold",
+                "initialRate": "initialRate"
             }
         ]
     },
@@ -609,7 +612,8 @@ Response JSON:
                 "amount": "amount",
                 "action": "action",
                 "cardNumber": "cardNumber",
-                "expiry": "expiry"
+                "expiry": "expiry",
+                "initialRate": "initialRate"
             }
         ]
     }
@@ -628,6 +632,64 @@ def account():
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
+"""
+Route: /account/purchase/wallet
+Request JSON:
+{
+    "wallet": {
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": [
+        {
+            "initialRate": "initialRate",
+            "amount": "amount",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry"
+        }
+    ]
+}
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "wallet": {
+        "walletAddress": "walletAddress",
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "currentBalance": "currentBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": [
+        {
+            "transactionID": "transactionID",
+            "transactionDateTime": "transactionDateTime",
+            "chargeApplied": "chargeApplied",
+            "amount": "amount",
+            "action": "action",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry",
+            "unitsSold": "unitsSold",
+            "initialRate": "initialRate"
+        }
+    ]
+}
+"""
+@app.route('/account/purchase/wallet', methods=["GET"])
+def account_purchasewallet():
+    print("account_purchasewallet entry")
+    jsonReqData = request.get_json()
+    print("jsonReqData : ", jsonReqData)
+    response = cWallet.purchaseWallet(jsonReqData)
+    print("account_purchasewallet entry")
+    return flask.make_response(response)
+
 
 
 """

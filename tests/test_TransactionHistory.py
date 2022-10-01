@@ -91,28 +91,28 @@ class TestTransactionDateTime(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_transactionDateTime_must_be_none_if_not_set(self):
+    def test_must_be_none_if_not_set(self):
         self.assertIsNone(self.newTransactionHistory.getTransactionDateTime())
 
-    def test_transactionDateTime_must_not_accept_none_argument(self):
+    def test_must_not_accept_none_argument(self):
         with self.assertRaises(TypeError):
             self.newTransactionHistory.setTransactionDateTime(None)
 
-    def test_transactionDateTime_must_not_be_a_string(self):
+    def test_must_not_be_a_string(self):
         with self.assertRaises(TypeError):
             self.newTransactionHistory.setTransactionDateTime("1232434334.3843943")
 
-    def test_transactionDateTime_must_not_be_a_false_boolean(self):
+    def test_must_not_be_a_false_boolean(self):
         with self.assertRaises(TypeError):
             self.newTransactionHistory.setTransactionDateTime(False)
 
-    def test_transactionDateTime_must_not_be_a_true_boolean(self):
+    def test_must_not_be_a_true_boolean(self):
         with self.assertRaises(TypeError):
             self.newTransactionHistory.setTransactionDateTime(True)
 
-    def test_transactionDateTime_must_return_a_float(self):
-        self.newTransactionHistory.setTransactionDateTime(632432525.232)
-        self.assertIsInstance(self.newTransactionHistory.getTransactionDateTime(), float)
+    def test_must_return_an_int(self):
+        self.newTransactionHistory.setTransactionDateTime(632432525)
+        self.assertIsInstance(self.newTransactionHistory.getTransactionDateTime(), int)
 
 
 class TestChargeApplied(unittest.TestCase):
@@ -451,3 +451,56 @@ class TestExpiry(unittest.TestCase):
     def test_transactionID_must_be_set_correctly_at_initilization_when_provided(self):
         self.newTransactionHistory = TransactionHistory(expiry="07/23")
         self.assertEqual(self.newTransactionHistory.getExpiry(), "07/23")
+
+
+class TestInitialRate(unittest.TestCase):
+
+    def setUp(self):
+        self.newTransactionHistory = TransactionHistory()
+
+    def tearDown(self):
+        pass
+
+    def test_must_throw_error_when_none(self):
+        with self.assertRaises(ValueError):
+            self.newTransactionHistory.setInitialRate(None)
+
+    def test_must_not_be_none_when_set(self):
+        self.newTransactionHistory.setInitialRate(5.0)
+        self.assertIsNotNone(self.newTransactionHistory.getInitialRate())
+
+    def test_must_not_be_str(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate("12345678901234567890")
+
+    def test_must_not_be_zero(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate(0)
+
+    def test_must_not_be_a_negative_int(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate(-1)
+
+    def test_must_not_be_a_negative_float(self):
+        with self.assertRaises(ValueError):
+            self.newTransactionHistory.setInitialRate(-0.01)
+
+    def test_must_not_be_a_negative_float_whole_number(self):
+        with self.assertRaises(ValueError):
+            self.newTransactionHistory.setInitialRate(-1.00)
+
+    def test_must_not_be_a_true_bool(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate(True)
+
+    def test_must_not_be_a_false_bool(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate(False)
+
+    def test_must_raise_an_error_for_int_argument(self):
+        with self.assertRaises(TypeError):
+            self.newTransactionHistory.setInitialRate(1)
+
+    def test_must_be_set_correctly_at_initilization_when_provided(self):
+        self.newTransactionHistory = TransactionHistory(initialRate=5)
+        self.assertEqual(self.newTransactionHistory.getInitialRate(), 5)

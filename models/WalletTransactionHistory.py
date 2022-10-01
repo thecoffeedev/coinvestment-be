@@ -3,9 +3,9 @@ from models.TransactionHistory import TransactionHistory
 class WalletTransactionHistory(TransactionHistory):
 
     def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0, amount=0.0,
-                 action=None, cardNumber=None, expiry=None, walletAddress=None, unitsSold=None):
+                 action=None, cardNumber=None, expiry=None, initialRate=None, walletAddress=None, unitsSold=None):
         super().__init__(transactionID, transactionDateTime, chargeApplied, amount,
-                         action, cardNumber, expiry)
+                         action, cardNumber, expiry, initialRate)
 
         self.__walletAddress = walletAddress
         self.__unitsSold = unitsSold

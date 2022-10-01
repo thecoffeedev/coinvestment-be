@@ -157,7 +157,6 @@ class WalletDataAccess:
         print("Insert successful.")
         print("insertWallet exit")
 
-
     def insertWalletTransactionHistory(self, walletTransactionObj):
         print("insertWalletTransactionHistory entry")
         print("walletTransactionObj :", walletTransactionObj.__dict__)
@@ -212,6 +211,7 @@ class WalletDataAccess:
     def readWalletFromCustomerID(self, customerID):
         print("readWalletFromWalletAddress entry")
         print("customerID : ", customerID)
+
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("SELECT * FROM Wallet where customerID = '"+customerID+"'")

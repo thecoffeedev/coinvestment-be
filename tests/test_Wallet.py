@@ -328,10 +328,6 @@ class TestCryptocurrencyCode(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.newWallet.setCryptocurrencyCode("r")
 
-    def test_cryptocurrencyCode_must_throw_error_when_less_than_ten_characters(self):
-        with self.assertRaises(ValueError):
-            self.newWallet.setCryptocurrencyCode("vbfhdyro")
-
     def test_cryptocurrencyCode_must_throw_error_when_more_than_ten_characters(self):
         with self.assertRaises(ValueError):
             self.newWallet.setCryptocurrencyCode("vbfhdyroeuvnbejkr")

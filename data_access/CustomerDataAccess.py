@@ -16,6 +16,13 @@ class CustomerDataAccess:
         self.createTables()
         self.insertDayZeroData()
 
+        c = Customer()
+        c.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+        c.setCurrentSignInDatetime(12345)
+        c.setPreviousSignInDatetime(67890)
+        self.updateCustomerSignInDatetimes(c)
+
+
     def createTables(self):
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
@@ -82,25 +89,58 @@ class CustomerDataAccess:
         con.commit()
         con.close()
 
-    def isExisting(self, emailAddress):
+    def isCustomerExistingByEmailAddress(self, emailAddress):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE emailAddress = %s", emailAddress)
+        cur.execute("SELECT * FROM Customer WHERE EmailAddress = %s", emailAddress)
         entry = cur.fetchall()
         cur.close()
         con.close()
 
-        # Empty cursor is False
+        # Empty cursor is False, therefore customer does not exist
         if entry:
             return True
         else:
-            # If not existing return False
             return False
 
-    def readCustomer(self, customerObj):
+    def isCustomerExistingByCustomerID(self, customerID):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE emailAddress = %s", customerObj.getEmailAddress())
+        cur.execute("SELECT * FROM Customer WHERE CustomerID = %s", customerID)
+        entry = cur.fetchall()
+        cur.close()
+        con.close()
+
+        # Empty cursor is False, therefore customer does not exist
+        if entry:
+            return True
+        else:
+            return False
+
+    def readCustomerByEmail(self, emailAddress):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Customer WHERE EmailAddress = %s", emailAddress)
+        result = cur.fetchone()
+        cur.close()
+        con.commit()
+        con.close()
+
+        customer = Customer()
+        customer.setCustomerID(result[0])
+        customer.setPasswordHash(result[1])
+        customer.setRegisterDatetime(result[2])
+        customer.setEmailAddress(result[3])
+        customer.setPreviousSignInDatetime(result[4])
+        customer.setCurrentSignInDatetime(result[5])
+        customer.setName(result[6])
+
+        return customer
+
+    def readCustomerByCustomerID(self, customerID):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM Customer WHERE CustomerID = %s", customerID)
         result = cur.fetchone()
         cur.close()
         con.commit()
@@ -129,7 +169,7 @@ class CustomerDataAccess:
         con.commit()
         con.close()
 
-    def updateCustomerPassword(self, customerObj):
+    def updateCustomerEmailAddress(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("UPDATE Customer SET PasswordHash = %s "
@@ -137,7 +177,24 @@ class CustomerDataAccess:
                     (customerObj.getPasswordHash(),
                      customerObj.getCustomerID()))
 
+        cur.close()
+        con.commit()
+        con.close()
+
+    def updateCustomerSignInDatetimes(self, customerObj):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        updateQuery = "UPDATE Customer SET PreviousSignInDatetime = %s, " \
+                      "CurrentSignInDatetime = %s " \
+                      "WHERE CustomerID = %s"
+
+        cur.execute(updateQuery,
+                    (customerObj.getPreviousSignInDatetime(),
+                     customerObj.getCurrentSignInDatetime(),
+                     customerObj.getCustomerID()))
+
         result = cur.fetchone()
+        print(result)
         cur.close()
         con.commit()
         con.close()

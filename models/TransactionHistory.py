@@ -3,7 +3,7 @@ import re
 class TransactionHistory:
 
     def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0, amount=0.0,
-                 action=None, cardNumber=None, expiry=None):
+                 action=None, cardNumber=None, expiry=None, initialRate=None):
         self._transactionID = transactionID
         self._transactionDateTime = transactionDateTime
         self._chargeApplied = chargeApplied
@@ -11,6 +11,7 @@ class TransactionHistory:
         self._action = action
         self._cardNumber = cardNumber
         self._expiry = expiry
+        self._initialRate = initialRate
 
     def getTransactionID(self):
         return self._transactionID
@@ -105,3 +106,15 @@ class TransactionHistory:
         else:
             self._expiry = expiry
 
+    def getInitialRate(self):
+        return self._initialRate
+
+    def setInitialRate(self, initialRate):
+        if initialRate is None:
+            raise ValueError("Initial rate must not be none")
+        elif type(initialRate) != float:
+            raise TypeError("Initial rate must be a float")
+        elif initialRate <= 0:
+            raise ValueError("Initial rate must be greater than 0")
+        else:
+            self._initialRate = initialRate

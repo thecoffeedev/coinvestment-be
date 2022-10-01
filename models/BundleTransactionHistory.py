@@ -4,9 +4,9 @@ from models.TransactionHistory import TransactionHistory
 class BundleTransactionHistory(TransactionHistory):
 
     def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0,
-                 amount=0.0, action=None, cardNumber=None, expiry=None, bundleAddress=None):
+                 amount=0.0, action=None, cardNumber=None, expiry=None, initialRate=None, bundleAddress=None):
         super().__init__(transactionID, transactionDateTime, chargeApplied,
-                         amount, action, cardNumber, expiry)
+                         amount, action, cardNumber, expiry, initialRate)
 
         self.__bundleAddress = bundleAddress
 

@@ -7,13 +7,16 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
+
 # from flask_session import Session
-# mysql = MySQL()
+
+from controllers.BundleController import BundleController
+import requests
 
 # initializing a variable of Flask
 app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "firestore"
+#app.config["SESSION_PERMANENT"] = False
+#app.config["SESSION_TYPE"] = "firestore"
 # Session(app)
 
 # MySQL configurations
@@ -25,18 +28,22 @@ app.config["SESSION_TYPE"] = "firestore"
 
 cWallet = WalletController(app)
 cCustomer = CustomerController(app)
+cBundle = BundleController(app)
 
 """
 Test route.
 """
 @app.route('/', methods=["GET"])
 def home():
+
     # print('Inside home')
     # print(session)
     # print(session["Token"])
     # print(session["CustomerID"])
 
+    cBundle.generateDayZeroData()
     return flask.make_response("test")
+
 
 """
 Request JSON:
@@ -304,7 +311,7 @@ Response JSON:
     ],
     "availableBundles": [
         {
-            "bundleName": "Low Risk",
+            "bundleName": "lowRisk",
             "bundleCryptocurrencies": [
                 {
                     "cryptocurrencyCode": "code",
@@ -475,7 +482,8 @@ Response JSON:
             "action": "action",
             "cardNumber": "cardNumber",
             "expiry": "expiry",
-            "unitsSold": "unitsSold"
+            "unitsSold": "unitsSold",
+            "initialRate": "initialRate"
         }
     ]
 }
@@ -525,7 +533,8 @@ Response JSON:
             "amount": "amount",
             "action": "action",
             "cardNumber": "cardNumber",
-            "expiry": "expiry"
+            "expiry": "expiry",
+            "initialRate": "initialRate"
         }
     ]
 }
@@ -582,7 +591,8 @@ Response JSON:
                 "action": "action",
                 "cardNumber": "cardNumber",
                 "expiry": "expiry",
-                "unitsSold": "unitsSold"
+                "unitsSold": "unitsSold",
+                "initialRate": "initialRate"
             }
         ]
     },
@@ -602,7 +612,8 @@ Response JSON:
                 "amount": "amount",
                 "action": "action",
                 "cardNumber": "cardNumber",
-                "expiry": "expiry"
+                "expiry": "expiry",
+                "initialRate": "initialRate"
             }
         ]
     }
@@ -621,6 +632,64 @@ def account():
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
+"""
+Route: /account/purchase/wallet
+Request JSON:
+{
+    "wallet": {
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": [
+        {
+            "initialRate": "initialRate",
+            "amount": "amount",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry"
+        }
+    ]
+}
+Response JSON:
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "wallet": {
+        "walletAddress": "walletAddress",
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "currentBalance": "currentBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": [
+        {
+            "transactionID": "transactionID",
+            "transactionDateTime": "transactionDateTime",
+            "chargeApplied": "chargeApplied",
+            "amount": "amount",
+            "action": "action",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry",
+            "unitsSold": "unitsSold",
+            "initialRate": "initialRate"
+        }
+    ]
+}
+"""
+@app.route('/account/purchase/wallet', methods=["GET"])
+def account_purchasewallet():
+    print("account_purchasewallet entry")
+    jsonReqData = request.get_json()
+    print("jsonReqData : ", jsonReqData)
+    response = cWallet.purchaseWallet(jsonReqData)
+    print("account_purchasewallet entry")
+    return flask.make_response(response)
+
 
 
 """

@@ -368,9 +368,9 @@ class TestPurchaseDatetime(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newBundle.setPurchaseDatetime(True)
 
-    def test_must_return_a_float(self):
-        self.newBundle.setPurchaseDatetime(632432525.232)
-        self.assertIsInstance(self.newBundle.getPurchaseDatetime(), float)
+    def test_must_return_a_int(self):
+        self.newBundle.setPurchaseDatetime(632432525)
+        self.assertIsInstance(self.newBundle.getPurchaseDatetime(), int)
 
 
 class TestStatus(unittest.TestCase):

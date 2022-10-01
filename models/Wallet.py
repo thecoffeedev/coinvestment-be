@@ -76,6 +76,8 @@ class Wallet:
             raise TypeError("Cryptocurrency Code must be alphanumeric string")
         elif len(cryptocurrencyCode) > 10:
             raise ValueError("Cryptocurrency Code must be less than or equal to 10 characters")
+        elif len(cryptocurrencyCode) <= 2:
+            raise ValueError("Cryptocurrency Code must be more than 2 characters")
         else:
             self.__cryptocurrencyCode = cryptocurrencyCode
 

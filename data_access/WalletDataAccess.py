@@ -134,10 +134,10 @@ class WalletDataAccess:
         con.commit()
         con.close()
 
-    def readWalletFromWalletAddress(self, walletObj):
+    def readWalletFromWalletAddress(self, walletAddress):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Wallet where WalletAddress = '"+walletObj.getWalletAddress()+"'")
+        cur.execute("SELECT * FROM Wallet where WalletAddress = '"+walletAddress+"'")
 
         result = cur.fetchall()
         cur.close()
@@ -156,10 +156,10 @@ class WalletDataAccess:
             walletOne.setHoldingPeriod(wallet[5])
             print(walletOne)
 
-    def readWalletFromCustomerID(self, walletObj):
+    def readWalletFromCustomerID(self, customerID):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Wallet where customerID = '"+walletObj.getCurrentBalance()+"'")
+        cur.execute("SELECT * FROM Wallet where customerID = '"+customerID+"'")
 
         result = cur.fetchall()
         cur.close()

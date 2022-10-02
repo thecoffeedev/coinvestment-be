@@ -63,11 +63,14 @@
 ```json
 {
     "status": {
-        "statusCode": "SUCCESS/FAILURE",
+        "statusCode": "SUCCESS",
         "statusMessage": "Successfully signed in"
     },
-    "name": "name"
-} 
+    "name": <customer name>,
+    "emailAddress": <email address>,
+    "currentSignInDatetime": <current sign in time>,
+    "previousSignInDatetime": <last sign in time>,
+}
 ```
 
 - - - - -
@@ -110,4 +113,29 @@
 > Where
 > * `availableCryptocurrencies` is a list of cryptocurrencies
 > * `availableBundles` is a list of bundles
+
+- - - - -
+
+## _[GET]_ `/list/all/cryptocurrencies`
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "List of all cryptocurrencies"
+    },
+    "availableCryptocurrencies": [
+        {
+            "cryptocurrencyCode": <code>,
+            "cryptocurrencyName": <name>
+        }
+    ]
+}
+```
+> Where
+> * `availableCryptocurrencies` is a list of cryptocurrencies
+
+- - - - -
+
+
 

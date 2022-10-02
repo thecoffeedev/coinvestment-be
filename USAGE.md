@@ -68,8 +68,8 @@
     },
     "name": <customer name>,
     "emailAddress": <email address>,
-    "currentSignInDatetime": <current sign in time>,
-    "previousSignInDatetime": <last sign in time>,
+    "currentSignInDatetime": <current sign in datetime>,
+    "previousSignInDatetime": <last sign in datetime>,
 }
 ```
 
@@ -142,20 +142,20 @@
 ```json
 {
     "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
+        "statusCode": "SUCCESS",
+        "statusMessage": "List of all available bundles"
     },
     "availableBundles": [
         {
-            "bundleName": "Low Risk",
+            "bundleName": <name of the bundle>,
+            "minimumHoldingPeriod": <in monthes>,
             "bundleCryptocurrencies": [
                 {
-                    "cryptocurrencyCode": "code",
-                    "cryptocurrencyName": "name",
-                    "percentage": 30
+                    "cryptocurrencyCode": <code>,
+                    "cryptocurrencyName": <name>,
+                    "percentage": <% of the bundle>
                 }
-            ],
-            "minimumHoldingPeriod": 5
+            ]
         }
     ]
 }
@@ -165,5 +165,98 @@
  
 - - - - -
 
+## _[GET]_ `/account/customer-details`
+### Request
+```json
+{
+    "customerID": <customer ID>
+}
+```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority 
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "The customers details"
+    },
+    "customerID": <Customers ID>,
+    "registerDatetime": <datetime of account creation>,
+    "emailAddress": <email address>,
+    "previousSignInDatetime": <last sign in datetime>,
+    "currentSignInDatetime": <current sign in datetime>,
+    "name": "name"
+}
+```
+
+- - - - -
+
+## _[GET]_ `/account/wallets`
+### Request
+```json
+{
+    "customerID": "customerID"
+}
+```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority 
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "All of the customers wallets"
+    },
+    "wallets": [
+        {
+            "walletAddress": <wallet address>,
+            "customerID": <customer ID>,
+            "initialBalance": <the balance at time of purchase>,
+            "currentBalance": <the current balance>,
+            "cryptocurrencyCode": <the wallets cryptocurrency>,
+            "holdingPeriod": <investment time period>
+        }
+    ]
+}
+```
+> Where
+> * `wallets` is a list of all the customers wallets
+ 
+- - - - -
+
+## _[GET]_ `/account/bundles`
+### Request
+```json
+{
+    "customerID": "customerID"
+}
+```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "All of the customers bundles"
+    },
+    "bundles": [
+        {
+            "bundleAddress": <bundle address>,
+            "bundleID": <bundle ID>,
+            "customerID": <customer ID>,
+            "amount": <amount invested>,
+            "holdingPeriod": <investment time period>,
+            "purchaseDatetime": <datetime of purchase>,
+            "status": <ACTIVE or INACTIVE>
+        }
+    ]
+}
+```
+> Where
+> * `bundles` is a list of all the customers bundles
+
+- - - - -
 
 

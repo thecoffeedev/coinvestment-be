@@ -21,7 +21,7 @@
 {
     "status": {
         "statusCode": "FAILURE",
-        "statusMessage" : "<The reason for the failure>"
+        "statusMessage" : <The reason for the failure>
     }
 }
 ```
@@ -181,58 +181,58 @@
 {
     "status": {
         "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
+        "statusMessage": "All details from account"
     },
     "customer": {
-        "customerID": "customerID",
-        "registerDatetime": "registerDatetime",
-        "emailAddress": "emailAddress",
-        "previousSignInDatetime": "previousSignInDatetime",
-        "currentSignInDatetime": "currentSignInDatetime",
-        "name": "name"
+        "customerID": <customerID>,
+        "registerDatetime": <registerDatetime>,
+        "emailAddress": <emailAddress>,
+        "previousSignInDatetime": <last sign in time>,
+        "currentSignInDatetime": <current sign in time>,
+        "name": <name>
     },
     "wallets": [
         {
-            "walletAddress": "walletAddress",
-            "customerID": "customerID",
-            "initialBalance": "initialBalance",
-            "currentBalance": "currentBalance",
-            "cryptocurrencyCode": "cryptocurrencyCode",
-            "holdingPeriod": "holdingPeriod",
+            "walletAddress": <wallet address>,
+            "customerID": <customer ID>,
+            "initialBalance": <balance when purchased>,
+            "currentBalance": <current balance>,
+            "cryptocurrencyCode": <cryptocurrency code>,
+            "holdingPeriod": <investment period>,
             "walletTransactions": [
                 {
-                    "transactionID": "transactionID",
-                    "transactionDateTime": "transactionDateTime",
-                    "chargeApplied": "chargeApplied",
-                    "amount": "amount",
-                    "action": "action",
-                    "cardNumber": "cardNumber",
-                    "expiry": "expiry",
-                    "unitsSold": "unitsSold",
-                    "initialRate": "initialRate"
+                    "transactionID": <transaction ID>,
+                    "transactionDateTime": <transaction datetime>,
+                    "chargeApplied": <charge applied for selling before holding period expires>,
+                    "amount": <amount invested>,
+                    "action": <BUY or SELL>,
+                    "cardNumber": <card number masked>,
+                    "expiry": <expiry maksed>,
+                    "unitsSold": <amount sold>,
+                    "initialRate": <rate at time of purchase>
                 }
             ]
         }
     ],
     "bundles": [ 
         {
-            "bundleAddress": "bundleAddress",
-            "bundleID": "bundleID",
-            "customerID": "customerID",
-            "amount": "amount",
-            "holdingPeriod": "holdingPeriod",
-            "purchaseDatetime": "purchaseDatetime",
-            "status": "status",
+            "bundleAddress": <bundle address>,
+            "bundleID": <bundle ID>,
+            "customerID": <customer ID>,
+            "amount": <amount invested>,
+            "holdingPeriod": <investment time period>,
+            "purchaseDatetime": <datetime of purchase>,
+            "status": <ACTIVE or INACTIVE>
             "bundleTransactions": [ 
                 {
-                    "transactionID": "transactionID",
-                    "transactionDateTime": "transactionDateTime",
-                    "chargeApplied": "chargeApplied",
-                    "amount": "amount",
-                    "action": "action",
-                    "cardNumber": "cardNumber",
-                    "expiry": "expiry",
-                    "initialRate": "initialRate"
+                    "transactionID": <transaction ID>,
+                    "transactionDateTime": <datetime of transaction>,
+                    "chargeApplied": <charges applied for selling before holding period expires>,
+                    "amount": <amount invested>,
+                    "action": <BUY or SELL>,
+                    "cardNumber": <card number masked>,
+                    "expiry": <expiry date masked>,
+                    "initialRate": <rate at which the cryptocurrency was bought>
                 }
             ]
         }
@@ -405,7 +405,7 @@
         "statusCode": "SUCCESS/",
         "statusMessage": "Details for the bundle requested"
     },
-    "bundles": {
+    "bundle": {
         "bundleAddress": <bundle address>,
         "bundleID": <bundle ID>,
         "customerID": <customer ID>,

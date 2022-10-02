@@ -3,7 +3,7 @@
 ## :heavy_exclamation_mark: Request failure
 > ## Note
 > When a request has failed the response will be formatted as below, 
-> with the `statusCode` key being `FAILURE`. The `statusMessage` 
+> with the `statusCode` key being `FAILURE` and the `statusMessage` 
 > showing the reason for the failure. `FAILURE` does not mean the 
 > request was not received, but the request received could not be
 > completed. These failure messages can be shown in the front-end or

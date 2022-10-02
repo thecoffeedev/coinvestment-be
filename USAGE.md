@@ -261,4 +261,51 @@
 
 - - - - -
 
+## _[POST]_ `/account/wallets/<wallet_adddress>`
+### Request
+```json
+{
+    "customerID": <customer ID>,
+    "walletAddress": <the wallet address for which details are requested>
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Details for wallet requested"
+    },
+    "wallet": {
+            "walletAddress": <wallet address>,
+            "customerID": <customer ID>,
+            "initialBalance": <the balance at time of purchase>,
+            "currentBalance": <the current balance>,
+            "cryptocurrencyCode": <the wallets cryptocurrency>,
+            "holdingPeriod": <investment time period>
+    },
+    "walletTransactions": [
+        {
+            "transactionID": <transaction ID>,
+            "transactionDateTime": <datetime of transaction>,
+            "chargeApplied": <charges applied for selling before holding period expires>,
+            "amount": <amount invested>,
+            "action": <BUY or SELL>,
+            "cardNumber": <card number masked>,
+            "expiry": <expiry date masked>,
+            "unitsSold": <sold cryptocurrency>,
+            "initialRate": <rate at which the cryptocurrency was bought>
+        }
+    ]
+}
+```
+> Where
+> * `walletTransactions` is a list of all transactions carried out on that wallet
+
+- - - - -
+
+##
+
+
+
 

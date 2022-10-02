@@ -1,7 +1,6 @@
 # API usage
 
-#  Request failure
-:heavy_exclamation_mark:
+# :heavy_exclamation_mark: Request failure
 > ## Note
 > When a request has failed the response will be formatted as below, 
 > with the `statusCode` key being `FAILURE`. The `statusMessage` 

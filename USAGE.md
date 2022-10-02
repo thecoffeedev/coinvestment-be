@@ -98,14 +98,14 @@
     "availableBundles": [
         {
             "bundleName": <bundle name>,
+            "minimumHoldingPeriod": <in monthes>,
             "bundleCryptocurrencies": [
                 {
                     "cryptocurrencyCode": <code>,
                     "cryptocurrencyName": <name>,
                     "percentage": <% of the bundle>
                 }
-            ],
-            "minimumHoldingPeriod": <in monthes>
+            ]
         }
     ]
 } 
@@ -122,7 +122,7 @@
 {
     "status": {
         "statusCode": "SUCCESS",
-        "statusMessage": "List of all cryptocurrencies"
+        "statusMessage": "List of all available cryptocurrencies"
     },
     "availableCryptocurrencies": [
         {
@@ -135,6 +135,34 @@
 > Where
 > * `availableCryptocurrencies` is a list of cryptocurrencies
 
+- - - - -
+
+## _[GET]_ `list/all/bundles`
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "availableBundles": [
+        {
+            "bundleName": "Low Risk",
+            "bundleCryptocurrencies": [
+                {
+                    "cryptocurrencyCode": "code",
+                    "cryptocurrencyName": "name",
+                    "percentage": 30
+                }
+            ],
+            "minimumHoldingPeriod": 5
+        }
+    ]
+}
+```
+> Where
+> * `availableBundles` is a list of bundles
+ 
 - - - - -
 
 

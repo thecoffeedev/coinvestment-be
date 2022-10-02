@@ -33,6 +33,3 @@ pip install -r requirements.txt
 |:--------------------------------|:---------------:|
 | `beatrice.shilling@hotmail.com` |   `password`    |
 | `frank.whittle@yahoomail.com`   |   `password2`   |
-
-&#064;
-

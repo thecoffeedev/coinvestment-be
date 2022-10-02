@@ -16,13 +16,6 @@ class CustomerDataAccess:
         self.createTables()
         self.insertDayZeroData()
 
-        c = Customer()
-        c.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
-        c.setCurrentSignInDatetime(12345)
-        c.setPreviousSignInDatetime(67890)
-        self.updateCustomerSignInDatetimes(c)
-
-
     def createTables(self):
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \
                             "CustomerID VARCHAR(20), " \
@@ -41,24 +34,6 @@ class CustomerDataAccess:
         con.close()
 
     def insertDayZeroData(self):
-        customerOne = Customer()
-        customerOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
-        customerOne.setPasswordHash("$2b$12$hilgtAM2h/10jUiOGpA.IuTq2vieG3A4o95kNiaUvsOnBjindoKMa")
-        customerOne.setRegisterDatetime(1664471892)
-        customerOne.setEmailAddress("beatrice.shilling@hotmail.com")
-        customerOne.setPreviousSignInDatetime(1664567871)
-        customerOne.setCurrentSignInDatetime(1664567244)
-        customerOne.setName("Beatrice Shilling")
-
-        customerTwo = Customer()
-        customerTwo.setCustomerID("Debo32tKqJBeZwHHgkvx")
-        customerTwo.setPasswordHash("$2b$12$GCq529ew5SSOUINxa.nxSOI27Ir1vIvww5X7go9eKysksavMCUL4a")
-        customerTwo.setRegisterDatetime(1664281967)
-        customerTwo.setEmailAddress("frank.whittle@yahoomail.com")
-        customerTwo.setPreviousSignInDatetime(1664460752)
-        customerTwo.setCurrentSignInDatetime(1664538380)
-        customerTwo.setName("Frank Whittle")
-
         con = self.mysql.connect()
         cur = con.cursor()
 
@@ -66,6 +41,24 @@ class CustomerDataAccess:
         cur.execute("SELECT EXISTS (SELECT * FROM Customer)")
 
         if not cur.fetchone()[0]:
+            customerOne = Customer()
+            customerOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+            customerOne.setPasswordHash("$2b$12$hilgtAM2h/10jUiOGpA.IuTq2vieG3A4o95kNiaUvsOnBjindoKMa")
+            customerOne.setRegisterDatetime(1664471892)
+            customerOne.setEmailAddress("beatrice.shilling@hotmail.com")
+            customerOne.setPreviousSignInDatetime(1664567871)
+            customerOne.setCurrentSignInDatetime(1664567244)
+            customerOne.setName("Beatrice Shilling")
+
+            customerTwo = Customer()
+            customerTwo.setCustomerID("Debo32tKqJBeZwHHgkvx")
+            customerTwo.setPasswordHash("$2b$12$GCq529ew5SSOUINxa.nxSOI27Ir1vIvww5X7go9eKysksavMCUL4a")
+            customerTwo.setRegisterDatetime(1664281967)
+            customerTwo.setEmailAddress("frank.whittle@yahoomail.com")
+            customerTwo.setPreviousSignInDatetime(1664460752)
+            customerTwo.setCurrentSignInDatetime(1664538380)
+            customerTwo.setName("Frank Whittle")
+
             self.insertCustomer(customerOne)
             self.insertCustomer(customerTwo)
 
@@ -172,8 +165,11 @@ class CustomerDataAccess:
     def updateCustomerEmailAddress(self, customerObj):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("UPDATE Customer SET PasswordHash = %s "
-                    "WHERE CustomerID = %s",
+
+        updateQuery = "UPDATE Customer SET PasswordHash = %s " \
+                "WHERE CustomerID = %s"
+
+        cur.execute(updateQuery,
                     (customerObj.getPasswordHash(),
                      customerObj.getCustomerID()))
 

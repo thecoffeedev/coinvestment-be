@@ -255,7 +255,7 @@ class WalletDataAccess:
             walletTransactionObj.setTransactionID(walletTransaction[0])
             walletTransactionObj.setWalletAddress(walletTransaction[1])
             walletTransactionObj.setUnitsSold(Utility.roundDecimals(walletTransaction[2]))
-            walletTransactionObj.setTransactionDateTime(Utility.unixTimestampToStrings(walletTransaction[3]))
+            walletTransactionObj.setTransactionDatetime(Utility.unixTimestampToStrings(walletTransaction[3]))
             walletTransactionObj.setChargeApplied(Utility.roundDecimals(walletTransaction[4]))
             walletTransactionObj.setAmount(Utility.roundDecimals(walletTransaction[5]))
             walletTransactionObj.setAction(walletTransaction[6])

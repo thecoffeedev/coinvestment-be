@@ -113,6 +113,7 @@
 > Where
 > * `availableCryptocurrencies` is a list of cryptocurrencies
 > * `availableBundles` is a list of bundles
+> * `bundleCryptocurrencies` is a list of the cryptocurrencies in that bundle
 
 - - - - -
 
@@ -162,6 +163,7 @@
 ```
 > Where
 > * `availableBundles` is a list of bundles
+> * `bundleCryptocurrencies` is a list of the cryptocurrencies in that bundle
  
 - - - - -
 

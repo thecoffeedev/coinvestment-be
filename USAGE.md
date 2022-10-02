@@ -1,6 +1,6 @@
 # API usage
 
-# :heavy_exclamation_mark: Request failure
+## :heavy_exclamation_mark: Request failure
 > ## Note
 > When a request has failed the response will be formatted as below, 
 > with the `statusCode` key being `FAILURE`. The `statusMessage` 
@@ -16,7 +16,7 @@
 >> * Attempted access to unauthorized routes
 >> * Incorrectly formatted data (email address, password length, etc.)
 
-## Request failure response
+### Request failure response
 ```json
 {
     "status": {

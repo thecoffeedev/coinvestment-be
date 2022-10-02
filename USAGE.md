@@ -167,6 +167,86 @@
  
 - - - - -
 
+## _[GET]_ `/account`
+### Request
+```json
+{
+    "customerID": "customerID"
+}
+```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority 
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "customer": {
+        "customerID": "customerID",
+        "registerDatetime": "registerDatetime",
+        "emailAddress": "emailAddress",
+        "previousSignInDatetime": "previousSignInDatetime",
+        "currentSignInDatetime": "currentSignInDatetime",
+        "name": "name"
+    },
+    "wallets": [
+        {
+            "walletAddress": "walletAddress",
+            "customerID": "customerID",
+            "initialBalance": "initialBalance",
+            "currentBalance": "currentBalance",
+            "cryptocurrencyCode": "cryptocurrencyCode",
+            "holdingPeriod": "holdingPeriod",
+            "walletTransactions": [
+                {
+                    "transactionID": "transactionID",
+                    "transactionDateTime": "transactionDateTime",
+                    "chargeApplied": "chargeApplied",
+                    "amount": "amount",
+                    "action": "action",
+                    "cardNumber": "cardNumber",
+                    "expiry": "expiry",
+                    "unitsSold": "unitsSold",
+                    "initialRate": "initialRate"
+                }
+            ]
+        }
+    ],
+    "bundles": [ 
+        {
+            "bundleAddress": "bundleAddress",
+            "bundleID": "bundleID",
+            "customerID": "customerID",
+            "amount": "amount",
+            "holdingPeriod": "holdingPeriod",
+            "purchaseDatetime": "purchaseDatetime",
+            "status": "status",
+            "bundleTransactions": [ 
+                {
+                    "transactionID": "transactionID",
+                    "transactionDateTime": "transactionDateTime",
+                    "chargeApplied": "chargeApplied",
+                    "amount": "amount",
+                    "action": "action",
+                    "cardNumber": "cardNumber",
+                    "expiry": "expiry",
+                    "initialRate": "initialRate"
+                }
+            ]
+        }
+    ]  
+}
+```
+> Where
+> * `wallets` is a list of all the customers wallets
+> * `walletTransactions` is a list of all transactions carried out on that wallet
+> * `bundles` is a list of all the customers bundles
+> * `bundleTransactions` is a list of all transactions carried out on that wallet
+
+- - - - -
+
 ## _[GET]_ `/account/customer-details`
 ### Request
 ```json
@@ -269,6 +349,8 @@
     "walletAddress": <the wallet address for which details are requested>
 }
 ```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority
 ### Response
 ```json
 {
@@ -300,12 +382,129 @@
 }
 ```
 > Where
-> * `walletTransactions` is a list of all transactions carried out on that wallet
+> * `walletTransactions` is a list of all transactions carried out on 
+> that wallet
 
 - - - - -
 
-##
+## _[POST]_ `/account/bundles/<bundle_address>`
+### Request
+```json
+{
+    "customerID": <customer ID>,
+    "bundleAddress": <bundle address>
+}
+```
+> The token present in the authorization header is the preferred
+> method to confirm access to this route and has priority
+### Response
+```json
+
+{
+    "status": {
+        "statusCode": "SUCCESS/",
+        "statusMessage": "Details for the bundle requested"
+    },
+    "bundles": {
+        "bundleAddress": <bundle address>,
+        "bundleID": <bundle ID>,
+        "customerID": <customer ID>,
+        "amount": <amount invested>,
+        "holdingPeriod": <investment time period>,
+        "purchaseDatetime": <datetime of purchase>,
+        "status": <ACTIVE or INACTIVE>
+    },
+    "bundleTransactions": [ 
+        {
+            "transactionID": <transaction ID>,
+            "transactionDateTime": <datetime of transaction>,
+            "chargeApplied": <charges applied for selling before holding period expires>,
+            "amount": <amount invested>,
+            "action": <BUY or SELL>,
+            "cardNumber": <card number masked>,
+            "expiry": <expiry date masked>,
+            "initialRate": <rate at which the cryptocurrency was bought>
+        }
+    ]
+}
+```
+> Where
+> * `bundleTransactions` is a list of all transactions carried out on 
+> that wallet
 
 
+- - - - -
 
+## _[POST]_ `/account/purchase/wallet`
+### Request
+```json
+{
+    "wallet": {
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": [
+        {
+            "initialRate": "initialRate",
+            "amount": "amount",
+            "cardNumber": "cardNumber",
+            "expiry": "expiry"
+        }
+    ]
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Wallet purchased"
+    },
+    "wallet": {
+            "walletAddress": <wallet address>,
+            "customerID": <customer ID>,
+            "initialBalance": <the balance at time of purchase>,
+            "currentBalance": <the current balance>,
+            "cryptocurrencyCode": <the wallets cryptocurrency>,
+            "holdingPeriod": <investment time period>
+    },
+    "walletTransaction": [
+        {
+            "transactionID": <transaction ID>,
+            "transactionDateTime": <datetime of transaction>,
+            "chargeApplied": <charges applied for selling before holding period expires>,
+            "amount": <amount invested>,
+            "action": <BUY or SELL>,
+            "cardNumber": <card number masked>,
+            "expiry": <expiry date masked>,
+            "unitsSold": <sold cryptocurrency>,
+            "initialRate": <rate at which the cryptocurrency was bought>
+        }
+    ]
+}
+```
+> Where
+> * `walletTransactions` is a list of all transactions carried out on 
+> that wallet
+
+- - - - -
+
+## _[POST]_ `/account/sell/wallet`
+### Request
+```json
+{
+    "wallet": {
+        "walletAddress": <wallet address>,
+        "customerID": <customer ID>,
+        "initialRate": <the rate at which bought>,
+        "unitsSold": <how many to sell>
+    }
+} 
+```
+### Response
+```json
+
+```
 

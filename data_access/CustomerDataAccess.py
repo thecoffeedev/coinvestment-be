@@ -195,13 +195,13 @@ class CustomerDataAccess:
         con.close()
 
     def updateCustomerEmailAddress(self, customerObj):
-        query = "UPDATE Customer SET PasswordHash = %s " \
+        query = "UPDATE Customer SET EmailAddress = %s " \
                 "WHERE CustomerID = %s"
 
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute(query,
-                    (customerObj.getPasswordHash(),
+                    (customerObj.getEmailAddress(),
                      customerObj.getCustomerID()))
 
         cur.close()

@@ -224,7 +224,15 @@ class CustomerDataAccess:
         con.commit()
         con.close()
 
-
+    def testDropTables(self):
+        # Just for unit testing
+        con = self.mysql.connect()
+        cur = con.cursor()
+        dropQuery = "DROP TABLE Customer"
+        cur.execute(dropQuery)
+        cur.close()
+        con.commit()
+        con.close()
 
 
 """

@@ -44,7 +44,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully registered new customer with ID " + customerFE.getCustomerID()
+                            "statusMessage": "Successfully registered new customer"
                         },
                         "name": customerFE.getName(),
                         "emailAddress": customerFE.getEmailAddress(),
@@ -94,7 +94,7 @@ class CustomerController:
                         {
                             "status": {
                                 "statusCode": "SUCCESS",
-                                "statusMessage": "Successfully signed in customer with ID " + customerDA.getCustomerID()
+                                "statusMessage": "Successfully signed in customer"
                             },
                             "customerID": customerDA.getCustomerID(),
                             "name": customerDA.getName(),
@@ -191,7 +191,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully changed password for customer with ID " + customerDA.getCustomerID()
+                            "statusMessage": "Successfully changed password for customer"
                             + " You will be signed out. Sign in with new password"
                         },
                         "customerID": customerDA.getCustomerID()

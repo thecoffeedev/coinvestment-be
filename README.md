@@ -29,10 +29,7 @@ pip install -r requirements.txt
 
 ### Test data
 
-| **Email address**                 | **Password** |
-|:----------------------------------|-------------:|
-| beatrice.shilling@hotmail.com     |     password |
-| frank.whittle@yahoomail.com       |    password2 |
-
-
-
+| **Email address**               |  **Password**   |
+|:--------------------------------|:---------------:|
+| `beatrice.shilling@hotmail.com` |   `password`    |
+| `frank.whittle@yahoomail.com`   |   `password2`   |

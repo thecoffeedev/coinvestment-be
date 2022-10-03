@@ -164,11 +164,11 @@ class WalletDataAccess:
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("INSERT INTO WalletTransactionHistory" \
-                    " (TransactionID, TransactionDateTime, ChargeApplied, Amount," \
+                    " (TransactionID, TransactionDatetime, ChargeApplied, Amount," \
                     " Action, CardNumber, Expiry, WalletAddress, UnitsSold, InitialRate) " \
                     " VALUES(%s, %s, %s, %s,  %s, %s, %s, %s, %s, %s)",
                     (walletTransactionObj.getTransactionID(),
-                    walletTransactionObj.getTransactionDateTime(),
+                    walletTransactionObj.getTransactionDatetime(),
                     walletTransactionObj.getChargeApplied(),
                     walletTransactionObj.getAmount(),
                     walletTransactionObj.getAction(),
@@ -262,7 +262,7 @@ class WalletDataAccess:
             walletTransactionObj.setTransactionID(walletTransaction[0])
             walletTransactionObj.setWalletAddress(walletTransaction[1])
             walletTransactionObj.setUnitsSold(walletTransaction[2])
-            walletTransactionObj.setTransactionDateTime(walletTransaction[3])
+            walletTransactionObj.setTransactionDatetime(walletTransaction[3])
             walletTransactionObj.setChargeApplied(walletTransaction[4])
             walletTransactionObj.setAmount(walletTransaction[5])
             walletTransactionObj.setAction(walletTransaction[6])
@@ -294,7 +294,7 @@ class WalletDataAccess:
             walletTransactionObj.setTransactionID(walletTransaction[0])
             walletTransactionObj.setWalletAddress(walletTransaction[1])
             walletTransactionObj.setUnitsSold(walletTransaction[2])
-            walletTransactionObj.setTransactionDateTime(walletTransaction[3])
+            walletTransactionObj.setTransactionDatetime(walletTransaction[3])
             walletTransactionObj.setChargeApplied(walletTransaction[4])
             walletTransactionObj.setAmount(walletTransaction[5])
             walletTransactionObj.setAction(walletTransaction[6])

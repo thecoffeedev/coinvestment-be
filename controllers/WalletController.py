@@ -97,7 +97,7 @@ class WalletController:
 
             walletTransactionFE.setTransactionID(transactionID)
             walletTransactionFE.setWalletAddress(walletAddress)
-            walletTransactionFE.setTransactionDateTime(timeNow)
+            walletTransactionFE.setTransactionDatetime(timeNow)
             walletTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
             walletTransactionFE.setAction("BUY")
             walletTransactionFE.setUnitsSold(Utility.roundDecimals(0.0))
@@ -123,7 +123,7 @@ class WalletController:
                     },
                     "walletTransaction": {
                         "transactionID": walletTransactionFE.getTransactionID(),
-                        "transactionDateTime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDateTime()),
+                        "transactionDateTime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDatetime()),
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
                         "action": walletTransactionFE.getAmount(),
@@ -205,8 +205,8 @@ class WalletController:
             walletTransactionDA = self.WDA.readPurchaseWalletTransactionFromWalletAddress(walletFE.getWalletAddress())
             walletTransactionFE.setTransactionID(Utility.generateRandomID())
             walletTransactionFE.setWalletAddress(walletFE.getWalletAddress())
-            walletTransactionFE.setTransactionDateTime(int(time.time()))
-            if Utility.isWithinHoldingPeriod(walletTransactionDA.getTransactionDateTime(), walletDA.getHoldingPeriod()):
+            walletTransactionFE.setTransactionDatetime(int(time.time()))
+            if Utility.isWithinHoldingPeriod(walletTransactionDA.getTransactionDatetime(), walletDA.getHoldingPeriod()):
                 walletTransactionFE.setChargeApplied(Utility.calculateChargesApplied(walletTransactionFE.getAmount()))
             else:
                 walletTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
@@ -233,7 +233,7 @@ class WalletController:
                     },
                     "walletTransaction": {
                         "transactionID": walletTransactionFE.getTransactionID(),
-                        "transactionDateTime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDateTime()),
+                        "transactionDateTime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDatetime()),
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
                         "action": walletTransactionFE.getAmount(),

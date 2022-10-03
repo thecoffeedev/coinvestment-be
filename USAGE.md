@@ -164,7 +164,37 @@
 > Where
 > * `availableBundles` is a list of bundles
 > * `bundleCryptocurrencies` is a list of the cryptocurrencies in that bundle
- 
+### Bundles 
+
+| ID     | code |  percent | minimum holding |
+|:-------|:-----|---------:|----------------:|
+| 1      |btc |50 |6|
+| 1      |eth| 50 |6|
+| 2      |bch |25 |12|
+| 2      | eth |15 |12|
+| 2      |xrp |15 |12|
+| 2      |ltc |25 |12|
+| 2      |xmr |20 |12|
+| 3      |doge |20 |12|
+| 3      |shib | 20 |12|
+| 3      |etc |30 |12|
+| 3      |ape |30 |12|
+| 4      |link |20 |12|
+| 4      |mana |20 |12|
+| 4      |qnt |20 |12|
+| 4      |wbtc |20 |12|
+| 4      |usdc |20 |12|
+| 5      |dai | 20 |12|
+| 5      |bnb|20|12|
+| 5      |sol|20|12|
+| 6      |algo| 20| 18|     
+|6|busd|20|18|
+|6|flow|20|18|
+|6|fil|20|18|
+|6|dot|20|18|
+
+
+
 - - - - -
 
 ## _[GET]_ `/account`

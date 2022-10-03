@@ -7,17 +7,16 @@ import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
-
-# from flask_session import Session
-
 from controllers.BundleController import BundleController
+from flask_session import Session
 import requests
 
 # initializing a variable of Flask
 app = Flask(__name__)
 #app.config["SESSION_PERMANENT"] = False
 #app.config["SESSION_TYPE"] = "firestore"
-# Session(app)
+sess = Session(app)
+sess.init_app(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -26,128 +25,59 @@ app = Flask(__name__)
 # app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
 # mysql.init_app(app)
 
-cWallet = WalletController(app)
-cCustomer = CustomerController(app)
-cBundle = BundleController(app)
+WController = WalletController(app)
+CController = CustomerController(app)
+BController = BundleController(app)
 
 """
 Test route.
 """
 @app.route('/', methods=["GET"])
 def home():
-
-    # print('Inside home')
-    # print(session)
-    # print(session["Token"])
-    # print(session["CustomerID"])
-
-    cBundle.generateDayZeroData()
-    return flask.make_response("test")
+    return flask.make_response("You have reached a test route")
 
 
-"""
-Request JSON:
-{
-    "emailAddress": "<emailAddress>",
-    "name": "<name>",
-    "password": "<password>"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "<Success or failure message to be displayed to the user.>"
-    },
-    "name": "<name>",
-    "emailAddress": "<emailAddress>"
-}
-"""
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
-    data = request.get_json()
-    print(data["email address"])
-    response = \
-        {
-            "status":
-                {
-                    "status code": "SUCCESS",
-                    "status message": "Successfully signed up"
-                },
-            "name": data["name"],
-            "email address": data["email address"]
-        }
-    return flask.make_response(response)
+    reqData = request.get_json()
+    print("received: ", reqData["name"], reqData["emailAddress"], reqData["password"])
+    responseData = CController.signUp(reqData)
+    resp = flask.make_response(responseData)
+    if responseData.get("status")["statusCode"] == "SUCCESS":
+        token = CController.generateToken()
+        session[token] = responseData["customerID"]
+        print(responseData["customerID"])
+
+        resp.headers.set("Authorization", token)
+
+    del responseData["customerID"]
+
+    return resp
 
 
-"""
-Request JSON:
-{
-    "emailAddress": "<emailAddress>",
-    "password": "<password>"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "<Success or failure message to be displayed to the user.>"
-    },
-    "name": "<name>",
-    "emailAddress": "<emailAddress>",
-    "currentSignInDatetime":"<currentSignInDatetime>",
-    "previousSignInDatetime":"<previousSignInDatetime>",
-}
-"""
 @app.route('/sign-in', methods=["POST"])
 def sign_in():
-    data = request.get_json()
-    print(request)
-    print(data)
-    print(data["emailAddress"])
-    print(data["password"])
-    response = cCustomer.customerSignIn(data)
-    print(response)
-    print(response["status"])
-    print(response["status"]["status code"])
-    # Session(app)
-    resp = flask.make_response(response)
+    reqData = request.get_json()
+    print("received: ", reqData["emailAddress"], reqData["password"])
+    responseData = CController.signIn(reqData)
+    resp = flask.make_response(responseData)
 
-    if response["status"]["status code"] == 'FAILURE':
-        # session = flask.session.
-        # session.__setattr__("Token",request.headers["Authorization"].strip("Bearer "))
-        # session.__setattr__("CustomerID", "ABCD12345")
-        session["Token"] = request.headers["Authorization"].strip("Bearer ")
-        session["CustomerID"] = "ABCD12345"
-        print(session)
-        # resp.headers['Authorization'] = 'Bearer 12345'
-        print(resp.headers)
-    # response = \
-    #     {
-    #         "status":
-    #             {
-    #                 "status code": "SUCCESS",
-    #                 "status message": "Successfully signed in"
-    #             },
-    #         "name": "Welcome <name>"
-    #     }
-    return resp #flask.make_response(response)
+    if responseData.get("status")["status code"] == "SUCCESS":
+        token = CController.generateToken()
+        session[token] = responseData["customerID"]
+        print(responseData["customerID"])
 
-"""
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show the message to the user in case of FAILURE"
-    },
-    "availableCryptocurrencies": [
-        {
-            "cryptocurrencyCode": "btc",
-            "cryptocurrencyName": "name"
-        }
-    ]
-}
-"""
+        resp.headers.set("Authorization", token)
+
+    del responseData["customerID"]
+    return resp
+
+@app.route('/sign-out', methods=["POST"])
+def sign_out():
+
+    del session[request.headers.get("Authorization")]
+
+
 @app.route('/list/all/cryptocurrencies', methods=["GET"])
 def list_all_cryptocurrencies():
     url = "https://api.coingecko.com/api/v3/search/trending"

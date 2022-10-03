@@ -4,3 +4,5 @@ passlib==1.7.4
 python-decouple==3.6
 requests~=2.25.1
 Flask-Session==0.4.0
+python-dateutil~=2.8.2
+

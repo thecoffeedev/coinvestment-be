@@ -22,7 +22,7 @@ class CustomerController:
             if not jsonReqData.get("password"):
                 raise ValueError("Password not provided in request JSON")
             if not jsonReqData.get("name"):
-                raise ValueError("Password not provided in request JSON")
+                raise ValueError("Name not provided in request JSON")
 
             customerFE = Customer()
             customerFE.setEmailAddress(jsonReqData.get("emailAddress"))

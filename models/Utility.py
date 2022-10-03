@@ -1,7 +1,9 @@
 import random
 import string
 from passlib.hash import bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+import time
 
 
 class Utility:
@@ -57,8 +59,23 @@ class Utility:
             raise TypeError("Timestamp must be a float or int")
 
         t = datetime.fromtimestamp(unixTimestamp)
-        return [t.strftime("%d-%m-%Y"), t.strftime("%H:%M:%S")]
+        return t.strftime("%d-%m-%Y") + " " + t.strftime("%H:%M:%S")
 
     @staticmethod
     def roundDecimals(decimalValue):
-        return round(decimalValue, 4)
+        return round(float(decimalValue), 4)
+
+    @staticmethod
+    def calculateChargesApplied(amount):
+        return round(float(amount) * 0.10, 4)
+    
+    @staticmethod
+    def isWithinHoldingPeriod(startDateTime, holdingPeriod):
+        startTime = datetime.fromtimestamp(int(startDateTime))
+        endTime = startTime + relativedelta(months=holdingPeriod)
+        currentTime = datetime.fromtimestamp(int(time.time()))
+
+        if currentTime > startTime and currentTime < endTime:
+            return True
+        else:
+            return False

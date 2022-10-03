@@ -44,9 +44,9 @@ class TransactionHistory:
         if chargeApplied is None:
             raise ValueError("Charge Applied must not be none")
         elif type(chargeApplied) != float:
-            raise TypeError("Charge Applied must be an float")
-        elif chargeApplied <= 0:
-            raise ValueError("Charge Applied must be greater than zero")
+            raise TypeError("Charge Applied must be a float")
+        elif chargeApplied < 0:
+            raise ValueError("Charge Applied must be greater than or equal to zero")
         else:
             self._chargeApplied = chargeApplied
 

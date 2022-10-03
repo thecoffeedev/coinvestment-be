@@ -22,7 +22,7 @@ class CustomerController:
             if not jsonReqData.get("password"):
                 raise ValueError("Password not provided in request JSON")
             if not jsonReqData.get("name"):
-                raise ValueError("Password not provided in request JSON")
+                raise ValueError("Name not provided in request JSON")
 
             customerFE = Customer()
             customerFE.setEmailAddress(jsonReqData.get("emailAddress"))
@@ -44,7 +44,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully registered new customer with ID " + customerFE.getCustomerID()
+                            "statusMessage": "Successfully registered new customer"
                         },
                         "name": customerFE.getName(),
                         "emailAddress": customerFE.getEmailAddress(),
@@ -94,13 +94,13 @@ class CustomerController:
                         {
                             "status": {
                                 "statusCode": "SUCCESS",
-                                "statusMessage": "Successfully signed in customer with ID " + customerDA.getCustomerID()
+                                "statusMessage": "Successfully signed in customer"
                             },
                             "customerID": customerDA.getCustomerID(),
                             "name": customerDA.getName(),
                             "emailAddress": customerDA.getEmailAddress(),
-                            "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
-                            "previousSignInDatetime": customerDA.getPreviousSignInDatetime()
+                            "currentSignInDatetime": Utility.unixTimestampToStrings(customerDA.getCurrentSignInDatetime()),
+                            "previousSignInDatetime": Utility.unixTimestampToStrings(customerDA.getPreviousSignInDatetime())
                         }
 
                     return response
@@ -191,7 +191,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully changed password for customer with ID " + customerDA.getCustomerID()
+                            "statusMessage": "Successfully changed password for customer"
                             + " You will be signed out. Sign in with new password"
                         },
                         "customerID": customerDA.getCustomerID()

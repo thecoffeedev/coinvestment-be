@@ -99,8 +99,8 @@ class CustomerController:
                             "customerID": customerDA.getCustomerID(),
                             "name": customerDA.getName(),
                             "emailAddress": customerDA.getEmailAddress(),
-                            "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
-                            "previousSignInDatetime": customerDA.getPreviousSignInDatetime()
+                            "currentSignInDatetime": Utility.unixTimestampToStrings(customerDA.getCurrentSignInDatetime()),
+                            "previousSignInDatetime": Utility.unixTimestampToStrings(customerDA.getPreviousSignInDatetime())
                         }
 
                     return response

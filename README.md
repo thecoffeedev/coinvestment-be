@@ -1,10 +1,13 @@
 # Coinvestment back end
+
+> ### See [USAGE.md](USAGE.md) for documentation on routes, requests, and responses
+
 ## 7047CEM Software Development Project
 
 ### Contributors
-Savraj Sandhu
-
-Nikita Kurup
+> Savraj Sandhu
+> 
+> Nikita Kurup
 
 ### Team members:
 
@@ -16,16 +19,19 @@ Nikita Kurup
 | Vivek Koleti   |        13024998 |
 | Shashant Dudam |        12975572 |
 
+
+
 ### Required packages:
 ```commandline
 pip install -r requirements.txt
 ```
-
-* Flask==2.2.2
-* Flask-MySQL==1.5.2
-* passlib==1.7.4
-* python-decouple==3.6
-* requests~=2.25.1
+```commandline
+Flask==2.2.2
+Flask-MySQL==1.5.2
+passlib==1.7.4
+python-decouple==3.6
+requests~=2.25.1
+```
 
 ### Test data
 

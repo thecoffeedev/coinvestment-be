@@ -70,8 +70,9 @@ class CustomerDataAccess:
         con = self.mysql.connect()
         cur = con.cursor()
         insertQuery = "INSERT INTO Customer (" \
-                "CustomerID, PasswordHash, RegisterDatetime, EmailAddress, PreviousSignInDatetime, " \
-                "CurrentSignInDatetime, Name) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                      "CustomerID, PasswordHash, RegisterDatetime, EmailAddress, " \
+                      "PreviousSignInDatetime, CurrentSignInDatetime, Name) " \
+                      "VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
         cur.execute(insertQuery, (customerObj.getCustomerID(), customerObj.getPasswordHash(),
                                   customerObj.getRegisterDatetime(), customerObj.getEmailAddress(),
@@ -83,78 +84,102 @@ class CustomerDataAccess:
         con.close()
 
     def isCustomerExistingByEmailAddress(self, emailAddress):
+        query = "SELECT * FROM Customer " \
+                "WHERE EmailAddress = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE EmailAddress = %s", emailAddress)
-        entry = cur.fetchall()
+        cur.execute(query, emailAddress)
+        rowCount = cur.rowcount
+        entry = cur.fetchone()
         cur.close()
         con.close()
 
         # Empty cursor is False, therefore customer does not exist
-        if entry:
+        if rowCount:
             return True
         else:
             return False
 
     def isCustomerExistingByCustomerID(self, customerID):
+        query = "SELECT * FROM Customer " \
+                "WHERE CustomerID = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE CustomerID = %s", customerID)
-        entry = cur.fetchall()
+        cur.execute(query, customerID)
+        rowCount = cur.rowcount
+        entry = cur.fetchone()
         cur.close()
         con.close()
 
         # Empty cursor is False, therefore customer does not exist
-        if entry:
+        if rowCount:
             return True
         else:
             return False
 
     def readCustomerByEmail(self, emailAddress):
+        query = "SELECT * FROM Customer " \
+                "WHERE EmailAddress = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE EmailAddress = %s", emailAddress)
+        cur.execute(query, emailAddress)
+        rowCount = cur.rowcount
         result = cur.fetchone()
         cur.close()
         con.commit()
         con.close()
 
-        customer = Customer()
-        customer.setCustomerID(result[0])
-        customer.setPasswordHash(result[1])
-        customer.setRegisterDatetime(result[2])
-        customer.setEmailAddress(result[3])
-        customer.setPreviousSignInDatetime(result[4])
-        customer.setCurrentSignInDatetime(result[5])
-        customer.setName(result[6])
+        if rowCount:
+            customer = Customer()
+            customer.setCustomerID(result[0])
+            customer.setPasswordHash(result[1])
+            customer.setRegisterDatetime(result[2])
+            customer.setEmailAddress(result[3])
+            customer.setPreviousSignInDatetime(result[4])
+            customer.setCurrentSignInDatetime(result[5])
+            customer.setName(result[6])
 
-        return customer
+            return customer
+        else:
+            raise LookupError("Customer record does not exist")
 
     def readCustomerByCustomerID(self, customerID):
+        query = "SELECT * FROM Customer " \
+                "WHERE CustomerID = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM Customer WHERE CustomerID = %s", customerID)
+        cur.execute(query, customerID)
+        rowCount = cur.rowcount
         result = cur.fetchone()
         cur.close()
         con.commit()
         con.close()
 
-        customer = Customer()
-        customer.setCustomerID(result[0])
-        customer.setPasswordHash(result[1])
-        customer.setRegisterDatetime(result[2])
-        customer.setEmailAddress(result[3])
-        customer.setPreviousSignInDatetime(result[4])
-        customer.setCurrentSignInDatetime(result[5])
-        customer.setName(result[6])
+        if rowCount:
+            customer = Customer()
+            customer.setCustomerID(result[0])
+            customer.setPasswordHash(result[1])
+            customer.setRegisterDatetime(result[2])
+            customer.setEmailAddress(result[3])
+            customer.setPreviousSignInDatetime(result[4])
+            customer.setCurrentSignInDatetime(result[5])
+            customer.setName(result[6])
 
-        return customer
+            return customer
+        else:
+            raise LookupError("Customer record does not exist")
 
     def updateCustomerPassword(self, customerObj):
+        query = "UPDATE Customer SET PasswordHash = %s " \
+                "WHERE CustomerID = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("UPDATE Customer SET PasswordHash = %s "
-                    "WHERE CustomerID = %s",
+        cur.execute(query,
                     (customerObj.getPasswordHash(),
                      customerObj.getCustomerID()))
 
@@ -163,14 +188,14 @@ class CustomerDataAccess:
         con.close()
 
     def updateCustomerEmailAddress(self, customerObj):
+        query = "UPDATE Customer SET EmailAddress = %s " \
+                "WHERE CustomerID = %s"
+
         con = self.mysql.connect()
         cur = con.cursor()
 
-        updateQuery = "UPDATE Customer SET PasswordHash = %s " \
-                "WHERE CustomerID = %s"
-
-        cur.execute(updateQuery,
-                    (customerObj.getPasswordHash(),
+        cur.execute(query,
+                    (customerObj.getEmailAddress(),
                      customerObj.getCustomerID()))
 
         cur.close()
@@ -189,13 +214,19 @@ class CustomerDataAccess:
                      customerObj.getCurrentSignInDatetime(),
                      customerObj.getCustomerID()))
 
-        result = cur.fetchone()
-        print(result)
         cur.close()
         con.commit()
         con.close()
 
-
+    def testDropTables(self):
+        # Just for unit testing
+        con = self.mysql.connect()
+        cur = con.cursor()
+        dropQuery = "DROP TABLE Customer"
+        cur.execute(dropQuery)
+        cur.close()
+        con.commit()
+        con.close()
 
 
 """

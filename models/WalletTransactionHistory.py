@@ -30,8 +30,8 @@ class WalletTransactionHistory(TransactionHistory):
     def setUnitsSold(self, unitsSold):
         if unitsSold is None:
             raise ValueError("Units Sold must not be none")
-        if type(unitsSold) != int:
-            raise TypeError("Units Sold must be an integer")
+        if type(unitsSold) != float:
+            raise TypeError("Units Sold must be a float")
         elif unitsSold < 0:
             raise ValueError("Units Sold must be greater than or equal zero")
         else:

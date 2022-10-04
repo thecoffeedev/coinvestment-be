@@ -1,23 +1,27 @@
 import flask
 from flask import Flask, render_template, request, session
-# from flaskext.mysql import MySQL
+from flask_cors import CORS
+from flask_session import Session
 import requests  # for making API calls
 import json
 import urllib.parse
 # from decouple import config  # for environment variables
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
-
-# from flask_session import Session
-
 from controllers.BundleController import BundleController
-import requests
 
 # initializing a variable of Flask
 app = Flask(__name__)
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "firestore"
-# Session(app)
+
+# Cors configs
+cors = CORS(app)
+
+app.config["CORS_HEADERS"] = "Content-Type"
+
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "firestore"
+# sess = Session(app)
+# sess.init_app(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -26,128 +30,100 @@ app = Flask(__name__)
 # app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
 # mysql.init_app(app)
 
-cWallet = WalletController(app)
-cCustomer = CustomerController(app)
-cBundle = BundleController(app)
+WController = WalletController(app)
+CController = CustomerController(app)
+BController = BundleController(app)
 
-"""
-Test route.
-"""
+sessionTokens = {}
+
+def validateToken(req):
+    if req.headers.get("Authorization") in sessionTokens.keys():
+        # req["customerID"] = sessionTokens[req.headers.get("Authorization")]
+        # customerID = sessionTokens[req.headers.get("Authorization")]
+        return True
+    else:
+        return False
+
+
 @app.route('/', methods=["GET"])
 def home():
-
-    # print('Inside home')
-    # print(session)
-    # print(session["Token"])
-    # print(session["CustomerID"])
-
-    cBundle.generateDayZeroData()
-    return flask.make_response("test")
+    return flask.make_response({
+            "status": {
+                "statusCode": "SUCCESS",
+                "statusMessage": "Successfully reached the test route"
+            }
+        })
 
 
-"""
-Request JSON:
-{
-    "emailAddress": "<emailAddress>",
-    "name": "<name>",
-    "password": "<password>"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "<Success or failure message to be displayed to the user.>"
-    },
-    "name": "<name>",
-    "emailAddress": "<emailAddress>"
-}
-"""
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
-    data = request.get_json()
-    print(data["email address"])
-    response = \
-        {
-            "status":
-                {
-                    "status code": "SUCCESS",
-                    "status message": "Successfully signed up"
-                },
-            "name": data["name"],
-            "email address": data["email address"]
-        }
-    return flask.make_response(response)
+    req = request.get_json()
+    responseData = CController.signUp(req)
+
+    if responseData.get("status")["statusCode"] == "SUCCESS":
+        token = CController.generateToken()
+        if "customerID" in responseData:
+            sessionTokens[token] = responseData["customerID"]
+            responseData["token"] = token
+            del responseData["customerID"]
+
+    resp = flask.make_response(responseData)
+    return resp
 
 
-"""
-Request JSON:
-{
-    "emailAddress": "<emailAddress>",
-    "password": "<password>"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "<Success or failure message to be displayed to the user.>"
-    },
-    "name": "<name>",
-    "emailAddress": "<emailAddress>",
-    "currentSignInDatetime":"<currentSignInDatetime>",
-    "previousSignInDatetime":"<previousSignInDatetime>",
-}
-"""
 @app.route('/sign-in', methods=["POST"])
 def sign_in():
-    data = request.get_json()
-    print(request)
-    print(data)
-    print(data["emailAddress"])
-    print(data["password"])
-    response = cCustomer.customerSignIn(data)
-    print(response)
-    print(response["status"])
-    print(response["status"]["status code"])
-    # Session(app)
-    resp = flask.make_response(response)
+    reqData = request.get_json()
+    responseData = CController.signIn(reqData)
 
-    if response["status"]["status code"] == 'FAILURE':
-        # session = flask.session.
-        # session.__setattr__("Token",request.headers["Authorization"].strip("Bearer "))
-        # session.__setattr__("CustomerID", "ABCD12345")
-        session["Token"] = request.headers["Authorization"].strip("Bearer ")
-        session["CustomerID"] = "ABCD12345"
-        print(session)
-        # resp.headers['Authorization'] = 'Bearer 12345'
-        print(resp.headers)
-    # response = \
-    #     {
-    #         "status":
-    #             {
-    #                 "status code": "SUCCESS",
-    #                 "status message": "Successfully signed in"
-    #             },
-    #         "name": "Welcome <name>"
-    #     }
-    return resp #flask.make_response(response)
+    if responseData.get("status")["statusCode"] == "SUCCESS":
+        token = CController.generateToken()
+        if "customerID" in responseData:
+            sessionTokens[token] = responseData["customerID"]
+            responseData["token"] = token
+            del responseData["customerID"]
+    resp = flask.make_response(responseData)
+    return resp
 
-"""
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show the message to the user in case of FAILURE"
-    },
-    "availableCryptocurrencies": [
-        {
-            "cryptocurrencyCode": "btc",
-            "cryptocurrencyName": "name"
-        }
-    ]
-}
-"""
+
+@app.route('/sign-out', methods=["POST"])
+def sign_out():
+    if validateToken(request):
+        del sessionTokens[request.headers.get("Authorization")]
+        res = \
+            {
+                "status": {
+                    "statusCode": "SUCCESS",
+                    "statusMessage": "Successfully signed out"
+                }
+            }
+        return flask.make_response(res)
+
+    else:
+        return flask.make_response({
+                "status": {
+                    "statusCode": "FAILURE",
+                    "statusMessage": "No valid token"
+                }
+            })
+
+
+@app.route('/profile/customer-details', methods=["POST"])
+def customer_details():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = CController.getCustomerDetails(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
+
 @app.route('/list/all/cryptocurrencies', methods=["GET"])
 def list_all_cryptocurrencies():
     url = "https://api.coingecko.com/api/v3/search/trending"
@@ -172,6 +148,7 @@ def list_all_cryptocurrencies():
         }
 
     return flask.make_response(response)
+
 
 """
 Response JSON:
@@ -201,6 +178,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/list/all/bundles', methods=["GET"])
 def list_all_bundles():
     availableBundles = [
@@ -324,6 +303,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/list/all', methods=["GET"])
 def list_all():
     response = {
@@ -357,6 +338,8 @@ Response JSON:
     "name": "name"
 }
 """
+
+
 @app.route('/account/customerdetails', methods=["GET"])
 def account_customerdetails(customerID):
     response = {
@@ -395,6 +378,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/wallets', methods=["GET"])
 def account_wallets(customerID):
     data = request.get_json()
@@ -436,6 +421,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/bundles', methods=["GET"])
 def account_bundles():
     data = request.get_json()
@@ -488,6 +475,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/wallets/<walletAddress>', methods=["GET"])
 def account_walletdetails(walletAddress):
     data = request.get_json()
@@ -501,6 +490,7 @@ def account_walletdetails(walletAddress):
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
 
 """
 Route: /account/bundles/<bundle_address>
@@ -539,6 +529,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/bundles/<bundle_address>', methods=["GET"])
 def account_bundledetails(bundleAddress):
     data = request.get_json()
@@ -619,6 +611,8 @@ Response JSON:
     }
 }
 """
+
+
 @app.route('/account', methods=["GET"])
 def account():
     data = request.get_json()
@@ -632,6 +626,7 @@ def account():
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
 
 """
 Route: /account/purchase/wallet
@@ -681,6 +676,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/purchase/wallet', methods=["GET"])
 def account_purchasewallet():
     print("account_purchasewallet entry")
@@ -689,7 +686,6 @@ def account_purchasewallet():
     response = cWallet.purchaseWallet(jsonReqData)
     print("account_purchasewallet entry")
     return flask.make_response(response)
-
 
 
 """

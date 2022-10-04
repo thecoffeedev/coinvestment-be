@@ -2,9 +2,9 @@ from models.TransactionHistory import TransactionHistory
 
 class WalletTransactionHistory(TransactionHistory):
 
-    def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0, amount=0.0,
+    def __init__(self, transactionID=None, transactionDatetime=None, chargeApplied=0.0, amount=0.0,
                  action=None, cardNumber=None, expiry=None, initialRate=None, walletAddress=None, unitsSold=None):
-        super().__init__(transactionID, transactionDateTime, chargeApplied, amount,
+        super().__init__(transactionID, transactionDatetime, chargeApplied, amount,
                          action, cardNumber, expiry, initialRate)
 
         self.__walletAddress = walletAddress

@@ -22,7 +22,7 @@ class CustomerController:
             if not jsonReqData.get("password"):
                 raise ValueError("Password not provided in request JSON")
             if not jsonReqData.get("name"):
-                raise ValueError("Password not provided in request JSON")
+                raise ValueError("Name not provided in request JSON")
 
             customerFE = Customer()
             customerFE.setEmailAddress(jsonReqData.get("emailAddress"))
@@ -44,7 +44,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully registered new customer with ID " + customerFE.getCustomerID()
+                            "statusMessage": "Successfully registered new customer"
                         },
                         "name": customerFE.getName(),
                         "emailAddress": customerFE.getEmailAddress(),
@@ -55,7 +55,6 @@ class CustomerController:
 
             else:
                 raise ValueError("Email address already registered with an account")
-
 
         except Exception as e:
             response = \
@@ -94,13 +93,13 @@ class CustomerController:
                         {
                             "status": {
                                 "statusCode": "SUCCESS",
-                                "statusMessage": "Successfully signed in customer with ID " + customerDA.getCustomerID()
+                                "statusMessage": "Successfully signed in customer"
                             },
                             "customerID": customerDA.getCustomerID(),
                             "name": customerDA.getName(),
                             "emailAddress": customerDA.getEmailAddress(),
-                            "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
-                            "previousSignInDatetime": customerDA.getPreviousSignInDatetime()
+                            "currentSignInDatetime": Utility.unixTimestampToStrings(customerDA.getCurrentSignInDatetime()),
+                            "previousSignInDatetime": Utility.unixTimestampToStrings(customerDA.getPreviousSignInDatetime())
                         }
 
                     return response
@@ -191,7 +190,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully changed password for customer with ID " + customerDA.getCustomerID()
+                            "statusMessage": "Successfully changed password for customer"
                             + " You will be signed out. Sign in with new password"
                         },
                         "customerID": customerDA.getCustomerID()
@@ -202,6 +201,41 @@ class CustomerController:
 
             else:
                 raise ValueError("Current password provided is incorrect")
+
+        except Exception as e:
+            response = \
+                {
+                    "status": {
+                        "statusCode": "FAILURE",
+                        "statusMessage": e.args[0]
+                    }
+                }
+            return response
+
+    def getCustomerDetails(self, jsonReqData):
+        try:
+            if not jsonReqData.get("customerID"):
+                raise ValueError("customerID not added to request JSON")
+
+            customerFE = Customer()
+            customerFE.setCustomerID(jsonReqData.get("customerID"))
+            customerDA = self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID())
+
+            response = \
+                {
+                    "status": {
+                        "statusCode": "SUCCESS",
+                        "statusMessage": "Successfully retrieved customer details"
+                    },
+                    "customerID": customerDA.getCustomerID(),
+                    "registerDatetime": customerDA.getRegisterDatetime(),
+                    "emailAddress": customerDA.getEmailAddress(),
+                    "previousSignInDatetime": customerDA.getPreviousSignInDatetime(),
+                    "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
+                    "name": customerDA.getName()
+                }
+
+            return response
 
         except Exception as e:
             response = \

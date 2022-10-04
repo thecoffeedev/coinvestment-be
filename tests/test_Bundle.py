@@ -230,60 +230,6 @@ class TestCustomerID(unittest.TestCase):
         self.newBundle = Bundle(customerID="9jDo34hLdfJdsRdsFN29")
         self.assertEqual(self.newBundle.getCustomerID(), "9jDo34hLdfJdsRdsFN29")
 
-
-class TestAmount(unittest.TestCase):
-
-    def setUp(self):
-        self.newBundle = Bundle()
-
-    def tearDown(self):
-        pass
-
-    def test_must_throw_error_when_none(self):
-        with self.assertRaises(ValueError):
-            self.newBundle.setAmount(None)
-
-    def test_must_not_be_none_when_set(self):
-        self.newBundle.setAmount(5.0)
-        self.assertIsNotNone(self.newBundle.getAmount())
-
-    def test_must_not_be_str(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount("12345678901234567890")
-
-    def test_must_not_be_zero(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount(0)
-
-    def test_must_not_be_a_negative_int(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount(-1)
-
-    def test_must_not_be_a_negative_float(self):
-        with self.assertRaises(ValueError):
-            self.newBundle.setAmount(-0.01)
-
-    def test_must_not_be_a_negative_float_whole_number(self):
-        with self.assertRaises(ValueError):
-            self.newBundle.setAmount(-1.00)
-
-    def test_must_not_be_a_true_bool(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount(True)
-
-    def test_must_not_be_a_false_bool(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount(False)
-
-    def test_must_raise_an_error_for_int_argument(self):
-        with self.assertRaises(TypeError):
-            self.newBundle.setAmount(1)
-
-    def test_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newBundle = Bundle(amount=5)
-        self.assertEqual(self.newBundle.getAmount(), 5)
-
-
 class TestHoldingPeriod(unittest.TestCase):
 
     def setUp(self):

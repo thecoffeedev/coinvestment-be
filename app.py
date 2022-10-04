@@ -36,40 +36,31 @@ BController = BundleController(app)
 
 sessionTokens = {}
 
+def validateToken(req):
+    if req.headers.get("Authorization") in sessionTokens.keys():
+        # req["customerID"] = sessionTokens[req.headers.get("Authorization")]
+        # customerID = sessionTokens[req.headers.get("Authorization")]
+        return True
+    else:
+        return False
+
 
 @app.route('/', methods=["GET"])
 def home():
-    """
-    Test route.
-    """
-    return flask.make_response("You have reached a test route")
+    return flask.make_response({
+            "status": {
+                "statusCode": "SUCCESS",
+                "statusMessage": "Successfully reached the test route"
+            }
+        })
 
 
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
-    reqData = request.get_json()
-    print("received: ", reqData["name"],
-          reqData["emailAddress"], reqData["password"])
-    responseData = CController.signUp(reqData)
+    req = request.get_json()
+    responseData = CController.signUp(req)
 
     if responseData.get("status")["statusCode"] == "SUCCESS":
-        token = CController.generateToken()
-        sessionTokens[token] = responseData["customerID"]
-        # resp.headers.set("Authorization", token)
-        responseData["token"] = token
-        del responseData["customerID"]
-
-    resp = flask.make_response(responseData)
-    return json.dumps(resp, indent=4)
-
-
-@app.route('/sign-in', methods=["POST"])
-def sign_in():
-    reqData = request.get_json()
-    print("received: ", reqData["emailAddress"], reqData["password"])
-    responseData = CController.signIn(reqData)
-
-    if responseData.get("status")["status code"] == "SUCCESS":
         token = CController.generateToken()
         if "customerID" in responseData:
             sessionTokens[token] = responseData["customerID"]
@@ -77,15 +68,60 @@ def sign_in():
             del responseData["customerID"]
 
     resp = flask.make_response(responseData)
-    return json.dumps(resp, indent=4)
+    return resp
 
+
+@app.route('/sign-in', methods=["POST"])
+def sign_in():
+    reqData = request.get_json()
+    responseData = CController.signIn(reqData)
+
+    if responseData.get("status")["statusCode"] == "SUCCESS":
+        token = CController.generateToken()
+        if "customerID" in responseData:
+            sessionTokens[token] = responseData["customerID"]
+            responseData["token"] = token
+            del responseData["customerID"]
+    resp = flask.make_response(responseData)
+    return resp
 
 
 @app.route('/sign-out', methods=["POST"])
 def sign_out():
-    if sessionTokens[request.headers.get("Authorization")] in sessionTokens:
-        print("Found user to sign out, id: " + sessionTokens[request.headers.get("Authorization")])
+    if validateToken(request):
         del sessionTokens[request.headers.get("Authorization")]
+        res = \
+            {
+                "status": {
+                    "statusCode": "SUCCESS",
+                    "statusMessage": "Successfully signed out"
+                }
+            }
+        return flask.make_response(res)
+
+    else:
+        return flask.make_response({
+                "status": {
+                    "statusCode": "FAILURE",
+                    "statusMessage": "No valid token"
+                }
+            })
+
+
+@app.route('/profile/customer-details', methods=["POST"])
+def customer_details():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = CController.getCustomerDetails(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
 
 
 @app.route('/list/all/cryptocurrencies', methods=["GET"])

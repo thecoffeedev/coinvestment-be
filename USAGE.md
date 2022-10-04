@@ -520,15 +520,44 @@
 ```json
 {
     "wallet": {
-        "walletAddress": <wallet address>,
-        "customerID": <customer ID>,
-        "initialRate": <the rate at which bought>,
-        "unitsSold": <how many to sell>
+        "walletAddress": "walletAddress",
+        "customerID": "customerID"
+    },
+    "walletTransaction": {
+        "initialRate": "initialRate",
+        "amount": "amount",
+        "cardNumber": "cardNumber",
+        "expiry": "expiry",
+        "unitsSold": "unitsSold"
     }
-} 
+}
 ```
 ### Response
 ```json
-
+{
+    "status": {
+        "statusCode": "SUCCESS/FAILURE",
+        "statusMessage": "show he message to the user in case of FAILURE"
+    },
+    "wallet": {
+        "walletAddress": "walletAddress",
+        "customerID": "customerID",
+        "initialBalance": "initialBalance",
+        "currentBalance": "currentBalance",
+        "cryptocurrencyCode": "cryptocurrencyCode",
+        "holdingPeriod": "holdingPeriod"
+    },
+    "walletTransaction": {
+        "transactionID": "transactionID",
+        "transactionDateTime": "transactionDateTime",
+        "chargeApplied": "chargeApplied",
+        "amount": "amount",
+        "action": "action",
+        "cardNumber": "cardNumber",
+        "expiry": "expiry",
+        "unitsSold": "unitsSold",
+        "initialRate": "initialRate"
+    }
+}
 ```
 

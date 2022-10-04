@@ -113,9 +113,8 @@ def customer_details():
     if validateToken(request):
         reqData = request.get_json()
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
-        responseData = CController.#the method to view all customer details(reqData)
+        responseData = CController.getCustomerDetails(reqData)
         return flask.make_response(responseData)
-
     else:
         return flask.make_response({
             "status": {
@@ -123,8 +122,6 @@ def customer_details():
                 "statusMessage": "No valid token"
             }
         })
-
-
 
 
 @app.route('/list/all/cryptocurrencies', methods=["GET"])

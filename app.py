@@ -1,6 +1,7 @@
 import flask
 from flask import Flask, render_template, request, session
-# from flaskext.mysql import MySQL
+from flask_cors import CORS
+from flask_session import Session
 import requests  # for making API calls
 import json
 import urllib.parse
@@ -8,9 +9,6 @@ import urllib.parse
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
 from controllers.BundleController import BundleController
-from flask_session import Session
-import requests
-from flask_cors import CORS
 
 # initializing a variable of Flask
 app = Flask(__name__)
@@ -71,9 +69,10 @@ def sign_in():
 
     if responseData.get("status")["status code"] == "SUCCESS":
         token = CController.generateToken()
-        sessionTokens[token] = responseData["customerID"]
-        responseData["token"] = token
-        del responseData["customerID"]
+        if "customerID" in responseData:
+            sessionTokens[token] = responseData["customerID"]
+            responseData["token"] = token
+            del responseData["customerID"]
 
     resp = flask.make_response(responseData)
     return json.dumps(resp, indent=4)
@@ -81,7 +80,9 @@ def sign_in():
 
 @app.route('/sign-out', methods=["POST"])
 def sign_out():
-    del session[request.headers.get("Authorization")]
+    if sessionTokens[request.headers.get("Authorization")] in sessionTokens:
+        print("Found user to sign out, id: " + sessionTokens[request.headers.get("Authorization")])
+        del sessionTokens[request.headers.get("Authorization")]
 
 
 @app.route('/list/all/cryptocurrencies', methods=["GET"])

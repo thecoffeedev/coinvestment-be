@@ -10,13 +10,19 @@ from controllers.CustomerController import CustomerController
 from controllers.BundleController import BundleController
 from flask_session import Session
 import requests
+from flask_cors import CORS
 
 # initializing a variable of Flask
 app = Flask(__name__)
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "firestore"
-sess = Session(app)
-sess.init_app(app)
+
+# Cors configs
+cors = CORS(app)
+app.config["CORS_HEADERS"] = "Content-Type"
+
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "firestore"
+# sess = Session(app)
+# sess.init_app(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -29,11 +35,14 @@ WController = WalletController(app)
 CController = CustomerController(app)
 BController = BundleController(app)
 
-"""
-Test route.
-"""
+sessionTokens = {}
+
+
 @app.route('/', methods=["GET"])
 def home():
+    """
+    Test route.
+    """
     return flask.make_response("You have reached a test route")
 
 
@@ -42,17 +51,16 @@ def sign_up():
     reqData = request.get_json()
     print("received: ", reqData["name"], reqData["emailAddress"], reqData["password"])
     responseData = CController.signUp(reqData)
-    resp = flask.make_response(responseData)
+
     if responseData.get("status")["statusCode"] == "SUCCESS":
         token = CController.generateToken()
-        session[token] = responseData["customerID"]
-        print(responseData["customerID"])
+        sessionTokens[token] = responseData["customerID"]
+        # resp.headers.set("Authorization", token)
+        responseData["token"] = token
+        del responseData["customerID"]
 
-        resp.headers.set("Authorization", token)
-
-    del responseData["customerID"]
-
-    return resp
+    resp = flask.make_response(responseData)
+    return json.dumps(resp, indent=4)
 
 
 @app.route('/sign-in', methods=["POST"])
@@ -60,21 +68,19 @@ def sign_in():
     reqData = request.get_json()
     print("received: ", reqData["emailAddress"], reqData["password"])
     responseData = CController.signIn(reqData)
-    resp = flask.make_response(responseData)
 
     if responseData.get("status")["status code"] == "SUCCESS":
         token = CController.generateToken()
-        session[token] = responseData["customerID"]
-        print(responseData["customerID"])
+        sessionTokens[token] = responseData["customerID"]
+        responseData["token"] = token
+        del responseData["customerID"]
 
-        resp.headers.set("Authorization", token)
+    resp = flask.make_response(responseData)
+    return json.dumps(resp, indent=4)
 
-    del responseData["customerID"]
-    return resp
 
 @app.route('/sign-out', methods=["POST"])
 def sign_out():
-
     del session[request.headers.get("Authorization")]
 
 
@@ -131,6 +137,7 @@ Response JSON:
     ]
 }
 """
+
 @app.route('/list/all/bundles', methods=["GET"])
 def list_all_bundles():
     availableBundles = [

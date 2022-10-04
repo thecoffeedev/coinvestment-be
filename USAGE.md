@@ -473,14 +473,12 @@
         "cryptocurrencyCode": <cryptocurrency code>,
         "holdingPeriod": <holding period>
     },
-    "walletTransaction": [
-        {
-            "initialRate": <initial rate>,
-            "amount": <amount>,
-            "cardNumber": <card number>,
-            "expiry": <expiry>
-        }
-    ]
+    "walletTransaction": {
+        "initialRate": <initial rate>,
+        "amount": <amount>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>
+    }
 }
 ```
 ### Response
@@ -498,19 +496,17 @@
             "cryptocurrencyCode": <the wallets cryptocurrency>,
             "holdingPeriod": <investment time period>
     },
-    "walletTransaction": [
-        {
-            "transactionID": <transaction ID>,
-            "transactionDateTime": <datetime of transaction>,
-            "chargeApplied": <charges applied for selling before holding period expires>,
-            "amount": <amount invested>,
-            "action": <BUY or SELL>,
-            "cardNumber": <card number masked>,
-            "expiry": <expiry date masked>,
-            "unitsSold": <sold cryptocurrency>,
-            "initialRate": <rate at which the cryptocurrency was bought>
-        }
-    ]
+    "walletTransaction": {
+        "transactionID": <transaction ID>,
+        "transactionDateTime": <datetime of transaction>,
+        "chargeApplied": <charges applied for selling before holding period expires>,
+        "amount": <amount invested>,
+        "action": <BUY or SELL>,
+        "cardNumber": <card number masked>,
+        "expiry": <expiry date masked>,
+        "unitsSold": <sold cryptocurrency>,
+        "initialRate": <rate at which the cryptocurrency was bought>
+    }
 }
 ```
 > Where

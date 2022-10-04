@@ -1,6 +1,7 @@
 import flask
 from flask import Flask, render_template, request, session
-# from flaskext.mysql import MySQL
+from flask_cors import CORS
+from flask_session import Session
 import requests  # for making API calls
 import json
 import urllib.parse
@@ -8,21 +9,19 @@ import urllib.parse
 from controllers.WalletController import WalletController
 from controllers.CustomerController import CustomerController
 from controllers.BundleController import BundleController
-from flask_session import Session
-import requests
-from flask_cors import CORS
 
 # initializing a variable of Flask
 app = Flask(__name__)
 
 # Cors configs
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
-#app.config["SESSION_PERMANENT"] = False
-#app.config["SESSION_TYPE"] = "firestore"
-sess = Session(app)
-sess.init_app(app)
+app.config["CORS_HEADERS"] = "Content-Type"
+
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "firestore"
+# sess = Session(app)
+# sess.init_app(app)
 
 # MySQL configurations
 # app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
@@ -35,13 +34,14 @@ WController = WalletController(app)
 CController = CustomerController(app)
 BController = BundleController(app)
 
-"""
-Test route.
-"""
+sessionTokens = {}
 
 
 @app.route('/', methods=["GET"])
 def home():
+    """
+    Test route.
+    """
     return flask.make_response("You have reached a test route")
 
 
@@ -51,17 +51,16 @@ def sign_up():
     print("received: ", reqData["name"],
           reqData["emailAddress"], reqData["password"])
     responseData = CController.signUp(reqData)
-    resp = flask.make_response(responseData)
+
     if responseData.get("status")["statusCode"] == "SUCCESS":
         token = CController.generateToken()
-        session[token] = responseData["customerID"]
-        print(responseData["customerID"])
+        sessionTokens[token] = responseData["customerID"]
+        # resp.headers.set("Authorization", token)
+        responseData["token"] = token
+        del responseData["customerID"]
 
-        resp.headers.set("Authorization", token)
-
-    del responseData["customerID"]
-
-    return resp
+    resp = flask.make_response(responseData)
+    return json.dumps(resp, indent=4)
 
 
 @app.route('/sign-in', methods=["POST"])
@@ -69,23 +68,24 @@ def sign_in():
     reqData = request.get_json()
     print("received: ", reqData["emailAddress"], reqData["password"])
     responseData = CController.signIn(reqData)
-    resp = flask.make_response(responseData)
 
     if responseData.get("status")["status code"] == "SUCCESS":
         token = CController.generateToken()
-        session[token] = responseData["customerID"]
-        print(responseData["customerID"])
+        if "customerID" in responseData:
+            sessionTokens[token] = responseData["customerID"]
+            responseData["token"] = token
+            del responseData["customerID"]
 
-        resp.headers.set("Authorization", token)
+    resp = flask.make_response(responseData)
+    return json.dumps(resp, indent=4)
 
-    del responseData["customerID"]
-    return resp
 
 
 @app.route('/sign-out', methods=["POST"])
 def sign_out():
-
-    del session[request.headers.get("Authorization")]
+    if sessionTokens[request.headers.get("Authorization")] in sessionTokens:
+        print("Found user to sign out, id: " + sessionTokens[request.headers.get("Authorization")])
+        del sessionTokens[request.headers.get("Authorization")]
 
 
 @app.route('/list/all/cryptocurrencies', methods=["GET"])

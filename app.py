@@ -353,45 +353,13 @@ def account_customerdetails(customerID):
     return flask.make_response(response)
 
 
-"""
-Route: /account/wallets
-Request JSON:
-{
-    "customerID": "customerID"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "wallets": [
-        {
-            "walletAddress": "walletAddress",
-            "customerID": "customerID",
-            "initialBalance": "initialBalance",
-            "currentBalance": "currentBalance",
-            "cryptocurrencyCode": "cryptocurrencyCode",
-            "holdingPeriod": "holdingPeriod"
-        }
-    ]
-}
-"""
-
-
-@app.route('/account/wallets', methods=["GET"])
-def account_wallets(customerID):
-    data = request.get_json()
-    print(data)
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View wallets for customer " + customerID
-            }
-    }
-    # return the data for that bundle address
+@app.route('/account/wallets', methods=["POST"])
+def account_wallets():
+    print("account_wallets entry")
+    jsonReqData = request.get_json()
+    print("jsonReqData : ", jsonReqData)
+    response = WController.getAllWalletsFromCustomerID(jsonReqData)
+    print("account_wallets exit")
     return flask.make_response(response)
 
 
@@ -438,59 +406,14 @@ def account_bundles():
     return flask.make_response(response)
 
 
-"""
-Route: /account/wallets/<wallet_adddress>
-Request JSON:
-{
-    "customerID": "customerID",
-    "walletAddress": "walletAddress"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "wallets": {
-        "walletAddress": "walletAddress",
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "currentBalance": "currentBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod"
-    },
-    "walletTransactions": [
-        {
-            "transactionID": "transactionID",
-            "transactionDateTime": "transactionDateTime",
-            "chargeApplied": "chargeApplied",
-            "amount": "amount",
-            "action": "action",
-            "cardNumber": "cardNumber",
-            "expiry": "expiry",
-            "unitsSold": "unitsSold",
-            "initialRate": "initialRate"
-        }
-    ]
-}
-"""
-
-
-@app.route('/account/wallets/<walletAddress>', methods=["GET"])
-def account_walletdetails(walletAddress):
-    data = request.get_json()
-    print(data)
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View details for wallet " + walletAddress
-            }
-    }
-    # return the data for that wallet address
+@app.route('/account/wallets/walletAddress', methods=["POST"])
+def account_walletdetails():
+    print("account_walletdetails entry")
+    jsonReqData = request.get_json()
+    print("jsonReqData : ", jsonReqData)
+    response = WController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+    print("account_walletdetails entry")
     return flask.make_response(response)
-
 
 """
 Route: /account/bundles/<bundle_address>
@@ -627,64 +550,22 @@ def account():
     # return the data for that wallet address
     return flask.make_response(response)
 
-
-"""
-Route: /account/purchase/wallet
-Request JSON:
-{
-    "wallet": {
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod"
-    },
-    "walletTransaction": [
-        {
-            "initialRate": "initialRate",
-            "amount": "amount",
-            "cardNumber": "cardNumber",
-            "expiry": "expiry"
-        }
-    ]
-}
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "wallet": {
-        "walletAddress": "walletAddress",
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "currentBalance": "currentBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod"
-    },
-    "walletTransaction": [
-        {
-            "transactionID": "transactionID",
-            "transactionDateTime": "transactionDateTime",
-            "chargeApplied": "chargeApplied",
-            "amount": "amount",
-            "action": "action",
-            "cardNumber": "cardNumber",
-            "expiry": "expiry",
-            "unitsSold": "unitsSold",
-            "initialRate": "initialRate"
-        }
-    ]
-}
-"""
-
-
 @app.route('/account/purchase/wallet', methods=["GET"])
 def account_purchasewallet():
     print("account_purchasewallet entry")
     jsonReqData = request.get_json()
     print("jsonReqData : ", jsonReqData)
-    response = cWallet.purchaseWallet(jsonReqData)
+    response = WController.purchaseWallet(jsonReqData)
     print("account_purchasewallet entry")
+    return flask.make_response(response)
+
+@app.route('/account/sell/wallet', methods=["POST"])
+def account_sellwallet():
+    print("account_sellwallet entry")
+    jsonReqData = request.get_json()
+    print("jsonReqData : ", jsonReqData)
+    response = WController.sellWallet(jsonReqData)
+    print("account_sellwallet exit")
     return flask.make_response(response)
 
 

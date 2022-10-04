@@ -227,13 +227,3 @@ class CustomerDataAccess:
         cur.close()
         con.commit()
         con.close()
-
-
-"""
-        cur.execute('INSERT INTO user (username, email, password)VALUES( %s,  %s, %s)',
-                        (username, email, password))
-
-        con.commit()
-
-"""
-

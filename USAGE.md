@@ -216,7 +216,7 @@
     "emailAddress": <email address>,
     "previousSignInDatetime": <last sign in datetime>,
     "currentSignInDatetime": <current sign in datetime>,
-    "name": "name"
+    "name": <name>
 }
 ```
 
@@ -226,7 +226,7 @@
 ### Request
 ```json
 {
-    "customerID": "customerID"
+    "customerID": <customerID>
 }
 ```
 > The token present in the authorization header is the preferred
@@ -306,7 +306,7 @@
 ### Request
 ```json
 {
-    "customerID": "customerID"
+    "customerID": <customerID>
 }
 ```
 > The token present in the authorization header is the preferred
@@ -339,7 +339,7 @@
 ### Request
 ```json
 {
-    "customerID": "customerID"
+    "customerID": <customerID>
 }
 ```
 > The token present in the authorization header is the preferred
@@ -468,17 +468,17 @@
 ```json
 {
     "wallet": {
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod"
+        "customerID": <customerID>,
+        "initialBalance": <initial balance>,
+        "cryptocurrencyCode": <cryptocurrency code>,
+        "holdingPeriod": <holding period>
     },
     "walletTransaction": [
         {
-            "initialRate": "initialRate",
-            "amount": "amount",
-            "cardNumber": "cardNumber",
-            "expiry": "expiry"
+            "initialRate": <initial rate>,
+            "amount": <amount>,
+            "cardNumber": <card number>,
+            "expiry": <expiry>
         }
     ]
 }

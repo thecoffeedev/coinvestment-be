@@ -19,6 +19,19 @@ class WalletDataAccess:
         # self.readWalletFromWalletAddress("UazgXbwu2tloBcajCPb")
         # self.readWalletFromCustomerID("Debo32tKqJBeZwHHgkvx")
 
+    def createTables(self):
+        # Create the table if it does not exist
+        createQuery = "CREATE TABLE IF NOT EXISTS AvailableCryptocurrency(" \
+                      "cryptocurrencyCode VARCHAR(10) NOT NULL PRIMARY KEY, " \
+                      "name VARCHAR(20) NOT NULL" \
+                      ")"
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute(createQuery)
+        cur.close()
+        con.commit()
+        con.close()
+
     def generateDayZeroData(self):
         # Create the table if it does not exist
         createQuery = "CREATE TABLE IF NOT EXISTS AvailableCryptocurrency(" \
@@ -55,17 +68,6 @@ class WalletDataAccess:
         # Check if the table exists
         #checkTableExistsQuery = "SELECT * FROM information_schema.tables WHERE table_name = 'AvailableCryptocurrency'"
         #cur.execute(checkTableExistsQuery)
-
-    def testMethod(self):
-        createQuery = "SELECT * from testInsert1"
-        con = self.mysql.connect()
-        cur = con.cursor()
-        cur.execute(createQuery)
-        myresult = cur.fetchall()
-
-        for x in myresult:
-            print(x)
-            print(x[0])
 
     def createWallet(self):
         print("createWallet entry")

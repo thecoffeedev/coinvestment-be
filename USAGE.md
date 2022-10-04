@@ -430,7 +430,7 @@
 
 {
     "status": {
-        "statusCode": "SUCCESS/",
+        "statusCode": "SUCCESS",
         "statusMessage": "Details for the bundle requested"
     },
     "bundle": {
@@ -510,8 +510,7 @@
 }
 ```
 > Where
-> * `walletTransactions` is a list of all transactions carried out on 
-> that wallet
+> * `walletTransaction` is the details of that particular transaction carried out 
 
 - - - - -
 
@@ -520,15 +519,15 @@
 ```json
 {
     "wallet": {
-        "walletAddress": "walletAddress",
-        "customerID": "customerID"
+        "walletAddress": <wallet address>,
+        "customerID": <customerID>
     },
     "walletTransaction": {
-        "initialRate": "initialRate",
-        "amount": "amount",
-        "cardNumber": "cardNumber",
-        "expiry": "expiry",
-        "unitsSold": "unitsSold"
+        "initialRate": <initial rate>,
+        "amount": <amount>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>,
+        "unitsSold": <units sold>
     }
 }
 ```
@@ -536,27 +535,27 @@
 ```json
 {
     "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully sold wallet"
     },
     "wallet": {
-        "walletAddress": "walletAddress",
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "currentBalance": "currentBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod"
+        "walletAddress": <wallet address>,
+        "customerID": <customer ID>,
+        "initialBalance": <initial balance>,
+        "currentBalance": <current balance>,
+        "cryptocurrencyCode": <cryptocurrency code>,
+        "holdingPeriod": <holdingPeriod>
     },
     "walletTransaction": {
-        "transactionID": "transactionID",
-        "transactionDateTime": "transactionDateTime",
-        "chargeApplied": "chargeApplied",
-        "amount": "amount",
-        "action": "action",
-        "cardNumber": "cardNumber",
-        "expiry": "expiry",
-        "unitsSold": "unitsSold",
-        "initialRate": "initialRate"
+        "transactionID": <transaction ID>,
+        "transactionDateTime": <transaction datetime>,
+        "chargeApplied": <charge applied>,
+        "amount": <amount>,
+        "action": <action>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>,
+        "unitsSold": <unitsSold>,
+        "initialRate": <initial rate>
     }
 }
 ```

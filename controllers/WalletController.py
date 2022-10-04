@@ -17,28 +17,12 @@ class WalletController:
 
     def generateDayZeroData(self):
         print("generateDayZeroData entry")
-        self.WDA.generateDayZeroData()
-        self.WDA.createWallet()
-        self.WDA.createWalletTransactionHistory()
-        # self.WDA.insertDayZeroWalletData()
-        # self.testMethod()
+        self.WDA.createTables()
+        self.WDA.insertDayZeroData()
+        print(self.WDA.readAllAvailableCryptocurrency())
 
-    def testMethod(self):
-        try:
-            print("createWallet entry")
-            self.WDA.insertWallet(None)
-
-        except Exception as e:
-            print("createWallet exception", e)
-            response = \
-                {
-                    "status": {
-                        "statusCode": "FAILURE",
-                        "statusMessage": e.args[0]
-                    }
-                }
-            print("createWallet exception", response)
-        print("createWallet exit")
+    def getAllAvailableCryptocurrencies(self):
+        pass
 
     def getAllWalletDetailsFromWalletAddress(self, jsonReqData):
         try:

@@ -8,7 +8,6 @@ class Bundle:
         self.__bundleAddress = bundleAddress
         self.__bundleID = bundleID
         self.__customerID = customerID
-        self.__amount = amount
         self.__holdingPeriod = holdingPeriod
         self.__purchaseDatetime = purchaseDatetime
         self.__status = status
@@ -51,19 +50,6 @@ class Bundle:
             raise ValueError("Customer ID must be exactly 20 characters")
         else:
             self.__customerID = customerID
-
-    def getAmount(self):
-        return self.__amount
-
-    def setAmount(self, amount):
-        if amount is None:
-            raise ValueError("Amount must not be none")
-        elif type(amount) != float:
-            raise TypeError("Amount must be a float")
-        elif amount <= 0:
-            raise ValueError("Amount must be greater than 0")
-        else:
-            self.__amount = amount
 
     def getHoldingPeriod(self):
         return self.__holdingPeriod

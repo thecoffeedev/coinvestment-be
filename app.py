@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 # Cors configs
 cors = CORS(app)
+
 app.config["CORS_HEADERS"] = "Content-Type"
 
 # app.config["SESSION_PERMANENT"] = False
@@ -47,7 +48,8 @@ def home():
 @app.route('/sign-up', methods=["POST"])
 def sign_up():
     reqData = request.get_json()
-    print("received: ", reqData["name"], reqData["emailAddress"], reqData["password"])
+    print("received: ", reqData["name"],
+          reqData["emailAddress"], reqData["password"])
     responseData = CController.signUp(reqData)
 
     if responseData.get("status")["statusCode"] == "SUCCESS":
@@ -76,6 +78,7 @@ def sign_in():
 
     resp = flask.make_response(responseData)
     return json.dumps(resp, indent=4)
+
 
 
 @app.route('/sign-out', methods=["POST"])
@@ -110,6 +113,7 @@ def list_all_cryptocurrencies():
 
     return flask.make_response(response)
 
+
 """
 Response JSON:
 {
@@ -138,6 +142,7 @@ Response JSON:
     ]
 }
 """
+
 
 @app.route('/list/all/bundles', methods=["GET"])
 def list_all_bundles():
@@ -262,6 +267,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/list/all', methods=["GET"])
 def list_all():
     response = {
@@ -295,6 +302,8 @@ Response JSON:
     "name": "name"
 }
 """
+
+
 @app.route('/account/customerdetails', methods=["GET"])
 def account_customerdetails(customerID):
     response = {
@@ -333,6 +342,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/wallets', methods=["GET"])
 def account_wallets(customerID):
     data = request.get_json()
@@ -374,6 +385,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/bundles', methods=["GET"])
 def account_bundles():
     data = request.get_json()
@@ -426,6 +439,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/wallets/<walletAddress>', methods=["GET"])
 def account_walletdetails(walletAddress):
     data = request.get_json()
@@ -439,6 +454,7 @@ def account_walletdetails(walletAddress):
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
 
 """
 Route: /account/bundles/<bundle_address>
@@ -477,6 +493,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/bundles/<bundle_address>', methods=["GET"])
 def account_bundledetails(bundleAddress):
     data = request.get_json()
@@ -557,6 +575,8 @@ Response JSON:
     }
 }
 """
+
+
 @app.route('/account', methods=["GET"])
 def account():
     data = request.get_json()
@@ -570,6 +590,7 @@ def account():
     }
     # return the data for that wallet address
     return flask.make_response(response)
+
 
 """
 Route: /account/purchase/wallet
@@ -619,6 +640,8 @@ Response JSON:
     ]
 }
 """
+
+
 @app.route('/account/purchase/wallet', methods=["GET"])
 def account_purchasewallet():
     print("account_purchasewallet entry")
@@ -627,7 +650,6 @@ def account_purchasewallet():
     response = cWallet.purchaseWallet(jsonReqData)
     print("account_purchasewallet entry")
     return flask.make_response(response)
-
 
 
 """

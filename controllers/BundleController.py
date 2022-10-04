@@ -1,5 +1,4 @@
 from data_access.BundleDataAccess import BundleDataAccess
-import requests
 
 
 class BundleController:

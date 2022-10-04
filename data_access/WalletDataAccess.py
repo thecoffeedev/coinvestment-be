@@ -200,7 +200,6 @@ class WalletDataAccess:
         print(wallet)
         print(rowCount)
         if rowCount:
-
             walletOne = Wallet()
             walletOne.setCustomerID(wallet[1])
             walletOne.setWalletAddress(wallet[0])
@@ -212,7 +211,7 @@ class WalletDataAccess:
             print("readWalletFromWalletAddress exit")
             return walletOne
         else:
-            raise LookupError("No wallet record for that address exists")
+            raise LookupError("No wallet exists")
 
     def readWalletsFromCustomerID(self, customerID):
         print("readWalletsFromCustomerID entry")
@@ -221,27 +220,30 @@ class WalletDataAccess:
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("SELECT * FROM Wallet where customerID = %s", customerID)
-
+        rowCount = cur.rowcount
         result = cur.fetchall()
         cur.close()
         con.commit()
         con.close()
 
-        walletsList = list()
-        for wallet in result:
-            print(wallet)
-            walletOne = Wallet()
-            walletOne.setCustomerID(wallet[1])
-            walletOne.setWalletAddress(wallet[0])
-            walletOne.setInitialBalance(wallet[2])
-            walletOne.setCurrentBalance(wallet[3])
-            walletOne.setCryptocurrencyCode(wallet[4])
-            walletOne.setHoldingPeriod(wallet[5])
-            print(walletOne.__dict__)
-            walletsList.append(walletOne)
-        print(walletsList)
-        print("readWalletsFromCustomerID exit")
-        return walletsList
+        if rowCount:
+            walletsList = list()
+            for wallet in result:
+                print(wallet)
+                walletOne = Wallet()
+                walletOne.setCustomerID(wallet[1])
+                walletOne.setWalletAddress(wallet[0])
+                walletOne.setInitialBalance(wallet[2])
+                walletOne.setCurrentBalance(wallet[3])
+                walletOne.setCryptocurrencyCode(wallet[4])
+                walletOne.setHoldingPeriod(wallet[5])
+                print(walletOne.__dict__)
+                walletsList.append(walletOne)
+            print(walletsList)
+            print("readWalletsFromCustomerID exit")
+            return walletsList
+        else:
+            raise LookupError("No wallet exists")
 
     def readWalletTransactionsFromWalletAddress(self, walletAddress):
         print("readWalletTransactionsFromWalletAddress entry")
@@ -249,32 +251,35 @@ class WalletDataAccess:
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("SELECT * FROM WalletTransactionHistory where WalletAddress = '"+walletAddress+"'")
-
+        rowCount = cur.rowcount
         result = cur.fetchall()
         cur.close()
         con.commit()
         con.close()
 
-        walletTransactionsList = list()
-        for walletTransaction in result:
-            print(walletTransaction)
-            walletTransactionObj = WalletTransactionHistory()
-            walletTransactionObj.setTransactionID(walletTransaction[0])
-            walletTransactionObj.setWalletAddress(walletTransaction[1])
-            walletTransactionObj.setUnitsSold(walletTransaction[2])
-            walletTransactionObj.setTransactionDatetime(walletTransaction[3])
-            walletTransactionObj.setChargeApplied(walletTransaction[4])
-            walletTransactionObj.setAmount(walletTransaction[5])
-            walletTransactionObj.setAction(walletTransaction[6])
-            walletTransactionObj.setCardNumber(walletTransaction[7])
-            walletTransactionObj.setExpiry(walletTransaction[8])
-            walletTransactionObj.setInitialRate(walletTransaction[9])
-            print(" walletTransactionObj :", walletTransactionObj.__dict__)
-            walletTransactionsList.append(walletTransactionObj)
+        if rowCount:
+            walletTransactionsList = list()
+            for walletTransaction in result:
+                print(walletTransaction)
+                walletTransactionObj = WalletTransactionHistory()
+                walletTransactionObj.setTransactionID(walletTransaction[0])
+                walletTransactionObj.setWalletAddress(walletTransaction[1])
+                walletTransactionObj.setUnitsSold(walletTransaction[2])
+                walletTransactionObj.setTransactionDatetime(walletTransaction[3])
+                walletTransactionObj.setChargeApplied(walletTransaction[4])
+                walletTransactionObj.setAmount(walletTransaction[5])
+                walletTransactionObj.setAction(walletTransaction[6])
+                walletTransactionObj.setCardNumber(walletTransaction[7])
+                walletTransactionObj.setExpiry(walletTransaction[8])
+                walletTransactionObj.setInitialRate(walletTransaction[9])
+                print(" walletTransactionObj :", walletTransactionObj.__dict__)
+                walletTransactionsList.append(walletTransactionObj)
 
-        print("walletTransactionsList : ", walletTransactionsList)
-        print("readWalletTransactionsFromWalletAddress exit")
-        return walletTransactionsList
+            print("walletTransactionsList : ", walletTransactionsList)
+            print("readWalletTransactionsFromWalletAddress exit")
+            return walletTransactionsList
+        else:
+            raise LookupError("No wallet transaction exists")
 
     def readPurchaseWalletTransactionFromWalletAddress(self, walletAddress):
         print("readWalletTransactionsFromWalletAddress entry")

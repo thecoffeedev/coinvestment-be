@@ -23,13 +23,6 @@ app.config["CORS_HEADERS"] = "Content-Type"
 # sess = Session(app)
 # sess.init_app(app)
 
-# MySQL configurations
-# app.config['MYSQL_DATABASE_USER'] = config('DB_USER')
-# app.config['MYSQL_DATABASE_PASSWORD'] = config('DB_PASSWORD')
-# app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
-# app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
-# mysql.init_app(app)
-
 WController = WalletController(app)
 CController = CustomerController(app)
 BController = BundleController(app)
@@ -150,36 +143,6 @@ def list_all_cryptocurrencies():
     return flask.make_response(response)
 
 
-"""
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "availableCryptocurrencies": [
-        {
-            "cryptocurrencyCode": "btc",
-            "cryptocurrencyName": "name"
-        }
-    ],
-    "availableBundles": [
-        {
-            "bundleName": "Low Risk",
-            "bundleCryptocurrencies": [
-                {
-                    "cryptocurrencyCode": "code",
-                    "cryptocurrencyName": "name",
-                    "percentage": 30
-                }
-            ],
-            "minimumHoldingPeriod": 5
-        }
-    ]
-}
-"""
-
-
 @app.route('/list/all/bundles', methods=["GET"])
 def list_all_bundles():
     availableBundles = [
@@ -275,36 +238,6 @@ def list_all_bundles():
     return flask.make_response(response)
 
 
-"""
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "availableCryptocurrencies": [
-        {
-            "cryptocurrencyCode": "btc",
-            "cryptocurrencyName": "name"
-        }
-    ],
-    "availableBundles": [
-        {
-            "bundleName": "lowRisk",
-            "bundleCryptocurrencies": [
-                {
-                    "cryptocurrencyCode": "code",
-                    "cryptocurrencyName": "name",
-                    "percentage": 30
-                }
-            ],
-            "minimumHoldingPeriod": 5
-        }
-    ]
-}
-"""
-
-
 @app.route('/list/all', methods=["GET"])
 def list_all():
     response = {
@@ -315,29 +248,6 @@ def list_all():
             }
     }
     return flask.make_response(response)
-
-
-"""
-Route: /account/customerdetails
-Request JSON:
-{
-    "customerID": "customerID"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "customerID": "customerID",
-    "registerDatetime": "registerDatetime",
-    "emailAddress": "emailAddress",
-    "previousSignInDatetime": "previousSignInDatetime",
-    "currentSignInDatetime": "currentSignInDatetime",
-    "name": "name"
-}
-"""
 
 
 @app.route('/account/customerdetails', methods=["GET"])
@@ -361,34 +271,6 @@ def account_wallets():
     response = WController.getAllWalletsFromCustomerID(jsonReqData)
     print("account_wallets exit")
     return flask.make_response(response)
-
-
-"""
-Route: /account/bundles
-Request JSON:
-{
-    "customerID": "customerID"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "bundles": [
-        {
-            "bundleAddress": "bundleAddress",
-            "bundleID": "bundleID",
-            "customerID": "customerID",
-            "amount": "amount",
-            "holdingPeriod": "holdingPeriod",
-            "purchaseDatetime": "purchaseDatetime",
-            "status": "status"
-        }
-    ]
-}
-"""
 
 
 @app.route('/account/bundles', methods=["GET"])
@@ -415,44 +297,6 @@ def account_walletdetails():
     print("account_walletdetails entry")
     return flask.make_response(response)
 
-"""
-Route: /account/bundles/<bundle_address>
-Request JSON:
-{
-    "customerID": "customerID",
-    "bundleAddress": "bundleAddress"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "bundles": {
-        "bundleAddress": "bundleAddress",
-        "bundleID": "bundleID",
-        "customerID": "customerID",
-        "amount": "amount",
-        "holdingPeriod": "holdingPeriod",
-        "purchaseDatetime": "purchaseDatetime",
-        "status": "status"
-    },
-    "bundleTransactions": [ 
-        {
-            "transactionID": "transactionID",
-            "transactionDateTime": "transactionDateTime",
-            "chargeApplied": "chargeApplied",
-            "amount": "amount",
-            "action": "action",
-            "cardNumber": "cardNumber",
-            "expiry": "expiry",
-            "initialRate": "initialRate"
-        }
-    ]
-}
-"""
-
 
 @app.route('/account/bundles/<bundle_address>', methods=["GET"])
 def account_bundledetails(bundleAddress):
@@ -467,73 +311,6 @@ def account_bundledetails(bundleAddress):
     }
     # return the data for that wallet address
     return flask.make_response(response)
-
-
-"""
-Route: /account/bundles/<bundle_address>
-Request JSON:
-{
-    "customerID": "customerID"
-}
-
-Response JSON:
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "show he message to the user in case of FAILURE"
-    },
-    "customer": {
-        "customerID": "customerID",
-        "registerDatetime": "registerDatetime",
-        "emailAddress": "emailAddress",
-        "previousSignInDatetime": "previousSignInDatetime",
-        "currentSignInDatetime": "currentSignInDatetime",
-        "name": "name"
-    },
-    "wallets": {
-        "walletAddress": "walletAddress",
-        "customerID": "customerID",
-        "initialBalance": "initialBalance",
-        "currentBalance": "currentBalance",
-        "cryptocurrencyCode": "cryptocurrencyCode",
-        "holdingPeriod": "holdingPeriod",
-        "walletTransactions": [
-            {
-                "transactionID": "transactionID",
-                "transactionDateTime": "transactionDateTime",
-                "chargeApplied": "chargeApplied",
-                "amount": "amount",
-                "action": "action",
-                "cardNumber": "cardNumber",
-                "expiry": "expiry",
-                "unitsSold": "unitsSold",
-                "initialRate": "initialRate"
-            }
-        ]
-    },
-    "bundles": {
-        "bundleAddress": "bundleAddress",
-        "bundleID": "bundleID",
-        "customerID": "customerID",
-        "amount": "amount",
-        "holdingPeriod": "holdingPeriod",
-        "purchaseDatetime": "purchaseDatetime",
-        "status": "status",
-        "bundleTransactions": [ 
-            {
-                "transactionID": "transactionID",
-                "transactionDateTime": "transactionDateTime",
-                "chargeApplied": "chargeApplied",
-                "amount": "amount",
-                "action": "action",
-                "cardNumber": "cardNumber",
-                "expiry": "expiry",
-                "initialRate": "initialRate"
-            }
-        ]
-    }
-}
-"""
 
 
 @app.route('/account', methods=["GET"])
@@ -568,116 +345,6 @@ def account_sellwallet():
     print("account_sellwallet exit")
     return flask.make_response(response)
 
-
-"""
-@app.route('/addrec', methods=['POST', 'GET'])
-def addrec():
-    date_time = ""
-    if request.method == 'POST':
-        try:
-            username = request.form['username']
-            email = request.form['email']
-            password = request.form['pass']
-
-            # API for date and time ---------------------------------------------------------------------------
-            url = "http://worldtimeapi.org/api/timezone/Europe/London"
-            response = requests.get(url).json()
-            print("" + str(response))  # response details
-            # retrieve response details form the attribute, datetime
-            date_time = response["datetime"]
-            # -------------------------------------------------------------------------------------------------
-
-            con = mysql.connect()
-            cur = con.cursor()
-
-            cur.execute('INSERT INTO user (username, email, password)VALUES( %s,  %s, %s)',
-                        (username, email, password))
-
-            con.commit()
-            msg = "You have signed up today (UK Time)"
-
-        except:
-            con.rollback()
-            msg = "The sign up operation failed."
-
-        finally:
-            # return render_template("result.html", msg=msg, date_time=date_time)
-            return render_template("result.html", msg=msg, date_time=date_time)
-            con.close()
-
-
-@app.route('/viewrec', methods=['POST', 'GET'])
-def viewrec():
-    if request.method == 'POST':
-        try:
-            username = request.form['username']
-            password = request.form['pass']
-            con = mysql.connect()
-            cur = con.cursor()
-            cur.execute('SELECT username, email FROM User WHERE username=%s AND password=%s',
-                        (username, password))
-            rows = cur.fetchall()
-            con.commit()
-
-        except:
-            con.rollback()
-
-        finally:
-            return render_template("view.html", rows=rows)
-            con.close()
-
-
-@app.route('/updaterec', methods=['POST', 'GET'])
-def updaterec():
-    if request.method == 'POST':
-        try:
-            username = request.form['username']
-            password = request.form['pass']
-            email = request.form['email']
-
-            con = mysql.connect()
-            cur = con.cursor()
-            cur.execute('UPDATE User SET email=%s WHERE username=%s AND password=%s',
-                        (email, username, password))
-            con.commit()
-
-            cur.execute(
-                'SELECT username, email FROM User WHERE username=%s', username)
-            rows = cur.fetchall()
-            con.commit()
-
-        except:
-            con.rollback()
-
-        finally:
-            return render_template("view.html", rows=rows)
-            con.close()
-
-
-@app.route('/removerec', methods=['POST', 'GET'])
-def removerec():
-    if request.method == 'POST':
-        try:
-            username = request.form['username']
-            password = request.form['pass']
-            con = mysql.connect()
-            cur = con.cursor()
-            cur.execute('DELETE FROM User WHERE username=%s AND password=%s',
-                        (username, password))
-            con.commit()
-
-            cur.execute(
-                'SELECT username, email FROM User WHERE username=%s', username)
-            rows = cur.fetchall()
-            con.commit()
-
-        except:
-            con.rollback()
-
-        finally:
-            return render_template("view.html", rows=rows)
-            con.close()
-"""
 
 if __name__ == "__main__":
     app.run()

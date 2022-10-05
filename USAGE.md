@@ -83,13 +83,8 @@
 
 ## _[GET]_ `/profile/customer-details`
 ### Request
-```json
-{
-    "customerID": customer ID
-}
-```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
+> The token present in the authorization header is the 
+> method to confirm access to this route  
 ### Response
 ```json
 {
@@ -103,6 +98,52 @@
     "previousSignInDatetime": last sign in datetime,
     "currentSignInDatetime": current sign in datetime,
     "name": name
+}
+```
+
+- - - - -
+
+## _[POST]_ `/profile/change-password`
+### Request
+```json
+{
+    "currentPassword": current password,
+    "newPassword": new password
+}
+```
+> The token present in the authorization header is the method 
+> to confirm access to this route  
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully changed password for customer. You will be signed out. Sign in with new password"
+    },
+    "customerID": customer ID
+}
+```
+
+- - - - -
+
+## _[POST]_ `/profile/change-emailaddress`
+### Request
+```json
+{
+    "currentPassword": current password,
+    "newEmailAddress": new email address
+}
+```
+> The token present in the authorization header is the method 
+> to confirm access to this route  
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully changed email address for customer"
+    },
+    "customerID": customerDA.getCustomerID()
 }
 ```
 
@@ -195,8 +236,8 @@
     "customerID": customerID
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
+> The token present in the authorization header is the 
+> method to confirm access to this route  
 ### Response
 ```json
 {
@@ -275,8 +316,8 @@
     "customerID": customerID
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
+> The token present in the authorization header is the 
+> method to confirm access to this route  
 ### Response
 ```json
 {
@@ -308,8 +349,8 @@
     "customerID": customerID
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -343,8 +384,8 @@
     "walletAddress": the wallet address for which details are requested
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -389,8 +430,8 @@
     "bundleAddress": bundle address
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 

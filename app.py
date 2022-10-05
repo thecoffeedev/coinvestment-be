@@ -101,7 +101,7 @@ def sign_out():
             })
 
 
-@app.route('/profile/customer-details', methods=["POST"])
+@app.route('/profile/customer-details', methods=["GET"])
 def customer_details():
     if validateToken(request):
         reqData = request.get_json()
@@ -116,6 +116,40 @@ def customer_details():
             }
         })
 
+
+@app.route('/profile/change-password', methods=["POST"])
+def change_password():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = CController.changePassword(reqData)
+        del sessionTokens[request.headers.get("Authorization")]
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
+
+@app.route('/profile/change-emailaddress', methods=["POST"])
+def change_emailAddress():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = CController.changeEmailAddress(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
+
 @app.route('/list/all/cryptocurrencies', methods=["GET"])
 def list_all_cryptocurrencies():
     responseData = WController.getAllAvailableCryptocurrencies()
@@ -129,86 +163,115 @@ def list_all_bundles():
     return flask.make_response(responseData)
 
 
-@app.route('/account', methods=["GET"])
-def account():
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View customer account and purchased wallets and bundles"
-            }
-    }
+# @app.route('/account', methods=["GET"])
+# def account():
+#     if validateToken(request):
+#         reqData = request.get_json()
+#         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+#         responseData = CController.getCustomerDetails(reqData)
+#         return flask.make_response(responseData)
+#     else:
+#         return flask.make_response({
+#             "status": {
+#                 "statusCode": "FAILURE",
+#                 "statusMessage": "No valid token"
+#             }
+#         })
 
-    return flask.make_response(response)
 
-
-@app.route('/account/wallets', methods=["POST"])
+@app.route('/account/wallets', methods=["GET"])
 def account_wallets():
-    print("account_wallets entry")
-    jsonReqData = request.get_json()
-    print("jsonReqData : ", jsonReqData)
-    response = WController.getAllWalletsFromCustomerID(jsonReqData)
-    print("account_wallets exit")
-    return flask.make_response(response)
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = WController.getAllWalletsFromCustomerID(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
 
 
 @app.route('/account/bundles', methods=["GET"])
 def account_bundles():
-    data = request.get_json()
-    print(data)
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View bundles for: "
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = WController.getAllBundlesFromCustomerID(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
             }
-    }
-    # return the data for that wallet address
-    return flask.make_response(response)
+        })
 
 
-@app.route('/account/wallets/walletAddress', methods=["POST"])
+@app.route('/account/wallets/wallet-address', methods=["GET"])
 def account_walletdetails():
-    print("account_walletdetails entry")
-    jsonReqData = request.get_json()
-    print("jsonReqData : ", jsonReqData)
-    response = WController.getAllWalletDetailsFromWalletAddress(jsonReqData)
-    print("account_walletdetails entry")
-    return flask.make_response(response)
-
-
-@app.route('/account/bundles/bundle_address', methods=["GET"])
-def account_bundledetails(bundleAddress):
-    data = request.get_json()
-    print(data)
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View details for wallet " + bundleAddress
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = WController.getAllWalletDetailsFromWalletAddress(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
             }
-    }
-    # return the data for that wallet address
-    return flask.make_response(response)
+        })
 
-@app.route('/account/purchase/wallet', methods=["GET"])
+
+@app.route('/account/bundles/bundle-address', methods=["GET"])
+def account_bundledetails():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = BController.getAllBundleDetailsFromBundleAddress(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
+
+@app.route('/account/purchase/wallet', methods=["POST"])
 def account_purchasewallet():
-    print("account_purchasewallet entry")
-    jsonReqData = request.get_json()
-    print("jsonReqData : ", jsonReqData)
-    response = WController.purchaseWallet(jsonReqData)
-    print("account_purchasewallet entry")
-    return flask.make_response(response)
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = WController.purchaseWallet(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
 
 @app.route('/account/sell/wallet', methods=["POST"])
 def account_sellwallet():
-    print("account_sellwallet entry")
-    jsonReqData = request.get_json()
-    print("jsonReqData : ", jsonReqData)
-    response = WController.sellWallet(jsonReqData)
-    print("account_sellwallet exit")
-    return flask.make_response(response)
-
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = WController.sellWallet(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
 
 if __name__ == "__main__":
     app.run()

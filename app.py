@@ -212,7 +212,7 @@ def account_bundles():
 
 
 @app.route('/account/wallets/wallet-address', methods=["GET"])
-def account_walletdetails():
+def account_wallet_details():
     if validateToken(request):
         reqData = request.get_json()
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
@@ -228,7 +228,7 @@ def account_walletdetails():
 
 
 @app.route('/account/bundles/bundle-address', methods=["GET"])
-def account_bundledetails():
+def account_bundle_details():
     if validateToken(request):
         reqData = request.get_json()
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
@@ -244,7 +244,7 @@ def account_bundledetails():
 
 
 @app.route('/account/purchase/wallet', methods=["POST"])
-def account_purchasewallet():
+def account_purchase_wallet():
     if validateToken(request):
         reqData = request.get_json()
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
@@ -259,7 +259,7 @@ def account_purchasewallet():
         })
 
 @app.route('/account/sell/wallet', methods=["POST"])
-def account_sellwallet():
+def account_sell_wallet():
     if validateToken(request):
         reqData = request.get_json()
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
@@ -272,6 +272,38 @@ def account_sellwallet():
                 "statusMessage": "No valid token"
             }
         })
+
+
+@app.route('/account/purchase/bundle', methods=["POST"])
+def account_purchase_bundle():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = BController.purchaseBundle(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
+@app.route('/account/sell/bundle', methods=["POST"])
+def account_sell_bundle():
+    if validateToken(request):
+        reqData = request.get_json()
+        reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
+        responseData = BController.sellBundle(reqData)
+        return flask.make_response(responseData)
+    else:
+        return flask.make_response({
+            "status": {
+                "statusCode": "FAILURE",
+                "statusMessage": "No valid token"
+            }
+        })
+
 
 if __name__ == "__main__":
     app.run()

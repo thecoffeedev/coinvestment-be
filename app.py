@@ -116,142 +116,21 @@ def customer_details():
             }
         })
 
-
 @app.route('/list/all/cryptocurrencies', methods=["GET"])
 def list_all_cryptocurrencies():
-    url = "https://api.coingecko.com/api/v3/search/trending"
-    trendingCoins = requests.get(url).json()
-    availableCryptocurrencies = []
-    for coin in trendingCoins["coins"]:
-        x = {
-            "cryptocurrency code": coin["item"]["symbol"],
-            "cryptocurrency name": coin["item"]["name"],
-            "iconPNG": coin["item"]["large"]
-        }
-        availableCryptocurrencies.append(x)
-    print(availableCryptocurrencies)
-    response = \
-        {
-            "status":
-                {
-                    "status code": "SUCCESS",
-                    "status message": "List of coins with code, name and symbol"
-                },
-            "available cryptocurrencies": availableCryptocurrencies
-        }
-
-    return flask.make_response(response)
+    responseData = WController.getAllAvailableCryptocurrencies()
+    return flask.make_response(responseData)
 
 
 @app.route('/list/all/bundles', methods=["GET"])
 def list_all_bundles():
-    availableBundles = [
-        {
-            "Low risk":
-                {
-                    "Minimum holding period": 6,
-                    "Bundles":
-                        [
-                            {
-                                "cryptocurrency code": "btc",
-                                "cryptocurrency name": "Bitcoin",
-                                "percentage": 50
-                            },
-                            {
-                                "cryptocurrency code": "eth",
-                                "cryptocurrency name": "Ethereum",
-                                "percentage": 50
-                            }
-                        ]
-                },
-            "Medium risk":
-                {
-                    "Minimum holding period": 12,
-                    "Bundles":
-                        [
-                            {
-                                "cryptocurrency code": "btc",
-                                "cryptocurrency name": "Bitcoin",
-                                "percentage": 25
-                            },
-                            {
-                                "cryptocurrency code": "eth",
-                                "cryptocurrency name": "Ethereum",
-                                "percentage": 15
-                            },
-                            {
-                                "cryptocurrency code": "xrp",
-                                "cryptocurrency name": "Ripple",
-                                "percentage": 15
-                            },
-                            {
-                                "cryptocurrency code": "ltc",
-                                "cryptocurrency name": "Litecoin",
-                                "percentage": 25
-                            },
-                            {
-                                "cryptocurrency code": "xmr",
-                                "cryptocurrency name": "Monero",
-                                "percentage": 20
-                            }
-                        ]
-                },
-            "High risk":
-                {
-                    "Minimum holding period": 12,
-                    "Bundles":
-                        [
-                            {
-                                "cryptocurrency code": "doge",
-                                "cryptocurrency name": "Dogecoin",
-                                "percentage": 20
-                            },
-                            {
-                                "cryptocurrency code": "shib",
-                                "cryptocurrency name": "Shiba Inu",
-                                "percentage": 20
-                            },
-                            {
-                                "cryptocurrency code": "etc",
-                                "cryptocurrency name": "Ethereum Classic",
-                                "percentage": 30
-                            },
-                            {
-                                "cryptocurrency code": "ape",
-                                "cryptocurrency name": "ApeCoin",
-                                "percentage": 30
-                            }
-                        ]
-                }
-        }
-    ]
-
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "List of bundles with code, name and percentage"
-            },
-        "available bundles": availableBundles
-    }
-
-    return flask.make_response(response)
+    # List all bundles with their names and ID
+    responseData = BController.getAllAvailableBundles()
+    return flask.make_response(responseData)
 
 
-@app.route('/list/all', methods=["GET"])
-def list_all():
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View customer account and purchased wallets and bundles"
-            }
-    }
-    return flask.make_response(response)
-
-
-@app.route('/account/customerdetails', methods=["GET"])
-def account_customerdetails(customerID):
+@app.route('/account', methods=["GET"])
+def account():
     response = {
         "status":
             {
@@ -298,7 +177,7 @@ def account_walletdetails():
     return flask.make_response(response)
 
 
-@app.route('/account/bundles/<bundle_address>', methods=["GET"])
+@app.route('/account/bundles/bundle_address', methods=["GET"])
 def account_bundledetails(bundleAddress):
     data = request.get_json()
     print(data)
@@ -307,21 +186,6 @@ def account_bundledetails(bundleAddress):
             {
                 "status code": "SUCCESS",
                 "status message": "View details for wallet " + bundleAddress
-            }
-    }
-    # return the data for that wallet address
-    return flask.make_response(response)
-
-
-@app.route('/account', methods=["GET"])
-def account():
-    data = request.get_json()
-    print(data)
-    response = {
-        "status":
-            {
-                "status code": "SUCCESS",
-                "status message": "View details for user "
             }
     }
     # return the data for that wallet address

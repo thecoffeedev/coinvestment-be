@@ -143,7 +143,7 @@
         "statusCode": "SUCCESS",
         "statusMessage": "Successfully changed email address for customer"
     },
-    "customerID": customerDA.getCustomerID()
+    "customerID": customer ID
 }
 ```
 
@@ -474,18 +474,14 @@
 ### Request
 ```json
 {
-    "wallet": {
-        "customerID": customerID,
-        "initialBalance": initial balance,
-        "cryptocurrencyCode": cryptocurrency code,
-        "holdingPeriod": holding period
-    },
-    "walletTransaction": {
-        "initialRate": initial rate,
-        "amount": amount,
-        "cardNumber": card number,
-        "expiry": expiry
-    }
+    "customerID": customerID,
+    "initialBalance": initial balance,
+    "cryptocurrencyCode": cryptocurrency code,
+    "holdingPeriod": holding period,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
 }
 ```
 ### Response
@@ -496,12 +492,12 @@
         "statusMessage": "Wallet purchased"
     },
     "wallet": {
-            "walletAddress": wallet address,
-            "customerID": customer ID,
-            "initialBalance": the balance at time of purchase,
-            "currentBalance": the current balance,
-            "cryptocurrencyCode": the wallets cryptocurrency,
-            "holdingPeriod": investment time period
+        "walletAddress": wallet address,
+        "customerID": customer ID,
+        "initialBalance": the balance at time of purchase,
+        "currentBalance": the current balance,
+        "cryptocurrencyCode": the wallets cryptocurrency,
+        "holdingPeriod": investment time period
     },
     "walletTransaction": {
         "transactionID": transaction ID,
@@ -525,17 +521,13 @@
 ### Request
 ```json
 {
-    "wallet": {
-        "walletAddress": wallet address,
-        "customerID": customerID
-    },
-    "walletTransaction": {
-        "initialRate": initial rate,
-        "amount": amount,
-        "cardNumber": card number,
-        "expiry": expiry,
-        "unitsSold": units sold
-    }
+    "walletAddress": wallet address,
+    "customerID": customerID,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry,
+    "unitsSold": units sold
 }
 ```
 ### Response
@@ -562,6 +554,94 @@
         "cardNumber": card number,
         "expiry": expiry,
         "unitsSold": unitsSold,
+        "initialRate": initial rate
+    }
+}
+```
+
+- - - - -
+
+## _[POST]_ `/account/purchase/bundle`
+### Request
+```json
+{
+    "customerID": customerID,
+    "bundleID": bundle ID,
+    "holdingPeriod": holding period,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Bundle purchased"
+    },
+    "bundle": {
+        "bundleAddress": bundle address,
+        "customerID": customer ID,
+        "bundleID": bundle ID,
+        "purchaseDatetime": purchase datetime,
+        "status": status,
+        "holdingPeriod": investment time period
+    },
+    "bundleTransaction": {
+        "transactionID": transaction ID,
+        "transactionDateTime": datetime of transaction,
+        "chargeApplied": charges applied for selling before holding period expires,
+        "amount": amount invested,
+        "action": BUY or SELL,
+        "cardNumber": card number masked,
+        "expiry": expiry date masked,
+        "initialRate": rate at which the cryptocurrency was bought
+    }
+}
+```
+> Where
+> * `bundleTransaction` is the details of that particular transaction carried out 
+
+- - - - -
+
+## _[POST]_ `/account/sell/bundle`
+### Request
+```json
+{
+    "bundleAddress": bundle address,
+    "customerID": customer ID,
+    "bundleID": bundle ID,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully sold bundle"
+    },
+    "bundle": {
+        "bundleAddress": bundle address,
+        "customerID": customer ID,
+        "bundleID": bundle ID,
+        "purchaseDatetime": purchase datetime,
+        "status": status,
+        "holdingPeriod": holdingPeriod
+    },
+    "bundleTransaction": {
+        "transactionID": transaction ID,
+        "transactionDateTime": transaction datetime,
+        "chargeApplied": charge applied,
+        "amount": amount,
+        "action": action,
+        "cardNumber": card number,
+        "expiry": expiry,
         "initialRate": initial rate
     }
 }

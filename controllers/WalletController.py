@@ -10,24 +10,44 @@ import time
 class WalletController:
 
     def __init__(self, app):
-        print("__init__ entry")
         self.WDA = WalletDataAccess(app)
-        self.generateDayZeroData()
-        print("__init__ exit")
-
-    def generateDayZeroData(self):
-        print("generateDayZeroData entry")
         self.WDA.createTables()
         self.WDA.insertDayZeroData()
-        print(self.WDA.readAllAvailableCryptocurrency())
 
     def getAllAvailableCryptocurrencies(self):
-        pass
+        try:
+            available = self.WDA.readAllAvailableCryptocurrency()
+            availableCryptocurrencies = []
+
+            for cc in available:
+                cryptoDict = {
+                    "cryptocurrencyCode": cc[0],
+                    "cryptocurrencyName": cc[1]
+                }
+                availableCryptocurrencies.append(cryptoDict)
+
+            response = \
+                {
+                    "status": {
+                        "statusCode": "SUCCESS",
+                        "statusMessage": "List of all available cryptocurrencies"
+                    },
+                    "availableCryptocurrencies": availableCryptocurrencies
+                }
+            return response
+
+        except Exception as e:
+            response = \
+                {
+                    "status": {
+                        "statusCode": "FAILURE",
+                        "statusMessage": e.args[0]
+                    }
+                }
+            return response
 
     def getAllWalletDetailsFromWalletAddress(self, jsonReqData):
         try:
-            print("getAllWalletDetailsFromWalletAddress entry")
-            print("jsonReqData : ", jsonReqData)
             if not jsonReqData.get("walletAddress"):
                 raise ValueError("Wallet Address not provided in request JSON")
             else:
@@ -52,13 +72,11 @@ class WalletController:
                     }
                     walletTransactionList.append(walletTransactionDict)
 
-                print("walletTransactionList :", walletTransactionList)
-
                 response = \
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Units sold successfully"
+                            "statusMessage": "All wallet details"
                         },
                         "wallet": {
                             "walletAddress": walletDA.getWalletAddress(),
@@ -68,13 +86,11 @@ class WalletController:
                             "cryptocurrencyCode": walletDA.getCryptocurrencyCode(),
                             "holdingPeriod": walletDA.getHoldingPeriod()
                         },
-                        "walletTransaction": walletTransactionList
+                        "walletTransactions": walletTransactionList
                     }
-                print("response :", response)
                 return response
 
         except Exception as e:
-            print("getAllWalletDetailsFromWalletAddress exception", e)
             response = \
                 {
                     "status": {
@@ -82,14 +98,10 @@ class WalletController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllWalletDetailsFromWalletAddress exception", response)
             return response
-        print("getAllWalletDetailsFromWalletAddress exit")
 
     def getAllWalletsFromCustomerID(self, jsonReqData):
         try:
-            print("getAllWalletsFromCustomerID entry")
-            print("jsonReqData : ", jsonReqData)
             if not jsonReqData.get("customerID"):
                 raise ValueError("Customer ID not provided in request JSON")
             else:
@@ -110,21 +122,17 @@ class WalletController:
                     }
                     walletList.append(walletDict)
 
-                print("walletList :", walletList)
-
                 response = \
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Units sold successfully"
+                            "statusMessage": "All wallets for customer"
                         },
                         "wallet": walletList
                     }
-                print("response :", response)
                 return response
 
         except Exception as e:
-            print("getAllWalletsFromCustomerID exception", e)
             response = \
                 {
                     "status": {
@@ -132,15 +140,10 @@ class WalletController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllWalletsFromCustomerID exception", response)
             return response
-        print("getAllWalletsFromCustomerID exit")
 
     def purchaseWallet(self, jsonReqData):
         try:
-            print("purchaseWallet entry")
-            print("jsonReqData : ", jsonReqData)
-
             walletFE = Wallet()
             if not jsonReqData.get("customerID"):
                 raise ValueError("Customer ID not provided in request JSON")
@@ -200,8 +203,6 @@ class WalletController:
             walletTransactionFE.setAction("BUY")
             walletTransactionFE.setUnitsSold(Utility.roundDecimals(0.0))
 
-            print("walletFE : ", walletFE.__dict__)
-            print("walletTransactionFE : ", walletTransactionFE.__dict__)
             self.WDA.insertWallet(walletFE)
             self.WDA.insertWalletTransactionHistory(walletTransactionFE)
 
@@ -209,7 +210,7 @@ class WalletController:
                 {
                     "status": {
                         "statusCode": "SUCCESS/FAILURE",
-                        "statusMessage": "Units sold successfully"
+                        "statusMessage": "Cryptocurrency purchased"
                     },
                     "wallet": {
                         "walletAddress": walletFE.getWalletAddress(),
@@ -234,7 +235,6 @@ class WalletController:
             return response
 
         except Exception as e:
-            print("purchaseWallet exception", e)
             response = \
                 {
                     "status": {
@@ -242,15 +242,10 @@ class WalletController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("purchaseWallet exception", response)
             return response
-        print("purchaseWallet exit")
 
     def sellWallet(self, jsonReqData):
         try:
-            print("sellWallet entry")
-            print("jsonReqData : ", jsonReqData)
-
             walletFE = Wallet()
             walletTransactionFE = WalletTransactionHistory()
             if not jsonReqData.get("customerID"):
@@ -311,8 +306,6 @@ class WalletController:
                 walletTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
             walletTransactionFE.setAction("SELL")
 
-            print("walletFE : ", walletFE.__dict__)
-            print("walletTransactionFE : ", walletTransactionFE.__dict__)
             self.WDA.updateWalletCurrentBalance(walletFE)
             self.WDA.insertWalletTransactionHistory(walletTransactionFE)
 
@@ -345,7 +338,6 @@ class WalletController:
             return response
 
         except Exception as e:
-            print("sellWallet exception", e)
             response = \
                 {
                     "status": {
@@ -353,8 +345,6 @@ class WalletController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("sellWallet exception", response)
             return response
-        print("sellWallet exit")
 
 

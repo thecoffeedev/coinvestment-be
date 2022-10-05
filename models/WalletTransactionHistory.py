@@ -2,9 +2,9 @@ from models.TransactionHistory import TransactionHistory
 
 class WalletTransactionHistory(TransactionHistory):
 
-    def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0, amount=0.0,
+    def __init__(self, transactionID=None, transactionDatetime=None, chargeApplied=0.0, amount=0.0,
                  action=None, cardNumber=None, expiry=None, initialRate=None, walletAddress=None, unitsSold=None):
-        super().__init__(transactionID, transactionDateTime, chargeApplied, amount,
+        super().__init__(transactionID, transactionDatetime, chargeApplied, amount,
                          action, cardNumber, expiry, initialRate)
 
         self.__walletAddress = walletAddress
@@ -30,8 +30,8 @@ class WalletTransactionHistory(TransactionHistory):
     def setUnitsSold(self, unitsSold):
         if unitsSold is None:
             raise ValueError("Units Sold must not be none")
-        if type(unitsSold) != int:
-            raise TypeError("Units Sold must be an integer")
+        if type(unitsSold) != float:
+            raise TypeError("Units Sold must be a float")
         elif unitsSold < 0:
             raise ValueError("Units Sold must be greater than or equal zero")
         else:

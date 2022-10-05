@@ -83,7 +83,7 @@ class TestTransactionID(unittest.TestCase):
         self.assertEqual(self.newTransactionHistory.getTransactionID(), "9jDo34hLdfJdsRdsFN29")
 
 
-class TestTransactionDateTime(unittest.TestCase):
+class TestTransactionDatetime(unittest.TestCase):
 
     def setUp(self):
         self.newTransactionHistory = TransactionHistory()
@@ -92,27 +92,27 @@ class TestTransactionDateTime(unittest.TestCase):
         pass
 
     def test_must_be_none_if_not_set(self):
-        self.assertIsNone(self.newTransactionHistory.getTransactionDateTime())
+        self.assertIsNone(self.newTransactionHistory.getTransactionDatetime())
 
     def test_must_not_accept_none_argument(self):
         with self.assertRaises(TypeError):
-            self.newTransactionHistory.setTransactionDateTime(None)
+            self.newTransactionHistory.setTransactionDatetime(None)
 
     def test_must_not_be_a_string(self):
         with self.assertRaises(TypeError):
-            self.newTransactionHistory.setTransactionDateTime("1232434334.3843943")
+            self.newTransactionHistory.setTransactionDatetime("1232434334.3843943")
 
     def test_must_not_be_a_false_boolean(self):
         with self.assertRaises(TypeError):
-            self.newTransactionHistory.setTransactionDateTime(False)
+            self.newTransactionHistory.setTransactionDatetime(False)
 
     def test_must_not_be_a_true_boolean(self):
         with self.assertRaises(TypeError):
-            self.newTransactionHistory.setTransactionDateTime(True)
+            self.newTransactionHistory.setTransactionDatetime(True)
 
     def test_must_return_an_int(self):
-        self.newTransactionHistory.setTransactionDateTime(632432525)
-        self.assertIsInstance(self.newTransactionHistory.getTransactionDateTime(), int)
+        self.newTransactionHistory.setTransactionDatetime(632432525)
+        self.assertIsInstance(self.newTransactionHistory.getTransactionDatetime(), int)
 
 
 class TestChargeApplied(unittest.TestCase):

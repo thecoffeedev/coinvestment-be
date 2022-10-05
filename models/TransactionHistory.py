@@ -2,10 +2,10 @@ import re
 
 class TransactionHistory:
 
-    def __init__(self, transactionID=None, transactionDateTime=None, chargeApplied=0.0, amount=0.0,
+    def __init__(self, transactionID=None, transactionDatetime=None, chargeApplied=0.0, amount=0.0,
                  action=None, cardNumber=None, expiry=None, initialRate=None):
         self._transactionID = transactionID
-        self._transactionDateTime = transactionDateTime
+        self._transactionDatetime = transactionDatetime
         self._chargeApplied = chargeApplied
         self._amount = amount
         self._action = action
@@ -26,16 +26,16 @@ class TransactionHistory:
         else:
             self._transactionID = transactionID
 
-    def getTransactionDateTime(self):
-        return self._transactionDateTime
+    def getTransactionDatetime(self):
+        return self._transactionDatetime
 
-    def setTransactionDateTime(self, transactionDateTime):
-        if transactionDateTime is None:
+    def setTransactionDatetime(self, transactionDatetime):
+        if transactionDatetime is None:
             raise TypeError("Transaction datetime must not be none")
-        elif type(transactionDateTime) != int:
+        elif type(transactionDatetime) != int:
             raise TypeError("Transaction datetime must be in unix time format, int")
         else:
-            self._transactionDateTime = transactionDateTime
+            self._transactionDatetime = transactionDatetime
 
     def getChargeApplied(self):
         return self._chargeApplied
@@ -44,9 +44,9 @@ class TransactionHistory:
         if chargeApplied is None:
             raise ValueError("Charge Applied must not be none")
         elif type(chargeApplied) != float:
-            raise TypeError("Charge Applied must be an float")
-        elif chargeApplied <= 0:
-            raise ValueError("Charge Applied must be greater than zero")
+            raise TypeError("Charge Applied must be a float")
+        elif chargeApplied < 0:
+            raise ValueError("Charge Applied must be greater than or equal to zero")
         else:
             self._chargeApplied = chargeApplied
 

@@ -430,7 +430,7 @@
 
 {
     "status": {
-        "statusCode": "SUCCESS/",
+        "statusCode": "SUCCESS",
         "statusMessage": "Details for the bundle requested"
     },
     "bundle": {
@@ -473,14 +473,12 @@
         "cryptocurrencyCode": <cryptocurrency code>,
         "holdingPeriod": <holding period>
     },
-    "walletTransaction": [
-        {
-            "initialRate": <initial rate>,
-            "amount": <amount>,
-            "cardNumber": <card number>,
-            "expiry": <expiry>
-        }
-    ]
+    "walletTransaction": {
+        "initialRate": <initial rate>,
+        "amount": <amount>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>
+    }
 }
 ```
 ### Response
@@ -498,24 +496,21 @@
             "cryptocurrencyCode": <the wallets cryptocurrency>,
             "holdingPeriod": <investment time period>
     },
-    "walletTransaction": [
-        {
-            "transactionID": <transaction ID>,
-            "transactionDateTime": <datetime of transaction>,
-            "chargeApplied": <charges applied for selling before holding period expires>,
-            "amount": <amount invested>,
-            "action": <BUY or SELL>,
-            "cardNumber": <card number masked>,
-            "expiry": <expiry date masked>,
-            "unitsSold": <sold cryptocurrency>,
-            "initialRate": <rate at which the cryptocurrency was bought>
-        }
-    ]
+    "walletTransaction": {
+        "transactionID": <transaction ID>,
+        "transactionDateTime": <datetime of transaction>,
+        "chargeApplied": <charges applied for selling before holding period expires>,
+        "amount": <amount invested>,
+        "action": <BUY or SELL>,
+        "cardNumber": <card number masked>,
+        "expiry": <expiry date masked>,
+        "unitsSold": <sold cryptocurrency>,
+        "initialRate": <rate at which the cryptocurrency was bought>
+    }
 }
 ```
 > Where
-> * `walletTransactions` is a list of all transactions carried out on 
-> that wallet
+> * `walletTransaction` is the details of that particular transaction carried out 
 
 - - - - -
 
@@ -525,14 +520,43 @@
 {
     "wallet": {
         "walletAddress": <wallet address>,
-        "customerID": <customer ID>,
-        "initialRate": <the rate at which bought>,
-        "unitsSold": <how many to sell>
+        "customerID": <customerID>
+    },
+    "walletTransaction": {
+        "initialRate": <initial rate>,
+        "amount": <amount>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>,
+        "unitsSold": <units sold>
     }
-} 
+}
 ```
 ### Response
 ```json
-
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully sold wallet"
+    },
+    "wallet": {
+        "walletAddress": <wallet address>,
+        "customerID": <customer ID>,
+        "initialBalance": <initial balance>,
+        "currentBalance": <current balance>,
+        "cryptocurrencyCode": <cryptocurrency code>,
+        "holdingPeriod": <holdingPeriod>
+    },
+    "walletTransaction": {
+        "transactionID": <transaction ID>,
+        "transactionDateTime": <transaction datetime>,
+        "chargeApplied": <charge applied>,
+        "amount": <amount>,
+        "action": <action>,
+        "cardNumber": <card number>,
+        "expiry": <expiry>,
+        "unitsSold": <unitsSold>,
+        "initialRate": <initial rate>
+    }
+}
 ```
 

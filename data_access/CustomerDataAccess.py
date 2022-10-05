@@ -13,8 +13,6 @@ class CustomerDataAccess:
         app.config['MYSQL_DATABASE_DB'] = config('DB_NAME')
         app.config['MYSQL_DATABASE_HOST'] = config('DB_HOST')
         self.mysql.init_app(app)
-        self.createTables()
-        self.insertDayZeroData()
 
     def createTables(self):
         createTableQuery = "CREATE TABLE IF NOT EXISTS Customer (" \

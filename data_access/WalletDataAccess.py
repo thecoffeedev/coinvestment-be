@@ -86,23 +86,50 @@ class WalletDataAccess:
         cur.execute("select exists (SELECT * FROM Wallet)")
 
         if not cur.fetchone()[0]:
-            walletOne = Wallet()
-            walletOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
-            walletOne.setWalletAddress(Utility.generateRandomID())
-            walletOne.setInitialBalance(8432.2871)
-            walletOne.setCurrentBalance(8432.2871)
-            walletOne.setCryptocurrencyCode('btc')
-            walletOne.setHoldingPeriod(24)
-            self.insertWallet(walletOne)
+            walletZero = Wallet()
+            walletZero.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+            walletZero.setWalletAddress("jNrxO4OyXgdqum0wj2LV")
+            walletZero.setInitialBalance(2.2632)
+            walletZero.setCurrentBalance(2.2632)
+            walletZero.setCryptocurrencyCode('btc')
+            walletZero.setHoldingPeriod(24)
+            self.insertWallet(walletZero)
 
             walletOne = Wallet()
             walletOne.setCustomerID("Debo32tKqJBeZwHHgkvx")
-            walletOne.setWalletAddress(Utility.generateRandomID())
-            walletOne.setInitialBalance(2731.3329)
-            walletOne.setCurrentBalance(2731.3329)
+            walletOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
+            walletOne.setInitialBalance(18248.1751)
+            walletOne.setCurrentBalance(18248.1751)
             walletOne.setCryptocurrencyCode('trx')
-            walletOne.setHoldingPeriod(10)
+            walletOne.setHoldingPeriod(12)
             self.insertWallet(walletOne)
+
+        cur.execute("select exists (SELECT * FROM Wallet)")
+        if not cur.fetchone()[0]:
+            walletTransZero = WalletTransactionHistory()
+            walletTransZero.setTransactionID("nmagkxkfXvN9WgMe9wvt")
+            walletTransZero.setTransactionDatetime(1664971119)
+            walletTransZero.setChargeApplied(0.0)
+            walletTransZero.setAmount(40000.00)
+            walletTransZero.setAction("BUY")
+            walletTransZero.setCardNumber("4921934757374347")
+            walletTransZero.setExpiry("07/25")
+            walletTransZero.setInitialRate(17617.53)
+            walletTransZero.setWalletAddress("jNrxO4OyXgdqum0wj2LV")
+            walletTransZero.setUnitsSold(0.0)
+
+            walletTransOne = WalletTransactionHistory()
+            walletTransOne.setTransactionID("APklhYdFZMZ5hDauOrx4")
+            walletTransOne.setTransactionDatetime(1664974591)
+            walletTransOne.setChargeApplied(0.0)
+            walletTransOne.setAmount(1000.00)
+            walletTransOne.setAction("BUY")
+            walletTransOne.setCardNumber("4763758393205721")
+            walletTransOne.setExpiry("12/23")
+            walletTransOne.setInitialRate(0.0548)
+            walletTransOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
+            walletTransOne.setUnitsSold(0.0)
+
 
         cur.close()
         con.commit()
@@ -257,12 +284,23 @@ class WalletDataAccess:
         else:
             raise LookupError("No wallet transaction record exists")
 
-
     def updateWalletCurrentBalance(self, walletObj):
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("UPDATE Wallet set CurrentBalance = %s where WalletAddress = %s",
                     (walletObj.getCurrentBalance(), walletObj.getWalletAddress()))
+        cur.close()
+        con.commit()
+        con.close()
+
+    def testDropTables(self):
+        # Just for unit testing
+        con = self.mysql.connect()
+        cur = con.cursor()
+        dropQuery = "DROP TABLE Wallet"
+        cur.execute(dropQuery)
+        dropQuery = "DROP TABLE WalletTransactionHistory"
+        cur.execute(dropQuery)
         cur.close()
         con.commit()
         con.close()

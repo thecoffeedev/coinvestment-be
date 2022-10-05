@@ -49,7 +49,7 @@ class WalletController:
     def getAllWalletDetailsFromWalletAddress(self, jsonReqData):
         try:
             if not jsonReqData.get("walletAddress"):
-                raise ValueError("Wallet Address not provided in request JSON")
+                raise ValueError("Wallet address not provided in request JSON")
             else:
                 walletFE = Wallet()
                 walletFE.setWalletAddress(jsonReqData.get("walletAddress"))

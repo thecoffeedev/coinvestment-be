@@ -9,9 +9,6 @@ class BundleController:
 
     def __init__(self, app):
         self.BDA = BundleDataAccess(app)
-        self.generateDayZeroData()
-
-    def generateDayZeroData(self):
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
 

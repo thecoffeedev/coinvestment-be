@@ -20,7 +20,7 @@ class BundleDataAccess:
         # Create the table if it does not exist
         createQuery = "CREATE TABLE IF NOT EXISTS AvailableBundle(" \
                       "BundleID VARCHAR(10) NOT NULL, " \
-                      "CryptocurrencyCode VARCHAR(10) NOT NULL, " \
+                      "CryptocurrencyCode VARCHAR(50) NOT NULL, " \
                       "Percentage INT NOT NULL, " \
                       "HoldingPeriod INT NOT NULL" \
                       ")"
@@ -64,12 +64,12 @@ class BundleDataAccess:
         cur.execute("SELECT EXISTS (SELECT * FROM AvailableBundle)")
 
         if not cur.fetchone()[0]:
-            bundleList = [(1, "btc", 50, 6), (1, "eth", 50, 6),
-                        (2, 'bch', 25, 6), (2, 'eth', 15, 6), (2, 'xrp', 15, 6), (2, 'ltc', 25, 6), (2, 'xmr', 20, 6),
-                        (3, 'doge', 20, 12), (3, 'shib', 20, 12), (3, 'etc', 30, 12), (3, 'ape', 30, 12),
-                        (4, 'link', 20, 12), (4, 'mana', 20, 12), (4, 'qnt', 20, 12), (4, 'wbtc', 20, 12), (4, 'usdc', 20, 12),
-                        (5, 'dai', 20, 18), (5, 'bnb', 20, 18), (5, 'sol', 20, 18),
-                        (6, 'algo', 20, 18), (6, 'busd', 20, 18), (6, 'flow', 20, 18), (6, 'fil', 20, 18), (6, 'dot', 20, 18)
+            bundleList = [(1, "bitcoin", 50, 6), (1, "ethereum", 50, 6),
+                        (2, 'bitcoin-cash', 25, 6), (2, 'tether', 15, 6), (2, 'ripple', 15, 6), (2, 'litecoin', 25, 6), (2, 'monero', 20, 6),
+                        (3, 'dogecoin', 20, 12), (3, 'shiba-inu', 20, 12), (3, 'ethereum-classic', 30, 12), (3, 'apecoin', 30, 12),
+                        (4, 'chainlink', 20, 12), (4, 'decentraland', 20, 12), (4, 'quant-network', 20, 12), (4, 'wrapped-bitcoin', 20, 12), (4, 'usd-coin', 20, 12),
+                        (5, 'dai', 20, 18), (5, 'binancecoin', 20, 18), (5, 'solana', 20, 18),
+                        (6, 'algorand', 20, 18), (6, 'binance-usd', 20, 18), (6, 'flow', 20, 18), (6, 'filecoin', 20, 18), (6, 'polkadot', 20, 18)
                         ]
 
             insertQuery = "INSERT INTO AvailableBundle VALUES (%s, %s, %s, %s)"

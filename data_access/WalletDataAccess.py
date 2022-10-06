@@ -19,8 +19,9 @@ class WalletDataAccess:
         # Create the table if it does not exist
         createAvailableTableQuery = \
             "CREATE TABLE IF NOT EXISTS AvailableCryptocurrency(" \
-            "cryptocurrencyCode VARCHAR(10) NOT NULL PRIMARY KEY, " \
-            "name VARCHAR(20) NOT NULL" \
+            "cryptocurrencyCode VARCHAR(50) NOT NULL PRIMARY KEY, " \
+            "name VARCHAR(20) NOT NULL," \
+            "symbol VARCHAR(10)" \
             ")"
 
         createWalletTableQuery = \
@@ -29,7 +30,7 @@ class WalletDataAccess:
             "CustomerID VARCHAR(20), " \
             "InitialBalance FLOAT(53), " \
             "CurrentBalance FLOAT(53), " \
-            "CryptocurrencyCode VARCHAR(10), " \
+            "CryptocurrencyCode VARCHAR(50), " \
             "HoldingPeriod INT(5) " \
             ")"
 
@@ -66,21 +67,25 @@ class WalletDataAccess:
         cur.execute("SELECT EXISTS (SELECT * FROM AvailableCryptocurrency)")
 
         if not cur.fetchone()[0]:
-            currencyList = [('btc', 'Bitcoin'), ('eth', 'Ethereum'), ('usdt', 'Tether'), ('usdc', 'USD Coin'),
-                            ('bnb', 'BNB'), ('xrp', 'XRP'), ('busd', 'Binance USD'), ('ada', 'Cardano'),
-                            ('sol', 'Solana'), ('doge', 'Dogecoin'), ('dot', 'Polkadot'), ('shib', 'Shiba Inu'),
-                            ('dai', 'Dai'), ('steth', 'Lido Staked Ether'), ('matic', 'Polygon'), ('trx', 'TRON'),
-                            ('avax', 'Avalanche'), ('uni', 'Uniswap'), ('wbtc', 'Wrapped Bitcoin'),
-                            ('leo', 'LEO Token'), ('link', 'Chainlink'), ('okb', 'OKB'), ('etc', 'Ethereum Classic'),
-                            ('atom', 'Cosmos Hub'), ('ltc', 'Litecoin'), ('ftt', 'FTX'), ('cro', 'Cronos'),
-                            ('near', 'NEAR Protocol'), ('xlm', 'Stellar'), ('xmr', 'Monero'), ('algo', 'Algorand'),
-                            ('bch', 'Bitcoin Cash'), ('lunc', 'Terra Luna Classic'), ('qnt', 'Quant'), ('flow', 'Flow'),
-                            ('fil', 'Filecoin'), ('ape', 'ApeCoin'), ('vet', 'VeChain'), ('icp', 'Internet Computer'),
-                            ('xcn', 'Chain'), ('hbar', 'Hedera'), ('frax', 'Frax'), ('chz', 'Chiliz'), ('xtz', 'Tezos'),
-                            ('mana', 'Decentraland'), ('sand', 'The Sandbox'), ('eos', 'EOS'), ('axs', 'Axie Infinity'),
-                            ('theta', 'Theta Network'), ('egld', 'Elrond')]
+            currencyList = [('bitcoin', 'Bitcoin', 'btc'), ('ethereum', 'Ethereum', 'eth'), ('tether', 'Tether', 'usdt'),
+                            ('binancecoin', 'BNB', 'bnb'), ('usd-coin', 'USD Coin', 'usdc'), ('ripple', 'XRP', 'xrp'),
+                            ('binance-usd', 'Binance USD', 'busd'), ('cardano', 'Cardano', 'ada'), ('solana', 'Solana', 'sol'),
+                            ('dogecoin', 'Dogecoin', 'doge'), ('polkadot', 'Polkadot', 'dot'), ('shiba-inu', 'Shiba Inu', 'shib'),
+                            ('dai', 'Dai', 'dai'), ('matic-network', 'Polygon', 'matic'), ('staked-ether', 'Lido Staked Ether', 'steth'),
+                            ('tron', 'TRON', 'trx'), ('uniswap', 'Uniswap', 'uni'), ('avalanche-2', 'Avalanche', 'avax'),
+                            ('wrapped-bitcoin', 'Wrapped Bitcoin', 'wbtc'), ('okb', 'OKB', 'okb'), ('leo-token', 'LEO Token', 'leo'),
+                            ('cosmos', 'Cosmos Hub', 'atom'), ('litecoin', 'Litecoin', 'ltc'), ('ethereum-classic', 'Ethereum Classic', 'etc'),
+                            ('chainlink', 'Chainlink', 'link'), ('ftx-token', 'FTX', 'ftt'), ('stellar', 'Stellar', 'xlm'),
+                            ('near', 'NEAR Protocol', 'near'), ('crypto-com-chain', 'Cronos', 'cro'), ('monero', 'Monero', 'xmr'),
+                            ('algorand', 'Algorand', 'algo'), ('bitcoin-cash', 'Bitcoin Cash', 'bch'), ('terra-luna', 'Terra Luna Classic', 'lunc'),
+                            ('quant-network', 'Quant', 'qnt'), ('flow', 'Flow', 'flow'), ('vechain', 'VeChain', 'vet'),
+                            ('filecoin', 'Filecoin', 'fil'), ('apecoin', 'ApeCoin', 'ape'), ('internet-computer', 'Internet Computer', 'icp'),
+                            ('chain-2', 'Chain', 'xcn'), ('hedera-hashgraph', 'Hedera', 'hbar'), ('frax', 'Frax', 'frax'),
+                            ('elrond-erd-2', 'Elrond', 'egld'), ('tezos', 'Tezos', 'xtz'), ('the-sandbox', 'The Sandbox', 'sand'),
+                            ('decentraland', 'Decentraland', 'mana'), ('eos', 'EOS', 'eos'), ('axie-infinity', 'Axie Infinity', 'axs'),
+                            ('chiliz', 'Chiliz', 'chz'), ('aave', 'Aave', 'aave')]
 
-            insertQuery = "INSERT INTO AvailableCryptocurrency (cryptocurrencyCode, name) VALUES (%s, %s)"
+            insertQuery = "INSERT INTO AvailableCryptocurrency (cryptocurrencyCode, name, symbol) VALUES (%s, %s, %s)"
             cur.executemany(insertQuery, currencyList)
 
         cur.execute("select exists (SELECT * FROM Wallet)")
@@ -91,7 +96,7 @@ class WalletDataAccess:
             walletZero.setWalletAddress("jNrxO4OyXgdqum0wj2LV")
             walletZero.setInitialBalance(2.2632)
             walletZero.setCurrentBalance(2.2632)
-            walletZero.setCryptocurrencyCode('btc')
+            walletZero.setCryptocurrencyCode('bitcoin')
             walletZero.setHoldingPeriod(24)
             self.insertWallet(walletZero)
 
@@ -100,7 +105,7 @@ class WalletDataAccess:
             walletOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
             walletOne.setInitialBalance(18248.1751)
             walletOne.setCurrentBalance(18248.1751)
-            walletOne.setCryptocurrencyCode('trx')
+            walletOne.setCryptocurrencyCode('tron')
             walletOne.setHoldingPeriod(12)
             self.insertWallet(walletOne)
 
@@ -130,6 +135,8 @@ class WalletDataAccess:
             walletTransOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
             walletTransOne.setUnitsSold(0.0)
 
+            self.insertWalletTransactionHistory(walletTransZero)
+            self.insertWalletTransactionHistory(walletTransOne)
 
         cur.close()
         con.commit()

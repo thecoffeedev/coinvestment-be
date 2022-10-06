@@ -25,8 +25,9 @@
     }
 }
 ```
-
-- - - -
+- - - - -
+# User registration, signing in and signing out
+- - - - -
 
 ## _[POST]_ `/sign-up` 
 ### Request
@@ -79,6 +80,8 @@
 > The request uses the token present in the authorization header 
 > to end the session. No request JSON is required.
 
+- - - - -
+# Customer profile
 - - - - -
 
 ## _[GET]_ `/profile/customer-details`
@@ -147,6 +150,8 @@
 }
 ```
 
+- - - - -
+# Items available to purchase
 - - - - -
 
 ## _[GET]_ `/list/all/cryptocurrencies`
@@ -225,6 +230,8 @@
 | 6   | fil  |      20 |              18 |
 | 6   | dot  |      20 |              18 |
 
+- - - - -
+# Customer account
 - - - - -
 
 ## _[GET]_ `/account/wallets`
@@ -385,7 +392,8 @@
 > * `bundleTransactions` is a list of all transactions carried out on 
 > that wallet
 
-
+- - - - -
+#  Purchasing
 - - - - -
 
 ## _[POST]_ `/account/purchase/wallet`

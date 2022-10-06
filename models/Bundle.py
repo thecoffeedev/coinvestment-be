@@ -3,8 +3,7 @@
 class Bundle:
 
     def __init__(self, bundleAddress=None, bundleID=None, customerID = None,
-                 amount=None, holdingPeriod=None, purchaseDatetime=None,
-                 status=None):
+                 holdingPeriod=None, purchaseDatetime=None, status=None):
         self.__bundleAddress = bundleAddress
         self.__bundleID = bundleID
         self.__customerID = customerID

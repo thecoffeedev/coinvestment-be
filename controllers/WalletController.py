@@ -225,7 +225,7 @@ class WalletController:
                 {
                     "status": {
                         "statusCode": "SUCCESS/FAILURE",
-                        "statusMessage": "Units sold successfully"
+                        "statusMessage": "Units purchased successfully"
                     },
                     "wallet": {
                         "walletAddress": walletFE.getWalletAddress(),
@@ -240,7 +240,7 @@ class WalletController:
                         "transactionDatetime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDatetime()),
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
-                        "action": walletTransactionFE.getAmount(),
+                        "action": walletTransactionFE.getAction(),
                         "cardNumber": walletTransactionFE.getCardNumber(),
                         "expiry": walletTransactionFE.getExpiry(),
                         "unitsSold": walletTransactionFE.getUnitsSold(),
@@ -351,7 +351,7 @@ class WalletController:
                         "transactionDatetime": Utility.unixTimestampToStrings(walletTransactionFE.getTransactionDatetime()),
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
-                        "action": walletTransactionFE.getAmount(),
+                        "action": walletTransactionFE.getAction(),
                         "cardNumber": walletTransactionFE.getCardNumber(),
                         "expiry": walletTransactionFE.getExpiry(),
                         "unitsSold": walletTransactionFE.getUnitsSold(),

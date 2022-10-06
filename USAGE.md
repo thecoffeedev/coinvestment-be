@@ -25,8 +25,9 @@
     }
 }
 ```
-
-- - - -
+- - - - -
+# User registration, signing in and signing out
+- - - - -
 
 ## _[POST]_ `/sign-up` 
 ### Request
@@ -79,6 +80,8 @@
 > The request uses the token present in the authorization header 
 > to end the session. No request JSON is required.
 
+- - - - -
+# Customer profile
 - - - - -
 
 ## _[GET]_ `/profile/customer-details`
@@ -147,6 +150,8 @@
 }
 ```
 
+- - - - -
+# Items available to purchase
 - - - - -
 
 ## _[GET]_ `/list/all/cryptocurrencies`
@@ -225,88 +230,8 @@
 | 6   | fil  |      20 |              18 |
 | 6   | dot  |      20 |              18 |
 
-
-
 - - - - -
-
-## _[GET]_ `/account`
-### Request
-```json
-{
-    "customerID": customerID
-}
-```
-> The token present in the authorization header is the 
-> method to confirm access to this route  
-### Response
-```json
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "All details from account"
-    },
-    "customer": {
-        "customerID": customerID,
-        "registerDatetime": registerDatetime,
-        "emailAddress": emailAddress,
-        "previousSignInDatetime": last sign in time,
-        "currentSignInDatetime": current sign in time,
-        "name": name
-    },
-    "wallets": [
-        {
-            "walletAddress": wallet address,
-            "customerID": customer ID,
-            "initialBalance": balance when purchased,
-            "currentBalance": current balance,
-            "cryptocurrencyCode": cryptocurrency code,
-            "holdingPeriod": investment period,
-            "walletTransactions": [
-                {
-                    "transactionID": transaction ID,
-                    "transactionDateTime": transaction datetime,
-                    "chargeApplied": charge applied for selling before holding period expires,
-                    "amount": amount invested,
-                    "action": BUY or SELL,
-                    "cardNumber": card number masked,
-                    "expiry": expiry maksed,
-                    "unitsSold": amount sold,
-                    "initialRate": rate at time of purchase
-                }
-            ]
-        }
-    ],
-    "bundles": [ 
-        {
-            "bundleAddress": bundle address,
-            "bundleID": bundle ID,
-            "customerID": customer ID,
-            "amount": amount invested,
-            "holdingPeriod": investment time period,
-            "purchaseDatetime": datetime of purchase,
-            "status": ACTIVE or INACTIVE
-            "bundleTransactions": [ 
-                {
-                    "transactionID": transaction ID,
-                    "transactionDateTime": datetime of transaction,
-                    "chargeApplied": charges applied for selling before holding period expires,
-                    "amount": amount invested,
-                    "action": BUY or SELL,
-                    "cardNumber": card number masked,
-                    "expiry": expiry date masked,
-                    "initialRate": rate at which the cryptocurrency was bought
-                }
-            ]
-        }
-    ]  
-}
-```
-> Where
-> * `wallets` is a list of all the customers wallets
-> * `walletTransactions` is a list of all transactions carried out on that wallet
-> * `bundles` is a list of all the customers bundles
-> * `bundleTransactions` is a list of all transactions carried out on that wallet
-
+# Customer account
 - - - - -
 
 ## _[GET]_ `/account/wallets`
@@ -467,7 +392,8 @@
 > * `bundleTransactions` is a list of all transactions carried out on 
 > that wallet
 
-
+- - - - -
+#  Purchasing
 - - - - -
 
 ## _[POST]_ `/account/purchase/wallet`

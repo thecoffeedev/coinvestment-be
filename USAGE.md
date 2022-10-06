@@ -393,7 +393,7 @@
 > that wallet
 
 - - - - -
-#  Purchasing
+#  Purchasing and selling
 - - - - -
 
 ## _[POST]_ `/account/purchase/wallet`

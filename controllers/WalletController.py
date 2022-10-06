@@ -22,7 +22,8 @@ class WalletController:
             for cc in available:
                 cryptoDict = {
                     "cryptocurrencyCode": cc[0],
-                    "cryptocurrencyName": cc[1]
+                    "cryptocurrencyName": cc[1],
+                    "sybbol": cc[2]
                 }
                 availableCryptocurrencies.append(cryptoDict)
 

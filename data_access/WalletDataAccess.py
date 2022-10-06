@@ -20,7 +20,7 @@ class WalletDataAccess:
         createAvailableTableQuery = \
             "CREATE TABLE IF NOT EXISTS AvailableCryptocurrency(" \
             "cryptocurrencyCode VARCHAR(50) NOT NULL PRIMARY KEY, " \
-            "name VARCHAR(20) NOT NULL" \
+            "name VARCHAR(20) NOT NULL," \
             "symbol VARCHAR(10)" \
             ")"
 
@@ -96,7 +96,7 @@ class WalletDataAccess:
             walletZero.setWalletAddress("jNrxO4OyXgdqum0wj2LV")
             walletZero.setInitialBalance(2.2632)
             walletZero.setCurrentBalance(2.2632)
-            walletZero.setCryptocurrencyCode('btc')
+            walletZero.setCryptocurrencyCode('bitcoin')
             walletZero.setHoldingPeriod(24)
             self.insertWallet(walletZero)
 
@@ -105,7 +105,7 @@ class WalletDataAccess:
             walletOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
             walletOne.setInitialBalance(18248.1751)
             walletOne.setCurrentBalance(18248.1751)
-            walletOne.setCryptocurrencyCode('trx')
+            walletOne.setCryptocurrencyCode('tron')
             walletOne.setHoldingPeriod(12)
             self.insertWallet(walletOne)
 
@@ -135,6 +135,8 @@ class WalletDataAccess:
             walletTransOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
             walletTransOne.setUnitsSold(0.0)
 
+            self.insertWalletTransactionHistory(walletTransZero)
+            self.insertWalletTransactionHistory(walletTransOne)
 
         cur.close()
         con.commit()

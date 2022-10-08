@@ -21,20 +21,21 @@
 {
     "status": {
         "statusCode": "FAILURE",
-        "statusMessage" : <The reason for the failure>
+        "statusMessage" : The reason for the failure
     }
 }
 ```
-
-- - - -
+- - - - -
+# User registration, signing in and signing out
+- - - - -
 
 ## _[POST]_ `/sign-up` 
 ### Request
 ```json
 {
-    "emailAddress": <email address>,
-    "password": <plain text password>,
-    "name": <name>
+    "emailAddress": email address,
+    "password": plain text password,
+    "name": name
 } 
 ```
 ### Response
@@ -44,8 +45,8 @@
         "statusCode": "SUCCESS",
         "statusMessage": "Successfully registered"
     },
-    "name": <name>,
-    "emailAddress": <email address>
+    "name": name,
+    "emailAddress": email address
 }
 ```
 
@@ -55,8 +56,8 @@
 ### Request
 ```json
 {
-    "emailddress": <email address>,
-    "password": <plain text password>
+    "emailddress": email address,
+    "password": plain text password
 } 
 ```
 ### Reponse
@@ -66,10 +67,10 @@
         "statusCode": "SUCCESS",
         "statusMessage": "Successfully signed in"
     },
-    "name": <customer name>,
-    "emailAddress": <email address>,
-    "currentSignInDatetime": <current sign in datetime>,
-    "previousSignInDatetime": <last sign in datetime>
+    "name": customer name,
+    "emailAddress": email address,
+    "currentSignInDatetime": current sign in datetime,
+    "previousSignInDatetime": last sign in datetime
 }
 ```
 
@@ -79,42 +80,78 @@
 > The request uses the token present in the authorization header 
 > to end the session. No request JSON is required.
 
-- - - - - 
+- - - - -
+# Customer profile
+- - - - -
 
-## _[GET]_ `/list/all`
+## _[GET]_ `/profile/customer-details`
+### Request
+> The token present in the authorization header is the 
+> method to confirm access to this route  
 ### Response
 ```json
 {
     "status": {
         "statusCode": "SUCCESS",
-        "statusMessage": "List of all available cryptocurrencies and bundles"
+        "statusMessage": "The customers details"
     },
-    "availableCryptocurrencies": [
-        {
-            "cryptocurrencyCode": <code>,
-            "cryptocurrencyName": <name>
-        }
-    ],
-    "availableBundles": [
-        {
-            "bundleName": <bundle name>,
-            "minimumHoldingPeriod": <in monthes>,
-            "bundleCryptocurrencies": [
-                {
-                    "cryptocurrencyCode": <code>,
-                    "cryptocurrencyName": <name>,
-                    "percentage": <% of the bundle>
-                }
-            ]
-        }
-    ]
-} 
+    "customerID": Customers ID,
+    "registerDatetime": datetime of account creation,
+    "emailAddress": email address,
+    "previousSignInDatetime": last sign in datetime,
+    "currentSignInDatetime": current sign in datetime,
+    "name": name
+}
 ```
-> Where
-> * `availableCryptocurrencies` is a list of cryptocurrencies
-> * `availableBundles` is a list of bundles
-> * `bundleCryptocurrencies` is a list of the cryptocurrencies in that bundle
 
+- - - - -
+
+## _[POST]_ `/profile/change-password`
+### Request
+```json
+{
+    "currentPassword": current password,
+    "newPassword": new password
+}
+```
+> The token present in the authorization header is the method 
+> to confirm access to this route  
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully changed password for customer. You will be signed out. Sign in with new password"
+    },
+    "customerID": customer ID
+}
+```
+
+- - - - -
+
+## _[POST]_ `/profile/change-emailaddress`
+### Request
+```json
+{
+    "currentPassword": current password,
+    "newEmailAddress": new email address
+}
+```
+> The token present in the authorization header is the method 
+> to confirm access to this route  
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully changed email address for customer"
+    },
+    "customerID": customer ID
+}
+```
+
+- - - - -
+# Items available to purchase
 - - - - -
 
 ## _[GET]_ `/list/all/cryptocurrencies`
@@ -127,8 +164,8 @@
     },
     "availableCryptocurrencies": [
         {
-            "cryptocurrencyCode": <code>,
-            "cryptocurrencyName": <name>
+            "cryptocurrencyCode": code,
+            "cryptocurrencyName": name
         }
     ]
 }
@@ -148,13 +185,13 @@
     },
     "availableBundles": [
         {
-            "bundleName": <name of the bundle>,
-            "minimumHoldingPeriod": <in monthes>,
+            "bundleName": name of the bundle,
+            "minimumHoldingPeriod": in monthes,
             "bundleCryptocurrencies": [
                 {
-                    "cryptocurrencyCode": <code>,
-                    "cryptocurrencyName": <name>,
-                    "percentage": <% of the bundle>
+                    "cryptocurrencyCode": code,
+                    "cryptocurrencyName": name,
+                    "percentage": % of the bundle
                 }
             ]
         }
@@ -194,123 +231,18 @@
 | 6   | dot  |      20 |              18 |
 
 - - - - -
-
-## _[GET]_ `/profile/customer-details`
-### Request
-```json
-{
-    "customerID": <customer ID>
-}
-```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
-### Response
-```json
-{
-    "status": {
-        "statusCode": "SUCCESS",
-        "statusMessage": "The customers details"
-    },
-    "customerID": <Customers ID>,
-    "registerDatetime": <datetime of account creation>,
-    "emailAddress": <email address>,
-    "previousSignInDatetime": <last sign in datetime>,
-    "currentSignInDatetime": <current sign in datetime>,
-    "name": <name>
-}
-```
-
-- - - - -
-
-## _[GET]_ `/account`
-### Request
-```json
-{
-    "customerID": <customerID>
-}
-```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
-### Response
-```json
-{
-    "status": {
-        "statusCode": "SUCCESS/FAILURE",
-        "statusMessage": "All details from account"
-    },
-    "customer": {
-        "customerID": <customerID>,
-        "registerDatetime": <registerDatetime>,
-        "emailAddress": <emailAddress>,
-        "previousSignInDatetime": <last sign in time>,
-        "currentSignInDatetime": <current sign in time>,
-        "name": <name>
-    },
-    "wallets": [
-        {
-            "walletAddress": <wallet address>,
-            "customerID": <customer ID>,
-            "initialBalance": <balance when purchased>,
-            "currentBalance": <current balance>,
-            "cryptocurrencyCode": <cryptocurrency code>,
-            "holdingPeriod": <investment period>,
-            "walletTransactions": [
-                {
-                    "transactionID": <transaction ID>,
-                    "transactionDateTime": <transaction datetime>,
-                    "chargeApplied": <charge applied for selling before holding period expires>,
-                    "amount": <amount invested>,
-                    "action": <BUY or SELL>,
-                    "cardNumber": <card number masked>,
-                    "expiry": <expiry maksed>,
-                    "unitsSold": <amount sold>,
-                    "initialRate": <rate at time of purchase>
-                }
-            ]
-        }
-    ],
-    "bundles": [ 
-        {
-            "bundleAddress": <bundle address>,
-            "bundleID": <bundle ID>,
-            "customerID": <customer ID>,
-            "amount": <amount invested>,
-            "holdingPeriod": <investment time period>,
-            "purchaseDatetime": <datetime of purchase>,
-            "status": <ACTIVE or INACTIVE>
-            "bundleTransactions": [ 
-                {
-                    "transactionID": <transaction ID>,
-                    "transactionDateTime": <datetime of transaction>,
-                    "chargeApplied": <charges applied for selling before holding period expires>,
-                    "amount": <amount invested>,
-                    "action": <BUY or SELL>,
-                    "cardNumber": <card number masked>,
-                    "expiry": <expiry date masked>,
-                    "initialRate": <rate at which the cryptocurrency was bought>
-                }
-            ]
-        }
-    ]  
-}
-```
-> Where
-> * `wallets` is a list of all the customers wallets
-> * `walletTransactions` is a list of all transactions carried out on that wallet
-> * `bundles` is a list of all the customers bundles
-> * `bundleTransactions` is a list of all transactions carried out on that wallet
-
+# Customer account
 - - - - -
 
 ## _[GET]_ `/account/wallets`
 ### Request
 ```json
 {
-    "customerID": <customerID>
+    "customerID": customerID
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority 
+> The token present in the authorization header is the 
+> method to confirm access to this route  
 ### Response
 ```json
 {
@@ -320,12 +252,12 @@
     },
     "wallets": [
         {
-            "walletAddress": <wallet address>,
-            "customerID": <customer ID>,
-            "initialBalance": <the balance at time of purchase>,
-            "currentBalance": <the current balance>,
-            "cryptocurrencyCode": <the wallets cryptocurrency>,
-            "holdingPeriod": <investment time period>
+            "walletAddress": wallet address,
+            "customerID": customer ID,
+            "initialBalance": the balance at time of purchase,
+            "currentBalance": the current balance,
+            "cryptocurrencyCode": the wallets cryptocurrency,
+            "holdingPeriod": investment time period
         }
     ]
 }
@@ -339,11 +271,11 @@
 ### Request
 ```json
 {
-    "customerID": <customerID>
+    "customerID": customerID
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -353,13 +285,13 @@
     },
     "bundles": [
         {
-            "bundleAddress": <bundle address>,
-            "bundleID": <bundle ID>,
-            "customerID": <customer ID>,
-            "amount": <amount invested>,
-            "holdingPeriod": <investment time period>,
-            "purchaseDatetime": <datetime of purchase>,
-            "status": <ACTIVE or INACTIVE>
+            "bundleAddress": bundle address,
+            "bundleID": bundle ID,
+            "customerID": customer ID,
+            "amount": amount invested,
+            "holdingPeriod": investment time period,
+            "purchaseDatetime": datetime of purchase,
+            "status": ACTIVE or INACTIVE
         }
     ]
 }
@@ -369,16 +301,16 @@
 
 - - - - -
 
-## _[POST]_ `/account/wallets/<wallet_adddress>`
+## _[POST]_ `/account/wallets/wallet-address`
 ### Request
 ```json
 {
-    "customerID": <customer ID>,
-    "walletAddress": <the wallet address for which details are requested>
+    "customerID": customer ID,
+    "walletAddress": the wallet address for which details are requested
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -387,24 +319,24 @@
         "statusMessage": "Details for wallet requested"
     },
     "wallet": {
-            "walletAddress": <wallet address>,
-            "customerID": <customer ID>,
-            "initialBalance": <the balance at time of purchase>,
-            "currentBalance": <the current balance>,
-            "cryptocurrencyCode": <the wallets cryptocurrency>,
-            "holdingPeriod": <investment time period>
+            "walletAddress": wallet address,
+            "customerID": customer ID,
+            "initialBalance": the balance at time of purchase,
+            "currentBalance": the current balance,
+            "cryptocurrencyCode": the wallets cryptocurrency,
+            "holdingPeriod": investment time period
     },
     "walletTransactions": [
         {
-            "transactionID": <transaction ID>,
-            "transactionDateTime": <datetime of transaction>,
-            "chargeApplied": <charges applied for selling before holding period expires>,
-            "amount": <amount invested>,
-            "action": <BUY or SELL>,
-            "cardNumber": <card number masked>,
-            "expiry": <expiry date masked>,
-            "unitsSold": <sold cryptocurrency>,
-            "initialRate": <rate at which the cryptocurrency was bought>
+            "transactionID": transaction ID,
+            "transactionDateTime": datetime of transaction,
+            "chargeApplied": charges applied for selling before holding period expires,
+            "amount": amount invested,
+            "action": BUY or SELL,
+            "cardNumber": card number masked,
+            "expiry": expiry date masked,
+            "unitsSold": sold cryptocurrency,
+            "initialRate": rate at which the cryptocurrency was bought
         }
     ]
 }
@@ -415,16 +347,16 @@
 
 - - - - -
 
-## _[POST]_ `/account/bundles/<bundle_address>`
+## _[POST]_ `/account/bundles/bundle-address`
 ### Request
 ```json
 {
-    "customerID": <customer ID>,
-    "bundleAddress": <bundle address>
+    "customerID": customer ID,
+    "bundleAddress": bundle address
 }
 ```
-> The token present in the authorization header is the preferred
-> method to confirm access to this route and has priority
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 
@@ -434,24 +366,24 @@
         "statusMessage": "Details for the bundle requested"
     },
     "bundle": {
-        "bundleAddress": <bundle address>,
-        "bundleID": <bundle ID>,
-        "customerID": <customer ID>,
-        "amount": <amount invested>,
-        "holdingPeriod": <investment time period>,
-        "purchaseDatetime": <datetime of purchase>,
-        "status": <ACTIVE or INACTIVE>
+        "bundleAddress": bundle address,
+        "bundleID": bundle ID,
+        "customerID": customer ID,
+        "amount": amount invested,
+        "holdingPeriod": investment time period,
+        "purchaseDatetime": datetime of purchase,
+        "status": ACTIVE or INACTIVE
     },
     "bundleTransactions": [ 
         {
-            "transactionID": <transaction ID>,
-            "transactionDateTime": <datetime of transaction>,
-            "chargeApplied": <charges applied for selling before holding period expires>,
-            "amount": <amount invested>,
-            "action": <BUY or SELL>,
-            "cardNumber": <card number masked>,
-            "expiry": <expiry date masked>,
-            "initialRate": <rate at which the cryptocurrency was bought>
+            "transactionID": transaction ID,
+            "transactionDateTime": datetime of transaction,
+            "chargeApplied": charges applied for selling before holding period expires,
+            "amount": amount invested,
+            "action": BUY or SELL,
+            "cardNumber": card number masked,
+            "expiry": expiry date masked,
+            "initialRate": rate at which the cryptocurrency was bought
         }
     ]
 }
@@ -460,25 +392,22 @@
 > * `bundleTransactions` is a list of all transactions carried out on 
 > that wallet
 
-
+- - - - -
+#  Purchasing and selling
 - - - - -
 
 ## _[POST]_ `/account/purchase/wallet`
 ### Request
 ```json
 {
-    "wallet": {
-        "customerID": <customerID>,
-        "initialBalance": <initial balance>,
-        "cryptocurrencyCode": <cryptocurrency code>,
-        "holdingPeriod": <holding period>
-    },
-    "walletTransaction": {
-        "initialRate": <initial rate>,
-        "amount": <amount>,
-        "cardNumber": <card number>,
-        "expiry": <expiry>
-    }
+    "customerID": customerID,
+    "initialBalance": initial balance,
+    "cryptocurrencyCode": cryptocurrency code,
+    "holdingPeriod": holding period,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
 }
 ```
 ### Response
@@ -489,23 +418,23 @@
         "statusMessage": "Wallet purchased"
     },
     "wallet": {
-            "walletAddress": <wallet address>,
-            "customerID": <customer ID>,
-            "initialBalance": <the balance at time of purchase>,
-            "currentBalance": <the current balance>,
-            "cryptocurrencyCode": <the wallets cryptocurrency>,
-            "holdingPeriod": <investment time period>
+        "walletAddress": wallet address,
+        "customerID": customer ID,
+        "initialBalance": the balance at time of purchase,
+        "currentBalance": the current balance,
+        "cryptocurrencyCode": the wallets cryptocurrency,
+        "holdingPeriod": investment time period
     },
     "walletTransaction": {
-        "transactionID": <transaction ID>,
-        "transactionDateTime": <datetime of transaction>,
-        "chargeApplied": <charges applied for selling before holding period expires>,
-        "amount": <amount invested>,
-        "action": <BUY or SELL>,
-        "cardNumber": <card number masked>,
-        "expiry": <expiry date masked>,
-        "unitsSold": <sold cryptocurrency>,
-        "initialRate": <rate at which the cryptocurrency was bought>
+        "transactionID": transaction ID,
+        "transactionDateTime": datetime of transaction,
+        "chargeApplied": charges applied for selling before holding period expires,
+        "amount": amount invested,
+        "action": BUY or SELL,
+        "cardNumber": card number masked,
+        "expiry": expiry date masked,
+        "unitsSold": sold cryptocurrency,
+        "initialRate": rate at which the cryptocurrency was bought
     }
 }
 ```
@@ -518,17 +447,13 @@
 ### Request
 ```json
 {
-    "wallet": {
-        "walletAddress": <wallet address>,
-        "customerID": <customerID>
-    },
-    "walletTransaction": {
-        "initialRate": <initial rate>,
-        "amount": <amount>,
-        "cardNumber": <card number>,
-        "expiry": <expiry>,
-        "unitsSold": <units sold>
-    }
+    "walletAddress": wallet address,
+    "customerID": customerID,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry,
+    "unitsSold": units sold
 }
 ```
 ### Response
@@ -539,23 +464,111 @@
         "statusMessage": "Successfully sold wallet"
     },
     "wallet": {
-        "walletAddress": <wallet address>,
-        "customerID": <customer ID>,
-        "initialBalance": <initial balance>,
-        "currentBalance": <current balance>,
-        "cryptocurrencyCode": <cryptocurrency code>,
-        "holdingPeriod": <holdingPeriod>
+        "walletAddress": wallet address,
+        "customerID": customer ID,
+        "initialBalance": initial balance,
+        "currentBalance": current balance,
+        "cryptocurrencyCode": cryptocurrency code,
+        "holdingPeriod": holdingPeriod
     },
     "walletTransaction": {
-        "transactionID": <transaction ID>,
-        "transactionDateTime": <transaction datetime>,
-        "chargeApplied": <charge applied>,
-        "amount": <amount>,
-        "action": <action>,
-        "cardNumber": <card number>,
-        "expiry": <expiry>,
-        "unitsSold": <unitsSold>,
-        "initialRate": <initial rate>
+        "transactionID": transaction ID,
+        "transactionDateTime": transaction datetime,
+        "chargeApplied": charge applied,
+        "amount": amount,
+        "action": action,
+        "cardNumber": card number,
+        "expiry": expiry,
+        "unitsSold": unitsSold,
+        "initialRate": initial rate
+    }
+}
+```
+
+- - - - -
+
+## _[POST]_ `/account/purchase/bundle`
+### Request
+```json
+{
+    "customerID": customerID,
+    "bundleID": bundle ID,
+    "holdingPeriod": holding period,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Bundle purchased"
+    },
+    "bundle": {
+        "bundleAddress": bundle address,
+        "customerID": customer ID,
+        "bundleID": bundle ID,
+        "purchaseDatetime": purchase datetime,
+        "status": status,
+        "holdingPeriod": investment time period
+    },
+    "bundleTransaction": {
+        "transactionID": transaction ID,
+        "transactionDateTime": datetime of transaction,
+        "chargeApplied": charges applied for selling before holding period expires,
+        "amount": amount invested,
+        "action": BUY or SELL,
+        "cardNumber": card number masked,
+        "expiry": expiry date masked,
+        "initialRate": rate at which the cryptocurrency was bought
+    }
+}
+```
+> Where
+> * `bundleTransaction` is the details of that particular transaction carried out 
+
+- - - - -
+
+## _[POST]_ `/account/sell/bundle`
+### Request
+```json
+{
+    "bundleAddress": bundle address,
+    "customerID": customer ID,
+    "bundleID": bundle ID,
+    "initialRate": initial rate,
+    "amount": amount,
+    "cardNumber": card number,
+    "expiry": expiry
+}
+```
+### Response
+```json
+{
+    "status": {
+        "statusCode": "SUCCESS",
+        "statusMessage": "Successfully sold bundle"
+    },
+    "bundle": {
+        "bundleAddress": bundle address,
+        "customerID": customer ID,
+        "bundleID": bundle ID,
+        "purchaseDatetime": purchase datetime,
+        "status": status,
+        "holdingPeriod": holdingPeriod
+    },
+    "bundleTransaction": {
+        "transactionID": transaction ID,
+        "transactionDateTime": transaction datetime,
+        "chargeApplied": charge applied,
+        "amount": amount,
+        "action": action,
+        "cardNumber": card number,
+        "expiry": expiry,
+        "initialRate": initial rate
     }
 }
 ```

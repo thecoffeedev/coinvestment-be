@@ -20,7 +20,7 @@ class BundleDataAccess:
         # Create the table if it does not exist
         createQuery = "CREATE TABLE IF NOT EXISTS AvailableBundle(" \
                       "BundleID VARCHAR(10) NOT NULL, " \
-                      "CryptocurrencyCode VARCHAR(10) NOT NULL, " \
+                      "CryptocurrencyCode VARCHAR(50) NOT NULL, " \
                       "Percentage INT NOT NULL, " \
                       "HoldingPeriod INT NOT NULL" \
                       ")"
@@ -31,9 +31,9 @@ class BundleDataAccess:
                       "BundleAddress VARCHAR(20) NOT NULL, " \
                       "BundleID VARCHAR(10) NOT NULL, " \
                       "CustomerID VARCHAR(20) NOT NULL, " \
-                      "HoldingPeriod INT NOT NULL" \
+                      "HoldingPeriod INT NOT NULL," \
                       "PurchaseDatetime INT NOT NULL, " \
-                      "Status VARCHAR(20) NOT NULL, " \
+                      "Status VARCHAR(20) NOT NULL " \
                       ")"
 
         cur.execute(createQuery)
@@ -64,12 +64,12 @@ class BundleDataAccess:
         cur.execute("SELECT EXISTS (SELECT * FROM AvailableBundle)")
 
         if not cur.fetchone()[0]:
-            bundleList = [(1, "btc", 50, 6), (1, "eth", 50, 6),
-                        (2, 'bch', 25, 12), (2, 'eth', 15, 12), (2, 'xrp', 15, 12), (2, 'ltc', 25, 12), (2, 'xmr', 20, 12),
-                        (3, 'doge', 20, 12), (3, 'shib', 20, 12), (3, 'etc', 30, 12), (3, 'ape', 30, 12),
-                        (4, 'link', 20, 12), (4, 'mana', 20, 12), (4, 'qnt', 20, 12), (4, 'wbtc', 20, 12), (4, 'usdc', 20, 12),
-                        (5, 'dai', 20, 12), (5, 'bnb', 20, 12), (5, 'sol', 20, 12),
-                        (6, 'algo', 20, 18), (6, 'busd', 20, 18), (6, 'flow', 20, 18), (6, 'fil', 20, 18), (6, 'dot', 20, 18)
+            bundleList = [(1, "bitcoin", 50, 6), (1, "ethereum", 50, 6),
+                        (2, 'bitcoin-cash', 25, 6), (2, 'tether', 15, 6), (2, 'ripple', 15, 6), (2, 'litecoin', 25, 6), (2, 'monero', 20, 6),
+                        (3, 'dogecoin', 20, 12), (3, 'shiba-inu', 20, 12), (3, 'ethereum-classic', 30, 12), (3, 'apecoin', 30, 12),
+                        (4, 'chainlink', 20, 12), (4, 'decentraland', 20, 12), (4, 'quant-network', 20, 12), (4, 'wrapped-bitcoin', 20, 12), (4, 'usd-coin', 20, 12),
+                        (5, 'dai', 20, 18), (5, 'binancecoin', 20, 18), (5, 'solana', 20, 18),
+                        (6, 'algorand', 20, 18), (6, 'binance-usd', 20, 18), (6, 'flow', 20, 18), (6, 'filecoin', 20, 18), (6, 'polkadot', 20, 18)
                         ]
 
             insertQuery = "INSERT INTO AvailableBundle VALUES (%s, %s, %s, %s)"
@@ -79,27 +79,27 @@ class BundleDataAccess:
         if not cur.fetchone()[0]:
             bundleOne = Bundle()
             bundleOne.setBundleAddress("kv908kmPkhFImJrZ4R1i")
-            bundleOne.setBundleID(1)
+            bundleOne.setBundleID("1")
             bundleOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
             bundleOne.setHoldingPeriod(12)
             bundleOne.setPurchaseDatetime(1664645692)
             bundleOne.setStatus("ACTIVE")
 
             bundleTwo = Bundle()
-            bundleOne.setBundleAddress("CiHp30zstnE1ufu7M8P5")
-            bundleOne.setBundleID(2)
-            bundleOne.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
-            bundleOne.setHoldingPeriod(18)
-            bundleOne.setPurchaseDatetime(1664645764)
-            bundleOne.setStatus("ACTIVE")
+            bundleTwo.setBundleAddress("CiHp30zstnE1ufu7M8P5")
+            bundleTwo.setBundleID("2")
+            bundleTwo.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+            bundleTwo.setHoldingPeriod(18)
+            bundleTwo.setPurchaseDatetime(1664645764)
+            bundleTwo.setStatus("ACTIVE")
 
             bundleThree = Bundle()
-            bundleOne.setBundleAddress("YRoIXn82skSGBhl9zJyg")
-            bundleOne.setBundleID(4)
-            bundleOne.setCustomerID("Debo32tKqJBeZwHHgkvx")
-            bundleOne.setHoldingPeriod(18)
-            bundleOne.setPurchaseDatetime(1664645865)
-            bundleOne.setStatus("ACTIVE")
+            bundleThree.setBundleAddress("YRoIXn82skSGBhl9zJyg")
+            bundleThree.setBundleID("4")
+            bundleThree.setCustomerID("Debo32tKqJBeZwHHgkvx")
+            bundleThree.setHoldingPeriod(18)
+            bundleThree.setPurchaseDatetime(1664645865)
+            bundleThree.setStatus("ACTIVE")
 
             self.insertBundle(bundleOne)
             self.insertBundle(bundleTwo)
@@ -114,7 +114,7 @@ class BundleDataAccess:
             bundleTransactionObj.setAction("BUY")
             bundleTransactionObj.setTransactionDatetime(1664645692)
             bundleTransactionObj.setChargeApplied(0.00)
-            bundleTransactionObj.setAmount(5000)
+            bundleTransactionObj.setAmount(5000.00)
             bundleTransactionObj.setCardNumber("4921852004294232")
             bundleTransactionObj.setExpiry("05/24")
             bundleTransactionObj.setInitialRate(19383.26)
@@ -125,7 +125,7 @@ class BundleDataAccess:
             bundleTransactionObjTwo.setAction("BUY")
             bundleTransactionObjTwo.setTransactionDatetime(1664645764)
             bundleTransactionObjTwo.setChargeApplied(0.00)
-            bundleTransactionObjTwo.setAmount(1000)
+            bundleTransactionObjTwo.setAmount(1000.00)
             bundleTransactionObjTwo.setCardNumber("4921852004294232")
             bundleTransactionObjTwo.setExpiry("05/24")
             bundleTransactionObjTwo.setInitialRate(1369.57)
@@ -136,7 +136,7 @@ class BundleDataAccess:
             bundleTransactionObjThree.setAction("BUY")
             bundleTransactionObjThree.setTransactionDatetime(1664645865)
             bundleTransactionObjThree.setChargeApplied(0.00)
-            bundleTransactionObjThree.setAmount(500)
+            bundleTransactionObjThree.setAmount(500.00)
             bundleTransactionObjThree.setCardNumber("4857037529348105")
             bundleTransactionObjThree.setExpiry("03/23")
             bundleTransactionObjThree.setInitialRate(735.23)
@@ -175,9 +175,9 @@ class BundleDataAccess:
         query = "INSERT INTO BundleTransactionHistory (" \
                 "TransactionID, BundleAddress, Action, " \
                 "TransactionDateTime, ChargeApplied, " \
-                "Amount, CardNumber, Expiry, InitialRate, " \
+                "Amount, CardNumber, Expiry, InitialRate " \
                 ") " \
-                "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         cur.execute(query,
                     (bundleTransactionObj.getTransactionID(),
@@ -271,8 +271,8 @@ class BundleDataAccess:
                 bundleTransactionObj.setChargeApplied(bundleTransaction[4])
                 bundleTransactionObj.setAmount(bundleTransaction[5])
                 bundleTransactionObj.setCardNumber(bundleTransaction[6])
-                bundleTransactionObj.setExpiry([7])
-                bundleTransactionObj.setInitialRate(8)
+                bundleTransactionObj.setExpiry(bundleTransaction[7])
+                bundleTransactionObj.setInitialRate(bundleTransaction[8])
 
                 bundleTransactions.append(bundleTransactionObj)
 
@@ -295,10 +295,51 @@ class BundleDataAccess:
         con.commit()
         con.close()
 
+    
+    def readPurchaseBundleTransactionFromBundleAddress(self, bundleAddress):
+        print("readPurchaseBundleTransactionFromBundleAddress entry")
+        print("bundleAddress : ", bundleAddress)
+        con = self.mysql.connect()
+        cur = con.cursor()
+        cur.execute("SELECT * FROM BundleTransactionHistory where Action='BUY' and BundleAddress = '"+bundleAddress+"'")
+        rowCount = cur.rowcount
+        bundleTransaction = cur.fetchone()
+        cur.close()
+        con.commit()
+        con.close()
+        print(rowCount)
+        if rowCount:
+            print(bundleTransaction)
+            bundleTransactionObj = BundleTransactionHistory()
+            bundleTransactionObj.setTransactionID(bundleTransaction[0])
+            bundleTransactionObj.setBundleAddress(bundleTransaction[1])
+            bundleTransactionObj.setAction(bundleTransaction[2])
+            bundleTransactionObj.setTransactionDatetime(bundleTransaction[3])
+            bundleTransactionObj.setChargeApplied(bundleTransaction[4])
+            bundleTransactionObj.setAmount(bundleTransaction[5])
+            bundleTransactionObj.setCardNumber(bundleTransaction[6])
+            bundleTransactionObj.setExpiry(bundleTransaction[7])
+            bundleTransactionObj.setInitialRate(bundleTransaction[8])
+            print("bundleTransactionObj :", bundleTransactionObj.__dict__)
+            print("readPurchaseBundleTransactionFromBundleAddress exit")
+            return bundleTransactionObj
+        else:
+            raise LookupError("No bundle transaction record exists")
 
+    def readAllAvailableBundles(self):
+        con = self.mysql.connect()
+        cur = con.cursor()
+        query = "SELECT a.*, b.name FROM AvailableBundle a, AvailableCryptocurrency b where a.CryptocurrencyCode = b.CryptocurrencyCode "
+        cur.execute(query)
+        result = cur.fetchall()
+        cur.close()
+        con.commit()
+        con.close()
+        return result
+        
 """
-    def createWallet(self):
-        print("in wallet data access")
+    def createBundle(self):
+        print("in bundle data access")
         # # self.mysql = MySQL()
         # # Creating a connection cursor
         # cursor = self.mysql.connect().cursor()

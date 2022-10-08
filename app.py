@@ -30,9 +30,12 @@ BController = BundleController(app)
 sessionTokens = {}
 
 def validateToken(req):
+    print(req.headers.get("Authorization"))
+    print(sessionTokens.keys())
     if req.headers.get("Authorization") in sessionTokens.keys():
         # req["customerID"] = sessionTokens[req.headers.get("Authorization")]
         # customerID = sessionTokens[req.headers.get("Authorization")]
+        print("true")
         return True
     else:
         return False
@@ -72,14 +75,14 @@ def sign_in():
     if responseData.get("status")["statusCode"] == "SUCCESS":
         token = CController.generateToken()
         if "customerID" in responseData:
-            sessionTokens[token] = responseData["customerID"]
+            sessionTokens["Bearer " + token] = responseData["customerID"]
             responseData["token"] = token
             del responseData["customerID"]
     resp = flask.make_response(responseData)
     return resp
 
 
-@app.route('/sign-out', methods=["POST"])
+@app.route('/sign-out', methods=["GET"])
 def sign_out():
     if validateToken(request):
         del sessionTokens[request.headers.get("Authorization")]
@@ -104,7 +107,7 @@ def sign_out():
 @app.route('/profile/customer-details', methods=["GET"])
 def customer_details():
     if validateToken(request):
-        reqData = request.get_json()
+        reqData = {}
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
         responseData = CController.getCustomerDetails(reqData)
         return flask.make_response(responseData)
@@ -182,7 +185,7 @@ def list_all_bundles():
 @app.route('/account/wallets', methods=["GET"])
 def account_wallets():
     if validateToken(request):
-        reqData = request.get_json()
+        reqData = {}
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
         responseData = WController.getAllWalletsFromCustomerID(reqData)
         return flask.make_response(responseData)
@@ -198,9 +201,9 @@ def account_wallets():
 @app.route('/account/bundles', methods=["GET"])
 def account_bundles():
     if validateToken(request):
-        reqData = request.get_json()
+        reqData = {}
         reqData["customerID"] = sessionTokens[request.headers.get("Authorization")]
-        responseData = WController.getAllBundlesFromCustomerID(reqData)
+        responseData = BController.getAllBundlesFromCustomerID(reqData)
         return flask.make_response(responseData)
     else:
         return flask.make_response({
@@ -211,7 +214,7 @@ def account_bundles():
         })
 
 
-@app.route('/account/wallets/wallet-address', methods=["GET"])
+@app.route('/account/wallets/wallet-address', methods=["POST"])
 def account_wallet_details():
     if validateToken(request):
         reqData = request.get_json()
@@ -227,7 +230,7 @@ def account_wallet_details():
         })
 
 
-@app.route('/account/bundles/bundle-address', methods=["GET"])
+@app.route('/account/bundles/bundle-address', methods=["POST"])
 def account_bundle_details():
     if validateToken(request):
         reqData = request.get_json()

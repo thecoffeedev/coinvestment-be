@@ -81,49 +81,56 @@ class BundleController:
         try:
             print("getAllBundleDetailsFromBundleAddress entry")
             print("jsonReqData : ", jsonReqData)
-            if not jsonReqData.get("bundleAddress"):
+            if not jsonReqData.get("customerID"):
+                raise ValueError("Customer ID not provided in request JSON")
+            elif not jsonReqData.get("bundleAddress"):
                 raise ValueError("Bundle Address not provided in request JSON")
             else:
                 bundleFE = Bundle()
                 bundleFE.setBundleAddress(jsonReqData.get("bundleAddress"))
 
                 bundleDA = self.BDA.readBundleByBundleAddress(bundleFE.getBundleAddress())
-                bundleTransactionDA = self.BDA.readBundleTransactionsByBundleAddress(bundleFE.getBundleAddress())
+                if jsonReqData.get("customerID") != bundleDA.getCustomerID():
+                    raise ValueError("Authorization Error")
+                elif "INACTIVE" != bundleDA.getStatus():
+                    raise ValueError("Bundle already sold")
+                else:
+                    bundleTransactionDA = self.BDA.readBundleTransactionsByBundleAddress(bundleFE.getBundleAddress())
 
-                bundleTransactionList = []
-                for bundleTransactionObj in bundleTransactionDA:
-                    bundleTransactionDict = {
-                        "transactionID": bundleTransactionObj.getTransactionID(),
-                        "transactionDatetime": Utility.unixTimestampToStrings(bundleTransactionObj.getTransactionDatetime()),
-                        "chargeApplied": bundleTransactionObj.getChargeApplied(),
-                        "amount": bundleTransactionObj.getAmount(),
-                        "action": bundleTransactionObj.getAction(),
-                        "cardNumber": bundleTransactionObj.getCardNumber(),
-                        "expiry": bundleTransactionObj.getExpiry(),
-                        "initialRate": bundleTransactionObj.getInitialRate()
-                    }
-                    bundleTransactionList.append(bundleTransactionDict)
+                    bundleTransactionList = []
+                    for bundleTransactionObj in bundleTransactionDA:
+                        bundleTransactionDict = {
+                            "transactionID": bundleTransactionObj.getTransactionID(),
+                            "transactionDatetime": Utility.unixTimestampToStrings(bundleTransactionObj.getTransactionDatetime()),
+                            "chargeApplied": bundleTransactionObj.getChargeApplied(),
+                            "amount": bundleTransactionObj.getAmount(),
+                            "action": bundleTransactionObj.getAction(),
+                            "cardNumber": bundleTransactionObj.getCardNumber(),
+                            "expiry": bundleTransactionObj.getExpiry(),
+                            "initialRate": bundleTransactionObj.getInitialRate()
+                        }
+                        bundleTransactionList.append(bundleTransactionDict)
 
-                print("bundleTransactionList :", bundleTransactionList)
+                    print("bundleTransactionList :", bundleTransactionList)
 
-                response = \
-                    {
-                        "status": {
-                            "statusCode": "SUCCESS",
-                            "statusMessage": "Bundle sold successfully"
-                        },
-                        "bundle": {
-                            "bundleAddress": bundleDA.getBundleAddress(),
-                            "bundleId": bundleDA.getBundleID(),
-                            "customerID": bundleDA.getCustomerID(),
-                            "holdingPeriod": bundleDA.getHoldingPeriod(),
-                            "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),
-                            "status": bundleDA.getStatus()
-                        },
-                        "bundleTransaction": bundleTransactionList
-                    }
-                print("response :", response)
-                return response
+                    response = \
+                        {
+                            "status": {
+                                "statusCode": "SUCCESS",
+                                "statusMessage": "Bundle sold successfully"
+                            },
+                            "bundle": {
+                                "bundleAddress": bundleDA.getBundleAddress(),
+                                "bundleId": bundleDA.getBundleID(),
+                                "customerID": bundleDA.getCustomerID(),
+                                "holdingPeriod": bundleDA.getHoldingPeriod(),
+                                "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),
+                                "status": bundleDA.getStatus()
+                            },
+                            "bundleTransaction": bundleTransactionList
+                        }
+                    print("response :", response)
+                    return response
 
         except Exception as e:
             print("getAllBundleDetailsFromBundleAddress exception", e)
@@ -316,67 +323,70 @@ class BundleController:
             bundleFE.setStatus("INACTIVE")
             bundleDA = self.BDA.readBundleByBundleAddress(bundleFE.getBundleAddress())
 
-            if not jsonReqData.get("initialRate"):
-                raise ValueError("Initial Rate not provided in request JSON")
+            if jsonReqData.get("customerID") != bundleDA.getCustomerID():
+                raise ValueError("Authorization Error")
             else:
-                bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
+                if not jsonReqData.get("initialRate"):
+                    raise ValueError("Initial Rate not provided in request JSON")
+                else:
+                    bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-            if not jsonReqData.get("amount"):
-                raise ValueError("Amount not provided in request JSON")
-            else:
-                bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
+                if not jsonReqData.get("amount"):
+                    raise ValueError("Amount not provided in request JSON")
+                else:
+                    bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-            if not jsonReqData.get("cardNumber"):
-                raise ValueError("Card Number not provided in request JSON")
-            else:
-                bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
+                if not jsonReqData.get("cardNumber"):
+                    raise ValueError("Card Number not provided in request JSON")
+                else:
+                    bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-            if not jsonReqData.get("expiry"):
-                raise ValueError("Expiry not provided in request JSON")
-            else:
-                bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
+                if not jsonReqData.get("expiry"):
+                    raise ValueError("Expiry not provided in request JSON")
+                else:
+                    bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
 
-            bundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(bundleFE.getBundleAddress())
-            bundleTransactionFE.setTransactionID(Utility.generateRandomID())
-            bundleTransactionFE.setBundleAddress(bundleFE.getBundleAddress())
-            bundleTransactionFE.setTransactionDatetime(int(time.time()))
-            if Utility.isWithinHoldingPeriod(bundleTransactionDA.getTransactionDatetime(), bundleDA.getHoldingPeriod()):
-                bundleTransactionFE.setChargeApplied(Utility.calculateChargesApplied(bundleTransactionFE.getAmount()))
-            else:
-                bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
-            bundleTransactionFE.setAction("SELL")
+                bundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(bundleFE.getBundleAddress())
+                bundleTransactionFE.setTransactionID(Utility.generateRandomID())
+                bundleTransactionFE.setBundleAddress(bundleFE.getBundleAddress())
+                bundleTransactionFE.setTransactionDatetime(int(time.time()))
+                if Utility.isWithinHoldingPeriod(bundleTransactionDA.getTransactionDatetime(), bundleDA.getHoldingPeriod()):
+                    bundleTransactionFE.setChargeApplied(Utility.calculateChargesApplied(bundleTransactionFE.getAmount()))
+                else:
+                    bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
+                bundleTransactionFE.setAction("SELL")
 
-            print("bundleFE : ", bundleFE.__dict__)
-            print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
-            self.BDA.updateBundleStatus(bundleFE)
-            self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
+                print("bundleFE : ", bundleFE.__dict__)
+                print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
+                self.BDA.updateBundleStatus(bundleFE)
+                self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
 
-            response = \
-                {
-                    "status": {
-                        "statusCode": "SUCCESS/FAILURE",
-                        "statusMessage": "Bundle sold successfully"
-                    },
-                    "bundle": {
-                        "bundleAddress": bundleFE.getBundleAddress(),
-                        "customerID": bundleFE.getCustomerID(),
-                        "bundleID": bundleFE.getBundleID(),
-                        "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),
-                        "status": bundleFE.getStatus(),
-                        "holdingPeriod": bundleDA.getHoldingPeriod()
-                    },
-                    "bundleTransaction": {
-                        "transactionID": bundleTransactionFE.getTransactionID(),
-                        "transactionDatetime": Utility.unixTimestampToStrings(bundleTransactionFE.getTransactionDatetime()),
-                        "chargeApplied": bundleTransactionFE.getChargeApplied(),
-                        "amount": bundleTransactionFE.getAmount(),
-                        "action": bundleTransactionFE.getAction(),
-                        "cardNumber": bundleTransactionFE.getCardNumber(),
-                        "expiry": bundleTransactionFE.getExpiry(),
-                        "initialRate": bundleTransactionFE.getInitialRate()
+                response = \
+                    {
+                        "status": {
+                            "statusCode": "SUCCESS/FAILURE",
+                            "statusMessage": "Bundle sold successfully"
+                        },
+                        "bundle": {
+                            "bundleAddress": bundleFE.getBundleAddress(),
+                            "customerID": bundleFE.getCustomerID(),
+                            "bundleID": bundleFE.getBundleID(),
+                            "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),
+                            "status": bundleFE.getStatus(),
+                            "holdingPeriod": bundleDA.getHoldingPeriod()
+                        },
+                        "bundleTransaction": {
+                            "transactionID": bundleTransactionFE.getTransactionID(),
+                            "transactionDatetime": Utility.unixTimestampToStrings(bundleTransactionFE.getTransactionDatetime()),
+                            "chargeApplied": bundleTransactionFE.getChargeApplied(),
+                            "amount": bundleTransactionFE.getAmount(),
+                            "action": bundleTransactionFE.getAction(),
+                            "cardNumber": bundleTransactionFE.getCardNumber(),
+                            "expiry": bundleTransactionFE.getExpiry(),
+                            "initialRate": bundleTransactionFE.getInitialRate()
+                        }
                     }
-                }
-            return response
+                return response
 
         except Exception as e:
             print("sellBundle exception", e)

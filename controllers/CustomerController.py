@@ -142,8 +142,7 @@ class CustomerController:
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully changed password for customer with ID " + customerDA.getCustomerID()
-                            + " You will be signed out. Sign in with new password"
+                            "statusMessage": "Successfully changed password for customer. You will be signed out. Sign in with new password"
                         },
                         "customerID": customerDA.getCustomerID()
                     }
@@ -175,6 +174,7 @@ class CustomerController:
 
             customerFE = Customer()
             customerFE.setCustomerID(jsonReqData.get("customerID"))
+            customerFE.setEmailAddress(jsonReqData.get("newEmailAddress"))
 
             if not self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID()):
                 raise ValueError("Account not found: not registered")
@@ -182,21 +182,18 @@ class CustomerController:
             customerDA = self.CDA.readCustomerByCustomerID(customerFE.getCustomerID())
 
             if Utility.verifyPassword(jsonReqData.get("currentPassword"), customerDA.getPasswordHash()):
-                customerDA.setPasswordHash(Utility.generatePasswordHash(jsonReqData.get("newPassword")))
-
+                customerDA.setEmailAddress(customerFE.getEmailAddress())
                 self.CDA.updateCustomerEmailAddress(customerDA)
 
                 response = \
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Successfully changed password for customer"
-                            + " You will be signed out. Sign in with new password"
+                            "statusMessage": "Successfully changed email address for customer"
                         },
                         "customerID": customerDA.getCustomerID()
                     }
 
-                # Invalidate session by removing the token for the customer
                 return response
 
             else:

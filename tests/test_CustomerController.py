@@ -959,5 +959,6 @@ class TestGetCustomerDetails(unittest.TestCase):
         response = self.CController.getCustomerDetails(reqData)
         self.assertEqual(response.get("emailAddress"), "beatrice.shilling@hotmail.com")
 
+
 if __name__ == '__main__':
     unittest.main()

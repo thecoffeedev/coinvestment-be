@@ -216,7 +216,11 @@ class CustomerController:
 
             customerFE = Customer()
             customerFE.setCustomerID(jsonReqData.get("customerID"))
-            customerDA = self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID())
+
+            if not self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID()):
+                raise ValueError("Account not found: not registered")
+
+            customerDA = self.CDA.readCustomerByCustomerID(customerFE.getCustomerID())
 
             response = \
                 {
@@ -225,10 +229,10 @@ class CustomerController:
                         "statusMessage": "Successfully retrieved customer details"
                     },
                     "customerID": customerDA.getCustomerID(),
-                    "registerDatetime": customerDA.getRegisterDatetime(),
+                    "registerDatetime": Utility.unixTimestampToStrings(customerDA.getRegisterDatetime()),
                     "emailAddress": customerDA.getEmailAddress(),
-                    "previousSignInDatetime": customerDA.getPreviousSignInDatetime(),
-                    "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
+                    "previousSignInDatetime": Utility.unixTimestampToStrings(customerDA.getPreviousSignInDatetime()),
+                    "currentSignInDatetime": Utility.unixTimestampToStrings(customerDA.getCurrentSignInDatetime()),
                     "name": customerDA.getName()
                 }
 

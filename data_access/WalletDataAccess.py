@@ -22,7 +22,7 @@ class WalletDataAccess:
             "cryptocurrencyCode VARCHAR(50) NOT NULL PRIMARY KEY, " \
             "name VARCHAR(20) NOT NULL," \
             "symbol VARCHAR(10)" \
-            ")"
+            ") DEFAULT COLLATE=utf8_bin"
 
         createWalletTableQuery = \
             "CREATE TABLE IF NOT EXISTS Wallet (" \
@@ -32,7 +32,7 @@ class WalletDataAccess:
             "CurrentBalance FLOAT(53), " \
             "CryptocurrencyCode VARCHAR(50), " \
             "HoldingPeriod INT(5) " \
-            ")"
+            ") DEFAULT COLLATE=utf8_bin"
 
         createWallletTransactionTableQuery = \
             "CREATE TABLE IF NOT EXISTS WalletTransactionHistory (" \
@@ -46,7 +46,7 @@ class WalletDataAccess:
             "CardNumber VARCHAR(20), " \
             "Expiry VARCHAR(20), " \
             "InitialRate FLOAT(53)" \
-            ")"
+            ") DEFAULT COLLATE=utf8_bin"
 
 
         con = self.mysql.connect()
@@ -194,7 +194,7 @@ class WalletDataAccess:
         cur.execute("SELECT * FROM Wallet where WalletAddress = %s", walletAddress)
         rowCount = cur.rowcount
         wallet = cur.fetchone()
-
+        print(wallet)
         cur.close()
         con.commit()
         con.close()

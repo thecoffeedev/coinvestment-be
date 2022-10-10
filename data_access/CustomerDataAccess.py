@@ -23,7 +23,7 @@ class CustomerDataAccess:
                             "PreviousSignInDatetime INT, " \
                             "CurrentSignInDatetime INT, " \
                             "Name VARCHAR(256)" \
-                            ")"
+                            ") DEFAULT COLLATE=utf8_bin"
 
         con = self.mysql.connect()
         cur = con.cursor()

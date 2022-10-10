@@ -19,13 +19,28 @@ class TestCustomerSignUp(unittest.TestCase):
 
     def test_failure_statuscode_missing_key_emailAddress(self):
         missingEmail = {
-            "email": "sandhu63@coventry.ac.uk",
             "password": "thisisnotagoodpassword"
         }
         response = self.cController.signUp(missingEmail)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
 
     def test_failure_msg_missing_key_emailAddress(self):
+        missingEmail = {
+            "password": "thisisnotagoodpassword"
+        }
+        response = self.cController.signUp(missingEmail)
+        expected = "Email address not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_emailAddress(self):
+        missingEmail = {
+            "email": "sandhu63@coventry.ac.uk",
+            "password": "thisisnotagoodpassword"
+        }
+        response = self.cController.signUp(missingEmail)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_msg_incorrect_key_emailAddress(self):
         missingEmail = {
             "email": "sandhu63@coventry.ac.uk",
             "password": "thisisnotagoodpassword"
@@ -37,13 +52,30 @@ class TestCustomerSignUp(unittest.TestCase):
     def test_failure_statuscode_missing_key_password(self):
         missingPassword = {
             "emailAddress": "thisisnotagoodpassword",
-            "pass": "password",
             "name": "Test name"
         }
         response = self.cController.signUp(missingPassword)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
 
     def test_failure_msg_missing_key_password(self):
+        missingPassword = {
+            "emailAddress": "thisisnotagoodpassword",
+            "name": "Test name"
+        }
+        response = self.cController.signUp(missingPassword)
+        expected = "Password not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_password(self):
+        missingPassword = {
+            "emailAddress": "thisisnotagoodpassword",
+            "pass": "password",
+            "name": "Test name"
+        }
+        response = self.cController.signUp(missingPassword)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_msg_incorrect_key_password(self):
         missingPassword = {
             "emailAddress": "thisisnotagoodpassword",
             "pass": "password",
@@ -56,13 +88,30 @@ class TestCustomerSignUp(unittest.TestCase):
     def test_failure_statuscode_missing_key_name(self):
         missingName = {
             "emailAddress": "thisisnotagoodpassword",
+            "password": "password"
+        }
+        response = self.cController.signUp(missingName)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_msg_missing_key_name(self):
+        missingName = {
+            "emailAddress": "thisisnotagoodpassword",
+            "password": "password"
+        }
+        response = self.cController.signUp(missingName)
+        expected = "Name not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_name(self):
+        missingName = {
+            "emailAddress": "thisisnotagoodpassword",
             "password": "password",
             "nam": "Test name"
         }
         response = self.cController.signUp(missingName)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
 
-    def test_failure_msg_missing_key_name(self):
+    def test_failure_msg_incorrect_key_name(self):
         missingName = {
             "emailAddress": "thisisnotagoodpassword",
             "password": "password",
@@ -115,13 +164,28 @@ class TestCustomerSignIn(unittest.TestCase):
 
     def test_failure_statuscode_missing_key_emailAddress(self):
         missingEmail = {
-            "email": "sandhu63@coventry.ac.uk",
             "password": "thisisnotagoodpassword"
         }
         response = self.cController.signIn(missingEmail)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
 
     def test_failure_msg_missing_key_emailAddress(self):
+        missingEmail = {
+            "password": "thisisnotagoodpassword"
+        }
+        response = self.cController.signIn(missingEmail)
+        expected = "Email address not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_emailAddress(self):
+        missingEmail = {
+            "email": "sandhu63@coventry.ac.uk",
+            "password": "thisisnotagoodpassword"
+        }
+        response = self.cController.signIn(missingEmail)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_msg_incorrect_key_emailAddress(self):
         missingEmail = {
             "email": "sandhu63@coventry.ac.uk",
             "password": "thisisnotagoodpassword"
@@ -133,7 +197,6 @@ class TestCustomerSignIn(unittest.TestCase):
     def test_failure_statuscode_missing_key_password(self):
         missingPassword = {
             "emailAddress": "thisisnotagoodpassword",
-            "pass": "password"
         }
         response = self.cController.signIn(missingPassword)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
@@ -141,11 +204,36 @@ class TestCustomerSignIn(unittest.TestCase):
     def test_failure_msg_missing_key_password(self):
         missingPassword = {
             "emailAddress": "thisisnotagoodpassword",
+        }
+        response = self.cController.signIn(missingPassword)
+        expected = "Password not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_password(self):
+        missingPassword = {
+            "emailAddress": "thisisnotagoodpassword",
+            "pass": "password"
+        }
+        response = self.cController.signIn(missingPassword)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_msg_incorrect_key_password(self):
+        missingPassword = {
+            "emailAddress": "thisisnotagoodpassword",
             "pass": "password"
         }
         response = self.cController.signIn(missingPassword)
         expected = "Password not provided in request JSON"
         self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_success_statuscode_email_prev_registered(self):
+        existing = {
+            "emailAddress": "beatrice.shilling@hotmail.com",
+            "password": "password"
+        }
+        response = self.cController.signIn(existing)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status")["statusCode"], expected)
 
     def test_success_message_email_prev_registered(self):
         existing = {
@@ -156,7 +244,7 @@ class TestCustomerSignIn(unittest.TestCase):
         expected = "Successfully signed in customer"
         self.assertEqual(response.get("status")["statusMessage"], expected)
 
-    def test_failure_message_with_non_registered(self):
+    def test_failure_statuscode_with_non_registered(self):
         goodReq = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password"
@@ -165,7 +253,77 @@ class TestCustomerSignIn(unittest.TestCase):
         expected = "FAILURE"
         self.assertEqual(response.get("status")["statusCode"], expected)
 
-    def test_success_msg_good_req(self):
+    def test_failure_message_with_non_registered(self):
+        goodReq = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password"
+        }
+        response = self.cController.signIn(goodReq)
+        expected = "Account not found: not registered"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_good_req_incorrect_email_address(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alanturing@hotmail.com",
+            "password": "password"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status")["statusCode"], expected)
+
+    def test_failure_message_good_req_incorrect_email_address(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alanturing@hotmail.com",
+            "password": "password"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        expected = "Account not found: not registered"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_good_req_incorrect_password(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password123"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status")["statusCode"], expected)
+
+    def test_failure_message_good_req_incorrect_password(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password123"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        expected = "Customer email address or password incorrect"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+
+    def test_success_statuscode_good_req(self):
         signUp = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password",
@@ -179,6 +337,35 @@ class TestCustomerSignIn(unittest.TestCase):
         response = self.cController.signIn(signIn)
         expected = "SUCCESS"
         self.assertEqual(response.get("status")["statusCode"], expected)
+
+    def test_success_message_good_req(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        expected = "Successfully signed in customer"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_success_customerID_key_good_req(self):
+        signUp = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password",
+            "name": "Alan Turing"
+        }
+        signIn = {
+            "emailAddress": "alan.turing@hotmail.com",
+            "password": "password"
+        }
+        r = self.cController.signUp(signUp)
+        response = self.cController.signIn(signIn)
+        self.assertEqual("customerID" in response.keys(), True)
 
 
 class TestCustomerChangePassword(unittest.TestCase):
@@ -313,7 +500,7 @@ class TestCustomerChangeEmailAddress(unittest.TestCase):
     def test_failure_msg_customer_not_exists(self):
         missingNewPassword = {
             "currentPassword": "password1",
-            "newEmailAddress": "thisisnotagoodpassword",
+            "newEmailAddress": "email@email.com",
             "customerID": "ORjf832hr0192jfj32rh"
         }
         response = self.cController.changeEmailAddress(missingNewPassword)

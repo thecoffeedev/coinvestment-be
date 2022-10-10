@@ -578,7 +578,7 @@ class TestCustomerChangePassword(unittest.TestCase):
             "customerID": "1wNJKpBpYfWwKIlvbaz0"  # Beatrice ID
         }
         response = self.cController.changePassword(reqData)
-        expected = "Account not found: not registered"
+        expected = "Account not found with customer ID provided"
         self.assertEqual(response.get("status")["statusMessage"], expected)
 
 
@@ -609,7 +609,27 @@ class TestCustomerChangePassword(unittest.TestCase):
             "customerID": "tj3jf0jlSFjsojflsfsf"  # Beatrice ID
         }
         response = self.cController.changePassword(reqData)
-        expected = "Account not found: not registered"
+        expected = "Account not found with customer ID provided"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_success_statuscode_correct_currentPassword(self):
+        reqData = {
+            "currentPassword": "password",
+            "newPassword": "thisisnotagoodpassword",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"  # Beatrice ID
+        }
+        response = self.cController.changePassword(reqData)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status")["statusCode"], expected)
+
+    def test_success_message_correct_currentPassword(self):
+        reqData = {
+            "currentPassword": "password",
+            "newPassword": "thisisnotagoodpassword",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"  # Beatrice ID
+        }
+        response = self.cController.changePassword(reqData)
+        expected = "Successfully changed password for customer. You will be signed out. Sign in with new password"
         self.assertEqual(response.get("status")["statusMessage"], expected)
 
 class TestCustomerChangeEmailAddress(unittest.TestCase):
@@ -624,6 +644,23 @@ class TestCustomerChangeEmailAddress(unittest.TestCase):
 
     def test_failure_statuscode_missing_key_currentPassword(self):
         reqData = {
+            "newEmailAddress": "thisisnotagoodpassword",
+            "customerID": "t845hjw0g9j3285yejoi"
+        }
+        response = self.cController.changeEmailAddress(reqData)
+        self.assertEqual(response.get("status")["statusCode"], "FAILURE")
+
+    def test_failure_message_missing_key_currentPassword(self):
+        reqData = {
+            "newEmailAddress": "thisisnotagoodpassword",
+            "customerID": "t845hjw0g9j3285yejoi"
+        }
+        response = self.cController.changeEmailAddress(reqData)
+        expected = "Current password not provided in request JSON"
+        self.assertEqual(response.get("status")["statusMessage"], expected)
+
+    def test_failure_statuscode_incorrect_key_currentPassword(self):
+        reqData = {
             "password": "password1",
             "newEmailAddress": "thisisnotagoodpassword",
             "customerID": "t845hjw0g9j3285yejoi"
@@ -631,7 +668,7 @@ class TestCustomerChangeEmailAddress(unittest.TestCase):
         response = self.cController.changeEmailAddress(reqData)
         self.assertEqual(response.get("status")["statusCode"], "FAILURE")
 
-    def test_failure_msg_missing_key_currentPassword(self):
+    def test_failure_message_incorrect_key_currentPassword(self):
         reqData = {
             "password": "password1",
             "newPassword": "thisisnotagoodpassword"

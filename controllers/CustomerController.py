@@ -129,7 +129,7 @@ class CustomerController:
             customerFE.setCustomerID(jsonReqData.get("customerID"))
 
             if not self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID()):
-                raise ValueError("Account not found: not registered")
+                raise ValueError("Account not found with customer ID provided")
 
             customerDA = self.CDA.readCustomerByCustomerID(customerFE.getCustomerID())
 

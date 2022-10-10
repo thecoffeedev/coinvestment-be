@@ -23,7 +23,7 @@ class BundleDataAccess:
                       "CryptocurrencyCode VARCHAR(50) NOT NULL, " \
                       "Percentage INT NOT NULL, " \
                       "HoldingPeriod INT NOT NULL" \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 
@@ -34,7 +34,7 @@ class BundleDataAccess:
                       "HoldingPeriod INT NOT NULL," \
                       "PurchaseDatetime INT NOT NULL, " \
                       "Status VARCHAR(20) NOT NULL " \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 
@@ -48,7 +48,7 @@ class BundleDataAccess:
                       "CardNumber VARCHAR(20), " \
                       "Expiry VARCHAR(20), " \
                       "InitialRate FLOAT(53)" \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 

@@ -16,7 +16,6 @@ class BundleController:
         dict = {'1': ('Alpha', 'Low risk/Short term'), '2': ('Beta', 'Medium risk/Short term'),
                 '3': ('Mu', 'Low risk/Medium term'), '4': ('Omega', 'Medium risk/Medium term'),
                 '5': ('Pi', 'Medium risk/Long term'), '6': ('Sigma', 'High risk/Long term')}
-        print("Dict: ", dict)
         if bundleID in dict.keys():
             return dict[bundleID]
         else:
@@ -51,6 +50,7 @@ class BundleController:
                     "bundleID": availableBundlesDict[bundleGroup][0][0],
                     "bundleCryptocurrencies": bundleCryptocurrenciesList
                 }
+                # /coins/{id}/history 180days, 90days, 30days
                 availableBundles.append(availableBundle)
             response = \
                 {
@@ -74,8 +74,6 @@ class BundleController:
                 }
             print("getAllAvailableBundles exception", response)
             return response
-        print("getAllAvailableBundles exit")
-
 
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
@@ -143,8 +141,6 @@ class BundleController:
                 }
             print("getAllBundleDetailsFromBundleAddress exception", response)
             return response
-        print("getAllBundleDetailsFromBundleAddress exit")
-        
     
     def getAllBundlesFromCustomerID(self, jsonReqData):
         try:

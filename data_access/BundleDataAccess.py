@@ -336,7 +336,20 @@ class BundleDataAccess:
         con.commit()
         con.close()
         return result
-        
+
+    def testDropTables(self):
+        # Just for unit testing
+        con = self.mysql.connect()
+        cur = con.cursor()
+        dropQuery = "DROP TABLE Bundle"
+        cur.execute(dropQuery)
+        dropQuery = "DROP TABLE BundleTransactionHistory"
+        cur.execute(dropQuery)
+        cur.close()
+        con.commit()
+        con.close()
+
+
 """
     def createBundle(self):
         print("in bundle data access")

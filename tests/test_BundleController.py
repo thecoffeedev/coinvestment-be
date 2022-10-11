@@ -566,8 +566,8 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
         self.BDA = BundleDataAccess(app)
 
     def tearDown(self):
-        # self.BDA.testDropTables()
-        pass
+        self.BDA.testDropTables()
+
     def test_failure_statusCode_missing_key_customerID(self):
         reqData = {
             "bundleAddress": "kv908kmPkhFImJrZ4R1i"
@@ -737,6 +737,441 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
         response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
         self.assertEqual(response.get("bundle").get("customerID"),
                          "1WNJKpBpYfWwKIlvbaz0")
+
+
+class TestGetAllBundlesFromCustomerID(unittest.TestCase):
+
+    def setUp(self):
+        app = Flask(__name__)
+        self.BController = BundleController(app)
+        self.BDA = BundleDataAccess(app)
+
+    def tearDown(self):
+        self.BDA.testDropTables()
+
+    def test_failure_statusCode_missing_key_customerID(self):
+        reqData = {
+
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_customerID(self):
+        reqData = {
+
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_customerID(self):
+        reqData = {
+            "customer": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_customerID(self):
+        reqData = {
+            "customer": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statuscode_customerID_does_not_exist(self):
+        reqData = {
+            "customerID": "1wNJKpBpYfWwKIlvbaz0"  # Lower case w after 1
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_customerID_does_not_exist(self):
+        reqData = {
+            "customerID": "1wNJKpBpYfWwKIlvbaz0"   # Lower case w after 1
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "No bundle found with customer ID provided"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_statuscode_customerID_does_exist(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_success_statusMessage_customerID_does_exist(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "All bundles for customer"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_reponse_key_bundles_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundles" in response.keys())
+
+    def test_success_reponse_key_bundleAddress_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleAddress" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_bundleAddress_is_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "kv908kmPkhFImJrZ4R1i"
+        self.assertEqual(response.get("bundles")[0].get("bundleAddress"), expected)
+
+    def test_success_reponse_key_customerID_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("customerID" in response.get("bundles")[0])
+
+    def test_success_reponse_key_customerID_is_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        expected = "1WNJKpBpYfWwKIlvbaz0"
+        self.assertEqual(response.get("bundles")[0].get("customerID"), expected)
+
+    def test_success_reponse_key_bundleID_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleID" in response.get("bundles")[0])
+
+    def test_success_reponse_key_purchaseDatetime_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleID" in response.get("bundles")[0])
+
+    def test_success_reponse_key_holdingPeriod_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("holdingPeriod" in response.get("bundles")[0])
+
+    def test_success_reponse_key_status_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("status" in response.get("bundles")[0])
+
+
+class TestPurchaseBundle(unittest.TestCase):
+
+    def setUp(self):
+        app = Flask(__name__)
+        self.BController = BundleController(app)
+        self.BDA = BundleDataAccess(app)
+
+    def tearDown(self):
+        self.BDA.testDropTables()
+
+    def test_failure_statusCode_missing_key_customerID(self):
+        reqData = {
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_customerID(self):
+        reqData = {
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_customerID(self):
+        reqData = {
+            "customer": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_customerID(self):
+        reqData = {
+            "customer": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_bundleID(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_bundleID(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_bundleID(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundle": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_bundleID(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundle": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_holdingPeriod(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_holdingPeriod(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_holdingPeriod(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holding": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_holdingPeriod(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holding": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_initialRate(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+
+
+###
+reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+
 
 """
 "Debo32tKqJBeZwHHgkvx"

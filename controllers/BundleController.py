@@ -84,8 +84,6 @@ class BundleController:
                 bundleDA = self.BDA.readBundleByBundleAddress(bundleFE.getBundleAddress())
                 if jsonReqData.get("customerID") != bundleDA.getCustomerID():
                     raise ValueError("Authorization Error")
-                # elif "INACTIVE" != bundleDA.getStatus():
-                #     raise ValueError("Bundle already sold")
                 else:
                     bundleTransactionDA = self.BDA.readBundleTransactionsByBundleAddress(bundleFE.getBundleAddress())
 
@@ -97,8 +95,8 @@ class BundleController:
                             "chargeApplied": bundleTransactionObj.getChargeApplied(),
                             "amount": bundleTransactionObj.getAmount(),
                             "action": bundleTransactionObj.getAction(),
-                            "cardNumber": bundleTransactionObj.getCardNumber(),
-                            "expiry": bundleTransactionObj.getExpiry(),
+                            "cardNumber": Utility.maskString(bundleTransactionObj.getCardNumber(), 12),
+                            "expiry": Utility.maskString(bundleTransactionObj.getExpiry(), 2),
                             "initialRate": bundleTransactionObj.getInitialRate()
                         }
                         bundleTransactionList.append(bundleTransactionDict)
@@ -145,7 +143,7 @@ class BundleController:
                 for bundleObj in bundleDA:
                     bundleDict = {
                         "bundleAddress": bundleObj.getBundleAddress(),
-                        "bundleId": bundleObj.getBundleID(),
+                        "bundleID": bundleObj.getBundleID(),
                         "customerID": bundleObj.getCustomerID(),
                         "holdingPeriod": bundleObj.getHoldingPeriod(),
                         "purchaseDatetime": Utility.unixTimestampToStrings(bundleObj.getPurchaseDatetime()),
@@ -159,7 +157,7 @@ class BundleController:
                             "statusCode": "SUCCESS",
                             "statusMessage": "All bundles for customer"
                         },
-                        "bundle": bundleList
+                        "bundles": bundleList
                     }
                 return response
 
@@ -251,8 +249,8 @@ class BundleController:
                         "chargeApplied": bundleTransactionFE.getChargeApplied(),
                         "amount": bundleTransactionFE.getAmount(),
                         "action": bundleTransactionFE.getAction(),
-                        "cardNumber": bundleTransactionFE.getCardNumber(),
-                        "expiry": bundleTransactionFE.getExpiry(),
+                        "cardNumber": Utility.maskString(bundleTransactionFE.getCardNumber(), 12),
+                        "expiry": Utility.maskString(bundleTransactionFE.getExpiry(), 2),
                         "initialRate": bundleTransactionFE.getInitialRate()
                     }
                 }
@@ -348,8 +346,8 @@ class BundleController:
                             "chargeApplied": bundleTransactionFE.getChargeApplied(),
                             "amount": bundleTransactionFE.getAmount(),
                             "action": bundleTransactionFE.getAction(),
-                            "cardNumber": bundleTransactionFE.getCardNumber(),
-                            "expiry": bundleTransactionFE.getExpiry(),
+                            "cardNumber": Utility.maskString(bundleTransactionFE.getCardNumber(), 12),
+                            "expiry": Utility.maskString(bundleTransactionFE.getExpiry(), 2),
                             "initialRate": bundleTransactionFE.getInitialRate()
                         }
                     }

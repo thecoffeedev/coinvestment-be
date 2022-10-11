@@ -1,5 +1,3 @@
-from flask import json
-
 from data_access.WalletDataAccess import WalletDataAccess
 from models.Wallet import Wallet
 from models.Utility import Utility
@@ -72,8 +70,8 @@ class WalletController:
                             "chargeApplied": Utility.roundDecimals(walletTransactionObj.getChargeApplied()),
                             "amount": Utility.roundDecimals(walletTransactionObj.getAmount()),
                             "action": walletTransactionObj.getAction(),
-                            "cardNumber": walletTransactionObj.getCardNumber(),
-                            "expiry": walletTransactionObj.getExpiry(),
+                            "cardNumber": Utility.maskString(walletTransactionObj.getCardNumber(), 12),
+                            "expiry": Utility.maskString(walletTransactionObj.getExpiry(), 2),
                             "unitsSold": Utility.roundDecimals(walletTransactionObj.getUnitsSold()),
                             "initialRate": Utility.roundDecimals(walletTransactionObj.getInitialRate())
                         }
@@ -233,8 +231,8 @@ class WalletController:
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
                         "action": walletTransactionFE.getAction(),
-                        "cardNumber": walletTransactionFE.getCardNumber(),
-                        "expiry": walletTransactionFE.getExpiry(),
+                        "cardNumber": Utility.maskString(walletTransactionFE.getCardNumber(), 12),
+                        "expiry": Utility.maskString(walletTransactionFE.getExpiry(), 2),
                         "unitsSold": walletTransactionFE.getUnitsSold(),
                         "initialRate": walletTransactionFE.getInitialRate()
                     }
@@ -338,8 +336,8 @@ class WalletController:
                             "chargeApplied": walletTransactionFE.getChargeApplied(),
                             "amount": walletTransactionFE.getAmount(),
                             "action": walletTransactionFE.getAction(),
-                            "cardNumber": walletTransactionFE.getCardNumber(),
-                            "expiry": walletTransactionFE.getExpiry(),
+                            "cardNumber": Utility.maskString(walletTransactionFE.getCardNumber(), 12),
+                            "expiry": Utility.maskString(walletTransactionFE.getExpiry(), 2),
                             "unitsSold": walletTransactionFE.getUnitsSold(),
                             "initialRate": walletTransactionFE.getInitialRate()
                         }

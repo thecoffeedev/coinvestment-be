@@ -1020,7 +1020,7 @@ class TestPurchaseBundle(unittest.TestCase):
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Customer ID not provided in request JSON"
+        expected = "Holding Period not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
     def test_failure_statusCode_incorrect_key_holdingPeriod(self):
@@ -1048,7 +1048,7 @@ class TestPurchaseBundle(unittest.TestCase):
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Customer ID not provided in request JSON"
+        expected = "Holding Period not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
     def test_failure_statusCode_missing_key_initialRate(self):
@@ -1074,7 +1074,7 @@ class TestPurchaseBundle(unittest.TestCase):
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Bundle ID not provided in request JSON"
+        expected = "Initial Rate not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
     def test_failure_statusCode_incorrect_key_initialRate(self):
@@ -1102,15 +1102,15 @@ class TestPurchaseBundle(unittest.TestCase):
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Bundle ID not provided in request JSON"
+        expected = "Initial Rate not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
-    def test_failure_statusCode_missing_key_initialRate(self):
+    def test_failure_statusCode_missing_key_amount(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
             "holdingPeriod": 12,
-            "amount": 1000.00,
+            "initialRate": 22000.00,
             "cardNumber": "1234567890123456",
             "expiry": "12/24"
         }
@@ -1118,26 +1118,26 @@ class TestPurchaseBundle(unittest.TestCase):
         expected = "FAILURE"
         self.assertEqual(response.get("status").get("statusCode"), expected)
 
-    def test_failure_statusMessage_missing_key_initialRate(self):
+    def test_failure_statusMessage_missing_key_amount(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
             "holdingPeriod": 12,
-            "amount": 1000.00,
+            "initialRate": 22000.00,
             "cardNumber": "1234567890123456",
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Bundle ID not provided in request JSON"
+        expected = "Amount not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
-    def test_failure_statusCode_incorrect_key_initialRate(self):
+    def test_failure_statusCode_incorrect_key_amount(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
             "holdingPeriod": 12,
             "initial": 22000.00,
-            "amount": 1000.00,
+            "amoun": 1000.00,
             "cardNumber": "1234567890123456",
             "expiry": "12/24"
         }
@@ -1145,24 +1145,130 @@ class TestPurchaseBundle(unittest.TestCase):
         expected = "FAILURE"
         self.assertEqual(response.get("status").get("statusCode"), expected)
 
-    def test_failure_statusMessage_incorrect_key_initialRate(self):
+    def test_failure_statusMessage_incorrect_key_amount(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
             "holdingPeriod": 12,
-            "initial": 22000.00,
-            "amount": 1000.00,
+            "initialRate": 22000.00,
+            "amoun": 1000.00,
             "cardNumber": "1234567890123456",
             "expiry": "12/24"
         }
         response = self.BController.purchaseBundle(reqData)
-        expected = "Bundle ID not provided in request JSON"
+        expected = "Amount not provided in request JSON"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
+    def test_failure_statusCode_missing_key_cardNumber(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
 
+    def test_failure_statusMessage_missing_key_cardNumber(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Card Number not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
 
-###
-reqData = {
+    def test_failure_statusCode_incorrect_key_cardNumber(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "card": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_cardNumber(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "card": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Card Number not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_expiry(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_expiry(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Expiry not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_expiry(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expired": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_expiry(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expired": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Expiry not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_statusCode(self):
+        reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
             "holdingPeriod": 12,
@@ -1171,16 +1277,1129 @@ reqData = {
             "cardNumber": "1234567890123456",
             "expiry": "12/24"
         }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
 
-
-"""
-"Debo32tKqJBeZwHHgkvx"
-
+    def test_success_statusMessage(self):
         reqData = {
-            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
-            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
         }
-"""
+        response = self.BController.purchaseBundle(reqData)
+        expected = "Bundle purchased successfully"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_response_key_bundleAddress_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("bundleAddress" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("customerID" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "1WNJKpBpYfWwKIlvbaz0"
+        self.assertEqual(response.get("bundle").get("customerID"),
+                         expected)
+
+    def test_success_response_key_bundleID_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("bundleID" in response.get("bundle").keys())
+
+    def test_success_response_key_bundleID_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "1"
+        self.assertEqual(response.get("bundle").get("bundleID"),
+                         expected)
+
+    def test_success_response_key_status_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("status" in response.get("bundle").keys())
+
+    def test_success_response_key_status_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "ACTIVE"
+        self.assertEqual(response.get("bundle").get("status"),
+                         expected)
+
+    def test_success_response_key_purchaseDatetime_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("purchaseDatetime" in response.get("bundle").keys())
+
+    def test_success_response_key_holdingPeriod_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("holdingPeriod" in response.get("bundle").keys())
+
+    def test_success_response_key_holdingPeriod_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = 12
+        self.assertEqual(response.get("bundle").get("holdingPeriod"),
+                         expected)
+
+    def test_success_response_key_transactionID_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("transactionID" in response.get("bundleTransaction").keys())
+
+    def test_success_response_key_transactionDatetime_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("transactionDatetime" in response.get("bundleTransaction").keys())
+
+    def test_success_response_key_chargeApplied_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("chargeApplied" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_chargeApplied_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = 0.0
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("chargeApplied"),
+                         expected)
+
+    def test_success_response_key_amount_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("amount" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_amount_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = 1000.00
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("amount"),
+                         expected)
+
+    def test_success_response_key_action_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("action" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_action_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "BUY"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("action"),
+                         expected)
+
+    def test_success_response_key_cardNumber_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("cardNumber" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_cardNumber_correct_and_masked(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "************3456"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("cardNumber"),
+                         expected)
+
+    def test_success_response_key_expiry_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("expiry" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_expiry_correct_and_masked(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = "**/24"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("expiry"),
+                         expected)
+
+    def test_success_response_key_initialRate_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        self.assertTrue("initialRate" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_initialRate_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 12,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+        expected = 22000.00
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("initialRate"),
+                         expected)
+
+
+class TestSellBundle(unittest.TestCase):
+
+    def setUp(self):
+        app = Flask(__name__)
+        self.BController = BundleController(app)
+        self.BDA = BundleDataAccess(app)
+
+    def tearDown(self):
+        self.BDA.testDropTables()
+
+    def test_failure_statusCode_missing_key_customerID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_customerID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_customerID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customer": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_customerID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customer": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Customer ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_bundleID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_bundleID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_bundleID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundle": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_bundleID(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundle": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Bundle ID not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_bundleAddress(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_bundleAddress(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Bundle Address not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_bundleAddress(self):
+        reqData = {
+            "bundle": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_bundleAddress(self):
+        reqData = {
+            "bundle": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Bundle Address not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_initialRate(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_initialRate(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Initial Rate not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_initialRate(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_initialRate(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initial": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Initial Rate not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_amount(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_amount(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Amount not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_amount(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amoun": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_amount(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amoun": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Amount not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_cardNumber(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_cardNumber(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Card Number not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_cardNumber(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "card": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_cardNumber(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "card": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Card Number not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_missing_key_expiry(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_missing_key_expiry(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Expiry not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_failure_statusCode_incorrect_key_expiry(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expired": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_incorrect_key_expiry(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expired": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Expiry not provided in request JSON"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_statusCode(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_success_statusMessage(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "Bundle sold successfully"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_response_key_bundleAddress_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("bundleAddress" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("customerID" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "1WNJKpBpYfWwKIlvbaz0"
+        self.assertEqual(response.get("bundle").get("customerID"),
+                         expected)
+
+    def test_success_response_key_bundleID_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("bundleID" in response.get("bundle").keys())
+
+    def test_success_response_key_bundleID_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "1"
+        self.assertEqual(response.get("bundle").get("bundleID"),
+                         expected)
+
+    def test_success_response_key_status_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("status" in response.get("bundle").keys())
+
+    def test_success_response_key_status_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "INACTIVE"
+        self.assertEqual(response.get("bundle").get("status"),
+                         expected)
+
+    def test_success_response_key_purchaseDatetime_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("purchaseDatetime" in response.get("bundle").keys())
+
+    def test_success_response_key_holdingPeriod_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("holdingPeriod" in response.get("bundle").keys())
+
+    def test_success_response_key_holdingPeriod_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = 18
+        self.assertEqual(response.get("bundle").get("holdingPeriod"),
+                         expected)
+
+    def test_success_response_key_transactionID_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("transactionID" in response.get("bundleTransaction").keys())
+
+    def test_success_response_key_transactionDatetime_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("transactionDatetime" in response.get("bundleTransaction").keys())
+
+    def test_success_response_key_chargeApplied_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("chargeApplied" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_chargeApplied_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = 100.0
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("chargeApplied"),
+                         expected)
+
+    def test_success_response_key_amount_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("amount" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_amount_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = 1000.00
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("amount"),
+                         expected)
+
+    def test_success_response_key_action_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("action" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_action_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "SELL"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("action"),
+                         expected)
+
+    def test_success_response_key_cardNumber_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("cardNumber" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_cardNumber_correct_and_masked(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "************3456"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("cardNumber"),
+                         expected)
+
+    def test_success_response_key_expiry_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("expiry" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_expiry_correct_and_masked(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = "**/24"
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("expiry"),
+                         expected)
+
+    def test_success_response_key_initialRate_exists(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertTrue("initialRate" in response.get("bundleTransaction").keys())
+
+
+    def test_success_response_key_initialRate_correct(self):
+        reqData = {
+            "bundleAddress": "CiHp30zstnE1ufu7M8P5",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        expected = 22000.00
+        self.assertEqual(response.get("bundleTransaction")
+                         .get("initialRate"),
+                         expected)
+
 
 if __name__ == '__main__':
     unittest.main()

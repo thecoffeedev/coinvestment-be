@@ -73,9 +73,9 @@ class BundleController:
 
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
-            elif not jsonReqData.get("bundleAddress"):
+            elif "bundleAddress" not in jsonReqData.keys():
                 raise ValueError("Bundle Address not provided in request JSON")
             else:
                 bundleFE = Bundle()
@@ -131,7 +131,7 @@ class BundleController:
     
     def getAllBundlesFromCustomerID(self, jsonReqData):
         try:
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE = Bundle()
@@ -175,12 +175,12 @@ class BundleController:
     def purchaseBundle(self, jsonReqData):
         try:
             bundleFE = Bundle()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("bundleID"):
+            if "bundleID" not in jsonReqData.keys():
                 raise ValueError("Bundle ID not provided in request JSON")
             else:
                 bundleFE.setBundleID(jsonReqData.get("bundleID"))
@@ -192,22 +192,22 @@ class BundleController:
 
 
             bundleTransactionFE = BundleTransactionHistory()
-            if not jsonReqData.get("initialRate"):
+            if "initialRate" not in jsonReqData.keys():
                 raise ValueError("Initial Rate not provided in request JSON")
             else:
                 bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-            if not jsonReqData.get("amount"):
+            if "amount" not in jsonReqData.keys():
                 raise ValueError("Amount not provided in request JSON")
             else:
                 bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-            if not jsonReqData.get("cardNumber"):
+            if "cardNumber" not in jsonReqData.keys():
                 raise ValueError("Card Number not provided in request JSON")
             else:
                 bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-            if not jsonReqData.get("expiry"):
+            if "expiry" not in jsonReqData.keys():
                 raise ValueError("Expiry not provided in request JSON")
             else:
                 bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -232,7 +232,7 @@ class BundleController:
             response = \
                 {
                     "status": {
-                        "statusCode": "SUCCESS/FAILURE",
+                        "statusCode": "SUCCESS",
                         "statusMessage": "Bundle purchased successfully"
                     },
                     "bundle": {
@@ -272,17 +272,17 @@ class BundleController:
         try:
             bundleFE = Bundle()
             bundleTransactionFE = BundleTransactionHistory()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("bundleAddress"):
+            if "bundleAddress" not in jsonReqData.keys():
                 raise ValueError("Bundle Address not provided in request JSON")
             else:
                 bundleFE.setBundleAddress(jsonReqData.get("bundleAddress"))
 
-            if not jsonReqData.get("bundleID"):
+            if "bundleID" not in jsonReqData.keys():
                 raise ValueError("Bundle ID not provided in request JSON")
             else:
                 bundleFE.setBundleID(jsonReqData.get("bundleID"))
@@ -293,22 +293,22 @@ class BundleController:
             if jsonReqData.get("customerID") != bundleDA.getCustomerID():
                 raise ValueError("Authorization Error")
             else:
-                if not jsonReqData.get("initialRate"):
+                if "initialRate" not in jsonReqData.keys():
                     raise ValueError("Initial Rate not provided in request JSON")
                 else:
                     bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-                if not jsonReqData.get("amount"):
+                if "amount" not in jsonReqData.keys():
                     raise ValueError("Amount not provided in request JSON")
                 else:
                     bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-                if not jsonReqData.get("cardNumber"):
+                if "cardNumber" not in jsonReqData.keys():
                     raise ValueError("Card Number not provided in request JSON")
                 else:
                     bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-                if not jsonReqData.get("expiry"):
+                if "expiry" not in jsonReqData.keys():
                     raise ValueError("Expiry not provided in request JSON")
                 else:
                     bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -329,7 +329,7 @@ class BundleController:
                 response = \
                     {
                         "status": {
-                            "statusCode": "SUCCESS/FAILURE",
+                            "statusCode": "SUCCESS",
                             "statusMessage": "Bundle sold successfully"
                         },
                         "bundle": {

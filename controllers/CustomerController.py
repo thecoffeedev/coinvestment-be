@@ -17,11 +17,19 @@ class CustomerController:
     def signUp(self, jsonReqData):
 
         try:
+            """
             if not jsonReqData.get("emailAddress"):
                 raise ValueError("Email address not provided in request JSON")
             if not jsonReqData.get("password"):
                 raise ValueError("Password not provided in request JSON")
             if not jsonReqData.get("name"):
+                raise ValueError("Name not provided in request JSON")
+            """
+            if "emailAddress" not in jsonReqData.keys():
+                raise ValueError("Email address not provided in request JSON")
+            if "password" not in jsonReqData.keys():
+                raise ValueError("Password not provided in request JSON")
+            if "name" not in jsonReqData.keys():
                 raise ValueError("Name not provided in request JSON")
 
             customerFE = Customer()
@@ -68,9 +76,9 @@ class CustomerController:
 
     def signIn(self, jsonReqData):
         try:
-            if not jsonReqData.get("emailAddress"):
+            if "emailAddress" not in jsonReqData.keys():
                 raise ValueError("Email address not provided in request JSON")
-            if not jsonReqData.get("password"):
+            if "password" not in jsonReqData.keys():
                 raise ValueError("Password not provided in request JSON")
 
             customerFE = Customer()
@@ -118,18 +126,18 @@ class CustomerController:
 
     def changePassword(self, jsonReqData):
         try:
-            if not jsonReqData.get("currentPassword"):
+            if "currentPassword" not in jsonReqData.keys():
                 raise ValueError("Current password not provided in request JSON")
-            if not jsonReqData.get("newPassword"):
+            if "newPassword" not in jsonReqData.keys():
                 raise ValueError("New password not provided in request JSON")
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("customerID not added to request JSON")
 
             customerFE = Customer()
             customerFE.setCustomerID(jsonReqData.get("customerID"))
 
             if not self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID()):
-                raise ValueError("Account not found: not registered")
+                raise ValueError("Account not found with customer ID provided")
 
             customerDA = self.CDA.readCustomerByCustomerID(customerFE.getCustomerID())
 
@@ -165,11 +173,12 @@ class CustomerController:
 
     def changeEmailAddress(self, jsonReqData):
         try:
-            if not jsonReqData.get("currentPassword"):
+
+            if "currentPassword" not in jsonReqData.keys():
                 raise ValueError("Current password not provided in request JSON")
-            if not jsonReqData.get("newEmailAddress"):
+            if "newEmailAddress" not in jsonReqData.keys():
                 raise ValueError("New password not provided in request JSON")
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("customerID not added to request JSON")
 
             customerFE = Customer()
@@ -211,12 +220,16 @@ class CustomerController:
 
     def getCustomerDetails(self, jsonReqData):
         try:
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("customerID not added to request JSON")
 
             customerFE = Customer()
             customerFE.setCustomerID(jsonReqData.get("customerID"))
-            customerDA = self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID())
+
+            if not self.CDA.isCustomerExistingByCustomerID(customerFE.getCustomerID()):
+                raise ValueError("Account not found: not registered")
+
+            customerDA = self.CDA.readCustomerByCustomerID(customerFE.getCustomerID())
 
             response = \
                 {
@@ -225,10 +238,10 @@ class CustomerController:
                         "statusMessage": "Successfully retrieved customer details"
                     },
                     "customerID": customerDA.getCustomerID(),
-                    "registerDatetime": customerDA.getRegisterDatetime(),
+                    "registerDatetime": Utility.unixTimestampToStrings(customerDA.getRegisterDatetime()),
                     "emailAddress": customerDA.getEmailAddress(),
-                    "previousSignInDatetime": customerDA.getPreviousSignInDatetime(),
-                    "currentSignInDatetime": customerDA.getCurrentSignInDatetime(),
+                    "previousSignInDatetime": Utility.unixTimestampToStrings(customerDA.getPreviousSignInDatetime()),
+                    "currentSignInDatetime": Utility.unixTimestampToStrings(customerDA.getCurrentSignInDatetime()),
                     "name": customerDA.getName()
                 }
 

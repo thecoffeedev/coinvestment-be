@@ -16,7 +16,6 @@ class BundleController:
         dict = {'1': ('Alpha', 'Low risk/Short term'), '2': ('Beta', 'Medium risk/Short term'),
                 '3': ('Mu', 'Low risk/Medium term'), '4': ('Omega', 'Medium risk/Medium term'),
                 '5': ('Pi', 'Medium risk/Long term'), '6': ('Sigma', 'High risk/Long term')}
-        print("Dict: ", dict)
         if bundleID in dict.keys():
             return dict[bundleID]
         else:
@@ -24,7 +23,6 @@ class BundleController:
 
     def getAllAvailableBundles(self):
         try:
-            print("getAllAvailableBundles entry")
             availableBundlesDA = self.BDA.readAllAvailableBundles()
 
             availableBundlesDict = defaultdict(list)
@@ -51,20 +49,19 @@ class BundleController:
                     "bundleID": availableBundlesDict[bundleGroup][0][0],
                     "bundleCryptocurrencies": bundleCryptocurrenciesList
                 }
+                # /coins/{id}/history 180days, 90days, 30days
                 availableBundles.append(availableBundle)
             response = \
                 {
                     "status": {
                         "statusCode": "SUCCESS",
-                        "statusMessage": "Bundle sold successfully"
+                        "statusMessage": "All available bundles"
                     },
                     "availableBundles": availableBundles
                 }
-            print("response :", response)
             return response
 
         except Exception as e:
-            print("getAllAvailableBundles exception", e)
             response = \
                 {
                     "status": {
@@ -72,18 +69,13 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllAvailableBundles exception", response)
             return response
-        print("getAllAvailableBundles exit")
-
 
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
-            print("getAllBundleDetailsFromBundleAddress entry")
-            print("jsonReqData : ", jsonReqData)
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
-            elif not jsonReqData.get("bundleAddress"):
+            elif "bundleAddress" not in jsonReqData.keys():
                 raise ValueError("Bundle Address not provided in request JSON")
             else:
                 bundleFE = Bundle()
@@ -92,8 +84,6 @@ class BundleController:
                 bundleDA = self.BDA.readBundleByBundleAddress(bundleFE.getBundleAddress())
                 if jsonReqData.get("customerID") != bundleDA.getCustomerID():
                     raise ValueError("Authorization Error")
-                elif "INACTIVE" != bundleDA.getStatus():
-                    raise ValueError("Bundle already sold")
                 else:
                     bundleTransactionDA = self.BDA.readBundleTransactionsByBundleAddress(bundleFE.getBundleAddress())
 
@@ -105,23 +95,21 @@ class BundleController:
                             "chargeApplied": bundleTransactionObj.getChargeApplied(),
                             "amount": bundleTransactionObj.getAmount(),
                             "action": bundleTransactionObj.getAction(),
-                            "cardNumber": bundleTransactionObj.getCardNumber(),
-                            "expiry": bundleTransactionObj.getExpiry(),
+                            "cardNumber": Utility.maskString(bundleTransactionObj.getCardNumber(), 12),
+                            "expiry": Utility.maskString(bundleTransactionObj.getExpiry(), 2),
                             "initialRate": bundleTransactionObj.getInitialRate()
                         }
                         bundleTransactionList.append(bundleTransactionDict)
-
-                    print("bundleTransactionList :", bundleTransactionList)
 
                     response = \
                         {
                             "status": {
                                 "statusCode": "SUCCESS",
-                                "statusMessage": "Bundle sold successfully"
+                                "statusMessage": "Details for bundle"
                             },
                             "bundle": {
                                 "bundleAddress": bundleDA.getBundleAddress(),
-                                "bundleId": bundleDA.getBundleID(),
+                                "bundleID": bundleDA.getBundleID(),
                                 "customerID": bundleDA.getCustomerID(),
                                 "holdingPeriod": bundleDA.getHoldingPeriod(),
                                 "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),
@@ -129,11 +117,9 @@ class BundleController:
                             },
                             "bundleTransaction": bundleTransactionList
                         }
-                    print("response :", response)
                     return response
 
         except Exception as e:
-            print("getAllBundleDetailsFromBundleAddress exception", e)
             response = \
                 {
                     "status": {
@@ -141,16 +127,11 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllBundleDetailsFromBundleAddress exception", response)
             return response
-        print("getAllBundleDetailsFromBundleAddress exit")
-        
     
     def getAllBundlesFromCustomerID(self, jsonReqData):
         try:
-            print("getAllBundlesFromCustomerID entry")
-            print("jsonReqData : ", jsonReqData)
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE = Bundle()
@@ -162,7 +143,7 @@ class BundleController:
                 for bundleObj in bundleDA:
                     bundleDict = {
                         "bundleAddress": bundleObj.getBundleAddress(),
-                        "bundleId": bundleObj.getBundleID(),
+                        "bundleID": bundleObj.getBundleID(),
                         "customerID": bundleObj.getCustomerID(),
                         "holdingPeriod": bundleObj.getHoldingPeriod(),
                         "purchaseDatetime": Utility.unixTimestampToStrings(bundleObj.getPurchaseDatetime()),
@@ -170,21 +151,17 @@ class BundleController:
                     }
                     bundleList.append(bundleDict)
 
-                print("bundleList :", bundleList)
-
                 response = \
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Units sold successfully"
+                            "statusMessage": "All bundles for customer"
                         },
-                        "bundle": bundleList
+                        "bundles": bundleList
                     }
-                print("response :", response)
                 return response
 
         except Exception as e:
-            print("getAllBundlesFromCustomerID exception", e)
             response = \
                 {
                     "status": {
@@ -192,22 +169,18 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllBundlesFromCustomerID exception", response)
+
             return response
-        print("getAllBundlesFromCustomerID exit")
         
     def purchaseBundle(self, jsonReqData):
         try:
-            print("purchaseBundle entry")
-            print("jsonReqData : ", jsonReqData)
-
             bundleFE = Bundle()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("bundleID"):
+            if "bundleID" not in jsonReqData.keys():
                 raise ValueError("Bundle ID not provided in request JSON")
             else:
                 bundleFE.setBundleID(jsonReqData.get("bundleID"))
@@ -219,22 +192,22 @@ class BundleController:
 
 
             bundleTransactionFE = BundleTransactionHistory()
-            if not jsonReqData.get("initialRate"):
+            if "initialRate" not in jsonReqData.keys():
                 raise ValueError("Initial Rate not provided in request JSON")
             else:
                 bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-            if not jsonReqData.get("amount"):
+            if "amount" not in jsonReqData.keys():
                 raise ValueError("Amount not provided in request JSON")
             else:
                 bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-            if not jsonReqData.get("cardNumber"):
+            if "cardNumber" not in jsonReqData.keys():
                 raise ValueError("Card Number not provided in request JSON")
             else:
                 bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-            if not jsonReqData.get("expiry"):
+            if "expiry" not in jsonReqData.keys():
                 raise ValueError("Expiry not provided in request JSON")
             else:
                 bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -253,15 +226,13 @@ class BundleController:
             bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
             bundleTransactionFE.setAction("BUY")
 
-            print("bundleFE : ", bundleFE.__dict__)
-            print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
             self.BDA.insertBundle(bundleFE)
             self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
 
             response = \
                 {
                     "status": {
-                        "statusCode": "SUCCESS/FAILURE",
+                        "statusCode": "SUCCESS",
                         "statusMessage": "Bundle purchased successfully"
                     },
                     "bundle": {
@@ -278,15 +249,15 @@ class BundleController:
                         "chargeApplied": bundleTransactionFE.getChargeApplied(),
                         "amount": bundleTransactionFE.getAmount(),
                         "action": bundleTransactionFE.getAction(),
-                        "cardNumber": bundleTransactionFE.getCardNumber(),
-                        "expiry": bundleTransactionFE.getExpiry(),
+                        "cardNumber": Utility.maskString(bundleTransactionFE.getCardNumber(), 12),
+                        "expiry": Utility.maskString(bundleTransactionFE.getExpiry(), 2),
                         "initialRate": bundleTransactionFE.getInitialRate()
                     }
                 }
             return response
 
         except Exception as e:
-            print("purchaseBundle exception", e)
+
             response = \
                 {
                     "status": {
@@ -294,28 +265,24 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("purchaseBundle exception", response)
+
             return response
-        print("purchaseBundle exit")
 
     def sellBundle(self, jsonReqData):
         try:
-            print("sellBundle entry")
-            print("jsonReqData : ", jsonReqData)
-
             bundleFE = Bundle()
             bundleTransactionFE = BundleTransactionHistory()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("bundleAddress"):
+            if "bundleAddress" not in jsonReqData.keys():
                 raise ValueError("Bundle Address not provided in request JSON")
             else:
                 bundleFE.setBundleAddress(jsonReqData.get("bundleAddress"))
 
-            if not jsonReqData.get("bundleID"):
+            if "bundleID" not in jsonReqData.keys():
                 raise ValueError("Bundle ID not provided in request JSON")
             else:
                 bundleFE.setBundleID(jsonReqData.get("bundleID"))
@@ -326,22 +293,22 @@ class BundleController:
             if jsonReqData.get("customerID") != bundleDA.getCustomerID():
                 raise ValueError("Authorization Error")
             else:
-                if not jsonReqData.get("initialRate"):
+                if "initialRate" not in jsonReqData.keys():
                     raise ValueError("Initial Rate not provided in request JSON")
                 else:
                     bundleTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-                if not jsonReqData.get("amount"):
+                if "amount" not in jsonReqData.keys():
                     raise ValueError("Amount not provided in request JSON")
                 else:
                     bundleTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-                if not jsonReqData.get("cardNumber"):
+                if "cardNumber" not in jsonReqData.keys():
                     raise ValueError("Card Number not provided in request JSON")
                 else:
                     bundleTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-                if not jsonReqData.get("expiry"):
+                if "expiry" not in jsonReqData.keys():
                     raise ValueError("Expiry not provided in request JSON")
                 else:
                     bundleTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -356,15 +323,13 @@ class BundleController:
                     bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
                 bundleTransactionFE.setAction("SELL")
 
-                print("bundleFE : ", bundleFE.__dict__)
-                print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
                 self.BDA.updateBundleStatus(bundleFE)
                 self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
 
                 response = \
                     {
                         "status": {
-                            "statusCode": "SUCCESS/FAILURE",
+                            "statusCode": "SUCCESS",
                             "statusMessage": "Bundle sold successfully"
                         },
                         "bundle": {
@@ -381,15 +346,15 @@ class BundleController:
                             "chargeApplied": bundleTransactionFE.getChargeApplied(),
                             "amount": bundleTransactionFE.getAmount(),
                             "action": bundleTransactionFE.getAction(),
-                            "cardNumber": bundleTransactionFE.getCardNumber(),
-                            "expiry": bundleTransactionFE.getExpiry(),
+                            "cardNumber": Utility.maskString(bundleTransactionFE.getCardNumber(), 12),
+                            "expiry": Utility.maskString(bundleTransactionFE.getExpiry(), 2),
                             "initialRate": bundleTransactionFE.getInitialRate()
                         }
                     }
                 return response
 
         except Exception as e:
-            print("sellBundle exception", e)
+
             response = \
                 {
                     "status": {
@@ -397,6 +362,5 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("sellBundle exception", response)
+
             return response
-        print("sellBundle exit")

@@ -278,23 +278,23 @@ class TestUnixTimestampToString(unittest.TestCase):
     def test_must_not_return_set_when_argument_is_float(self):
         self.assertNotIsInstance(self.timeStringsFromFloat, set)
 
+    def test_must_not_return_a_list_when_argument_is_int(self):
+        self.assertNotIsInstance(self.timeStringsFromInt, list)
+
+    def test_must_not_return_a_list_when_argument_is_float(self):
+        self.assertNotIsInstance(self.timeStringsFromFloat, list)
+
     def test_must_return_a_string_when_argument_is_int(self):
-        self.assertNotIsInstance(self.timeStringsFromInt, str)
+        self.assertIsInstance(self.timeStringsFromInt, str)
 
     def test_must_return_a_string_when_argument_is_float(self):
-        self.assertNotIsInstance(self.timeStringsFromFloat, str)
+        self.assertIsInstance(self.timeStringsFromFloat, str)
 
-    def test_must_return_a_list_when_argument_is_int(self):
-        self.assertIsInstance(self.timeStringsFromInt, list)
+    def test_must_return_a_string_date_up_to_element_10(self):
+        self.assertIsInstance(self.timeStringsFromInt[0:10], str)
 
-    def test_must_return_a_list_when_argument_is_float(self):
-        self.assertIsInstance(self.timeStringsFromFloat, list)
-
-    def test_must_return_a_string_in_return_list_element_0_when_argument_is_int(self):
-        self.assertIsInstance(self.timeStringsFromInt[0], str)
-
-    def test_must_return_a_string_in_return_list_element_1_when_argument_is_int(self):
-        self.assertIsInstance(self.timeStringsFromInt[1], str)
+    def test_must_return_a_string_time_from_element_10_to_end(self):
+        self.assertIsInstance(self.timeStringsFromInt[10:-1], str)
 
     def test_must_return_a_string_in_return_list_element_0_when_argument_is_float(self):
         self.assertIsInstance(self.timeStringsFromFloat[0], str)
@@ -302,17 +302,112 @@ class TestUnixTimestampToString(unittest.TestCase):
     def test_must_return_a_string_in_return_list_element_1_when_argument_is_float(self):
         self.assertIsInstance(self.timeStringsFromFloat[1], str)
 
+    def test_must_return_a_space_between_date_and_time_when_argument_is_int(self):
+        self.assertEqual(self.timeStringsFromInt[10], " ")
+
+    def test_must_return_a_space_between_date_and_time_when_argument_is_float(self):
+        self.assertEqual(self.timeStringsFromFloat[10], " ")
+
     def test_must_return_correct_date_string_when_argument_is_int(self):
-        self.assertEqual(self.timeStringsFromInt[0], "22-09-2022")
+        self.assertEqual(self.timeStringsFromInt[0:10], "22-09-2022")
 
     def test_must_return_correct_time_string_when_argument_is_int(self):
-        self.assertEqual(self.timeStringsFromInt[1], "03:59:35")
+        self.assertEqual(self.timeStringsFromInt[11:], "03:59:35")
 
     def test_must_return_correct_date_string_when_argument_is_float(self):
-        self.assertEqual(self.timeStringsFromFloat[0], "25-09-2022")
+        self.assertEqual(self.timeStringsFromFloat[0:10], "25-09-2022")
 
     def test_must_return_correct_time_string_when_argument_is_float(self):
-        self.assertEqual(self.timeStringsFromFloat[1], "15:36:15")
+        self.assertEqual(self.timeStringsFromFloat[11:], "15:36:15")
+
+
+class TestMaskString(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_strToMask_must_not_be_an_int(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString(5, 1)
+
+    def test_strToMask_must_not_be_a_float(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString(5.1, 1)
+
+    def test_strToMask_must_not_be_a_list(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString([5.1], 1)
+
+    def test_strToMask_must_not_be_a_dict(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString({5: 1}, 1)
+
+    def test_strToMask_must_not_be_a_tuple(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString((5, 1), 1)
+
+    def test_strToMask_must_be_a_string(self):
+        testString = "helloWorld"
+        Utility.maskString(testString, 1)
+        self.assertIsInstance(testString, str)
+
+    def test_lenToMask_must_not_be_a_float(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString("helloWorld", 1.1)
+
+    def test_lenToMask_must_not_be_a_list(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString("helloWorld", [1])
+
+    def test_lenToMask_must_not_be_a_dict(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString("helloWorld", {"1": 1})
+
+    def test_lenToMask_must_not_be_a_tuple(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString("helloWorld", (1, 2))
+    def test_lenToMask_must_be_an_int(self):
+        testString = "helloWorld"
+        length = 5
+        Utility.maskString(testString, length)
+        self.assertIsInstance(length, int)
+
+    def test_lenToMask_must_not_be_less_than_0(self):
+        with self.assertRaises(ValueError):
+            Utility.maskString("helloWorld", -1)
+
+    def test_lenToMask_must_be_set_to_string_length_if_greater_than_string_length(self):
+        testString = "helloWorld"
+        length = len(testString)
+        masked = Utility.maskString(testString, length)
+        self.assertEqual(masked, "**********")
+
+    def test_must_not_return_none(self):
+        testString = "helloWorld"
+        length = len(testString)
+        masked = Utility.maskString(testString, length)
+        self.assertIsNotNone(masked)
+
+    def test_must_not_return_a_list(self):
+        testString = "helloWorld"
+        length = len(testString)
+        masked = Utility.maskString(testString, length)
+        self.assertNotIsInstance(masked, list)
+
+    def test_must_return_a_string(self):
+        testString = "helloWorld"
+        length = len(testString)
+        masked = Utility.maskString(testString, length)
+        self.assertIsInstance(masked, str)
+
+    def test_mask_characters_must_be_stars(self):
+        testString = "helloWorld"
+        length = len(testString)
+        masked = Utility.maskString(testString, length)
+        self.assertEqual(masked, "*" * length)
 
 
 if __name__ == '__main__':

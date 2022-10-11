@@ -1,5 +1,3 @@
-from flask import json
-
 from data_access.WalletDataAccess import WalletDataAccess
 from models.Wallet import Wallet
 from models.Utility import Utility
@@ -23,7 +21,7 @@ class WalletController:
                 cryptoDict = {
                     "cryptocurrencyCode": cc[0],
                     "cryptocurrencyName": cc[1],
-                    "sybbol": cc[2]
+                    "symbol": cc[2]
                 }
                 availableCryptocurrencies.append(cryptoDict)
 
@@ -49,9 +47,9 @@ class WalletController:
 
     def getAllWalletDetailsFromWalletAddress(self, jsonReqData):
         try:
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
-            elif not jsonReqData.get("walletAddress"):
+            elif "walletAddress" not in jsonReqData.keys():
                 raise ValueError("Wallet address not provided in request JSON")
             else:
                 walletFE = Wallet()
@@ -69,13 +67,13 @@ class WalletController:
                         walletTransactionDict = {
                             "transactionID": walletTransactionObj.getTransactionID(),
                             "transactionDatetime": Utility.unixTimestampToStrings(walletTransactionObj.getTransactionDatetime()),
-                            "chargeApplied": walletTransactionObj.getChargeApplied(),
-                            "amount": walletTransactionObj.getAmount(),
+                            "chargeApplied": Utility.roundDecimals(walletTransactionObj.getChargeApplied()),
+                            "amount": Utility.roundDecimals(walletTransactionObj.getAmount()),
                             "action": walletTransactionObj.getAction(),
-                            "cardNumber": walletTransactionObj.getCardNumber(),
-                            "expiry": walletTransactionObj.getExpiry(),
-                            "unitsSold": walletTransactionObj.getUnitsSold(),
-                            "initialRate": walletTransactionObj.getInitialRate()
+                            "cardNumber": Utility.maskString(walletTransactionObj.getCardNumber(), 12),
+                            "expiry": Utility.maskString(walletTransactionObj.getExpiry(), 2),
+                            "unitsSold": Utility.roundDecimals(walletTransactionObj.getUnitsSold()),
+                            "initialRate": Utility.roundDecimals(walletTransactionObj.getInitialRate())
                         }
                         walletTransactionList.append(walletTransactionDict)
 
@@ -109,7 +107,7 @@ class WalletController:
 
     def getAllWalletsFromCustomerID(self, jsonReqData):
         try:
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 walletFE = Wallet()
@@ -152,44 +150,44 @@ class WalletController:
     def purchaseWallet(self, jsonReqData):
         try:
             walletFE = Wallet()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 walletFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("initialBalance"):
+            if "initialBalance" not in jsonReqData.keys():
                 raise ValueError("Initial Balance not provided in request JSON")
             else:
                 walletFE.setInitialBalance(Utility.roundDecimals(jsonReqData.get("initialBalance")))
 
-            if not jsonReqData.get("cryptocurrencyCode"):
+            if "cryptocurrencyCode" not in jsonReqData.keys():
                 raise ValueError("Cryptocurrency Code not provided in request JSON")
             else:
                 walletFE.setCryptocurrencyCode(jsonReqData.get("cryptocurrencyCode"))
 
-            if not jsonReqData.get("holdingPeriod"):
+            if "holdingPeriod" not in jsonReqData.keys():
                 raise ValueError("Holding Period not provided in request JSON")
             else:
                 walletFE.setHoldingPeriod(jsonReqData.get("holdingPeriod"))
 
 
             walletTransactionFE = WalletTransactionHistory()
-            if not jsonReqData.get("initialRate"):
+            if "initialRate" not in jsonReqData.keys():
                 raise ValueError("Initial Rate not provided in request JSON")
             else:
                 walletTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-            if not jsonReqData.get("amount"):
+            if "amount" not in jsonReqData.keys():
                 raise ValueError("Amount not provided in request JSON")
             else:
                 walletTransactionFE.setAmount(Utility.roundDecimals(jsonReqData.get("amount")))
 
-            if not jsonReqData.get("cardNumber"):
+            if "cardNumber" not in jsonReqData.keys():
                 raise ValueError("Card Number not provided in request JSON")
             else:
                 walletTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-            if not jsonReqData.get("expiry"):
+            if "expiry" not in jsonReqData.keys():
                 raise ValueError("Expiry not provided in request JSON")
             else:
                 walletTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -233,8 +231,8 @@ class WalletController:
                         "chargeApplied": walletTransactionFE.getChargeApplied(),
                         "amount": walletTransactionFE.getAmount(),
                         "action": walletTransactionFE.getAction(),
-                        "cardNumber": walletTransactionFE.getCardNumber(),
-                        "expiry": walletTransactionFE.getExpiry(),
+                        "cardNumber": Utility.maskString(walletTransactionFE.getCardNumber(), 12),
+                        "expiry": Utility.maskString(walletTransactionFE.getExpiry(), 2),
                         "unitsSold": walletTransactionFE.getUnitsSold(),
                         "initialRate": walletTransactionFE.getInitialRate()
                     }
@@ -255,23 +253,21 @@ class WalletController:
         try:
             walletFE = Wallet()
             walletTransactionFE = WalletTransactionHistory()
-            if not jsonReqData.get("customerID"):
+            if "customerID" not in jsonReqData.keys():
                 raise ValueError("Customer ID not provided in request JSON")
             else:
                 walletFE.setCustomerID(jsonReqData.get("customerID"))
 
-            if not jsonReqData.get("walletAddress"):
+            if "walletAddress" not in jsonReqData.keys():
                 raise ValueError("Wallet Address not provided in request JSON")
             else:
                 walletFE.setWalletAddress(jsonReqData.get("walletAddress"))
 
             walletDA = self.WDA.readWalletFromWalletAddress(walletFE.getWalletAddress())
-
             if jsonReqData.get("customerID") != walletDA.getCustomerID():
                 raise ValueError("Authorization Error")
             else:
-
-                if not jsonReqData.get("unitsSold"):
+                if "unitsSold" not in jsonReqData.keys():
                     raise ValueError("Units Sold not provided in request JSON")
                 else:
                     walletTransactionFE.setUnitsSold(Utility.roundDecimals(jsonReqData.get("unitsSold")))
@@ -286,23 +282,23 @@ class WalletController:
                     walletFE.setCurrentBalance(Utility.roundDecimals(float(walletDA.getCurrentBalance()) - float(walletTransactionFE.getUnitsSold())))
 
 
-                if not jsonReqData.get("initialRate"):
+                if "initialRate" not in jsonReqData.keys():
                     raise ValueError("Initial Rate not provided in request JSON")
                 else:
                     walletTransactionFE.setInitialRate(Utility.roundDecimals(jsonReqData.get("initialRate")))
 
-                if not jsonReqData.get("amount"):
+                if "amount" not in jsonReqData.keys():
                     raise ValueError("Amount not provided in request JSON")
                 else:
                     walletTransactionFE.setAmount(
                         Utility.roundDecimals(float(walletTransactionFE.getUnitsSold()) * float(walletTransactionFE.getInitialRate())))
 
-                if not jsonReqData.get("cardNumber"):
+                if "cardNumber" not in jsonReqData.keys():
                     raise ValueError("Card Number not provided in request JSON")
                 else:
                     walletTransactionFE.setCardNumber(jsonReqData.get("cardNumber"))
 
-                if not jsonReqData.get("expiry"):
+                if "expiry" not in jsonReqData.keys():
                     raise ValueError("Expiry not provided in request JSON")
                 else:
                     walletTransactionFE.setExpiry(jsonReqData.get("expiry"))
@@ -340,8 +336,8 @@ class WalletController:
                             "chargeApplied": walletTransactionFE.getChargeApplied(),
                             "amount": walletTransactionFE.getAmount(),
                             "action": walletTransactionFE.getAction(),
-                            "cardNumber": walletTransactionFE.getCardNumber(),
-                            "expiry": walletTransactionFE.getExpiry(),
+                            "cardNumber": Utility.maskString(walletTransactionFE.getCardNumber(), 12),
+                            "expiry": Utility.maskString(walletTransactionFE.getExpiry(), 2),
                             "unitsSold": walletTransactionFE.getUnitsSold(),
                             "initialRate": walletTransactionFE.getInitialRate()
                         }
@@ -357,5 +353,3 @@ class WalletController:
                     }
                 }
             return response
-
-

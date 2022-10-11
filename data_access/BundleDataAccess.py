@@ -3,6 +3,7 @@ from decouple import config
 from models.Bundle import Bundle
 from models.BundleTransactionHistory import BundleTransactionHistory
 
+
 class BundleDataAccess:
 
     def __init__(self, app):
@@ -23,7 +24,7 @@ class BundleDataAccess:
                       "CryptocurrencyCode VARCHAR(50) NOT NULL, " \
                       "Percentage INT NOT NULL, " \
                       "HoldingPeriod INT NOT NULL" \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 
@@ -34,7 +35,7 @@ class BundleDataAccess:
                       "HoldingPeriod INT NOT NULL," \
                       "PurchaseDatetime INT NOT NULL, " \
                       "Status VARCHAR(20) NOT NULL " \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 
@@ -48,7 +49,7 @@ class BundleDataAccess:
                       "CardNumber VARCHAR(20), " \
                       "Expiry VARCHAR(20), " \
                       "InitialRate FLOAT(53)" \
-                      ")"
+                      ") DEFAULT COLLATE=utf8_bin"
 
         cur.execute(createQuery)
 
@@ -256,10 +257,6 @@ class BundleDataAccess:
         con.commit()
         con.close()
 
-        "TransactionID, BundleAddress, Action, " \
-        "TransactionDateTime, ChargeApplied, " \
-        "Amount, CardNumber, Expiry, InitialRate, "
-
         if result:
             bundleTransactions = []
             for bundleTransaction in result:
@@ -277,7 +274,6 @@ class BundleDataAccess:
                 bundleTransactions.append(bundleTransactionObj)
 
             return bundleTransactions
-
         else:
             raise LookupError("No bundle transactions found for the bundle address proved")
 
@@ -297,8 +293,6 @@ class BundleDataAccess:
 
     
     def readPurchaseBundleTransactionFromBundleAddress(self, bundleAddress):
-        print("readPurchaseBundleTransactionFromBundleAddress entry")
-        print("bundleAddress : ", bundleAddress)
         con = self.mysql.connect()
         cur = con.cursor()
         cur.execute("SELECT * FROM BundleTransactionHistory where Action='BUY' and BundleAddress = '"+bundleAddress+"'")
@@ -307,9 +301,7 @@ class BundleDataAccess:
         cur.close()
         con.commit()
         con.close()
-        print(rowCount)
         if rowCount:
-            print(bundleTransaction)
             bundleTransactionObj = BundleTransactionHistory()
             bundleTransactionObj.setTransactionID(bundleTransaction[0])
             bundleTransactionObj.setBundleAddress(bundleTransaction[1])
@@ -320,8 +312,6 @@ class BundleDataAccess:
             bundleTransactionObj.setCardNumber(bundleTransaction[6])
             bundleTransactionObj.setExpiry(bundleTransaction[7])
             bundleTransactionObj.setInitialRate(bundleTransaction[8])
-            print("bundleTransactionObj :", bundleTransactionObj.__dict__)
-            print("readPurchaseBundleTransactionFromBundleAddress exit")
             return bundleTransactionObj
         else:
             raise LookupError("No bundle transaction record exists")
@@ -336,32 +326,15 @@ class BundleDataAccess:
         con.commit()
         con.close()
         return result
-        
-"""
-    def createBundle(self):
-        print("in bundle data access")
-        # # self.mysql = MySQL()
-        # # Creating a connection cursor
-        # cursor = self.mysql.connect().cursor()
-        #
-        # # Executing SQL Statements
-        # query = "CREATE TABLE test3(id VARCHAR(20), name VARCHAR(20))"
-        # cursor.execute(query)
-        #
-        # query = "INSERT INTO test3('1', 'Nikita')"
-        # cursor.execute(query)
-        #
-        # # Saving the Actions performed on the DB
-        # self.mysql.connect().commit()
-        #
-        # # Closing the cursor
-        # cursor.close()
-        # print(" Table created successfully ")
 
-        conn = self.mysqlDB.connect(MYSQL_DATABASE_USER='root', MYSQL_DATABASE_PASSWORD='', MYSQL_DATABASE_HOST='127.0.0.1')
-        cursorDB = conn.cursor()
-        sql = "CREATE database MYDATABASE"
-        cursor.execute(sql)
-        conn.close()
-        print(" DB created successfully ")
-        """
+    def testDropTables(self):
+        # Just for unit testing
+        con = self.mysql.connect()
+        cur = con.cursor()
+        dropQuery = "DROP TABLE Bundle"
+        cur.execute(dropQuery)
+        dropQuery = "DROP TABLE BundleTransactionHistory"
+        cur.execute(dropQuery)
+        cur.close()
+        con.commit()
+        con.close()

@@ -233,7 +233,7 @@ class TestSignUp(unittest.TestCase):
             "name": "Alan Turing"
         }
         response = self.CController.signUp(reqData)
-        self.assertEqual("customerID" in response.keys(), True)
+        self.assertTrue("customerID" in response.keys())
 
     def test_success_response_emailAddress_key_good_req(self):
         reqData = {
@@ -467,7 +467,7 @@ class TestSignIn(unittest.TestCase):
         }
         r = self.CController.signUp(reqData)
         response = self.CController.signIn(reqData2)
-        self.assertEqual("customerID" in response.keys(), True)
+        self.assertTrue("customerID" in response.keys())
 
     def test_success_response_currentSignInDatetime_key_good_req(self):
         reqData = {
@@ -481,7 +481,7 @@ class TestSignIn(unittest.TestCase):
         }
         r = self.CController.signUp(reqData)
         response = self.CController.signIn(reqData2)
-        self.assertEqual("currentSignInDatetime" in response.keys(), True)
+        self.assertTrue("currentSignInDatetime" in response.keys())
 
     def test_success_response_previousSignInDatetime_key_good_req(self):
         reqData = {
@@ -495,7 +495,7 @@ class TestSignIn(unittest.TestCase):
         }
         r = self.CController.signUp(reqData)
         response = self.CController.signIn(reqData2)
-        self.assertEqual("previousSignInDatetime" in response.keys(), True)
+        self.assertTrue("previousSignInDatetime" in response.keys())
 
     def test_success_response_emailAddress_key_good_req(self):
         reqData = {

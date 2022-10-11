@@ -107,7 +107,7 @@ class BundleController:
                         {
                             "status": {
                                 "statusCode": "SUCCESS",
-                                "statusMessage": "Bundle sold successfully"
+                                "statusMessage": "Details for bundle"
                             },
                             "bundle": {
                                 "bundleAddress": bundleDA.getBundleAddress(),

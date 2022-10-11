@@ -652,6 +652,58 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
         expected = "Authorization Error"
         self.assertEqual(response.get("status").get("statusMessage"), expected)
 
+    def test_failure_statusCode_for_bundle_not_existing(self):
+        reqData = {
+            "bundleAddress": "328hfdSDFjsfih3foejf",
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        expected = "FAILURE"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_failure_statusMessage_for_bundle_not_existing(self):
+        reqData = {
+            "bundleAddress": "328hfdSDFjsfih3foejf",
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        expected = "No bundle found with address provided"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_statuscode_for_correct_request(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        expected = "SUCCESS"
+        self.assertEqual(response.get("status").get("statusCode"), expected)
+
+    def test_success_statusMessage_for_correct_request(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        expected = "Details for bundle"
+        self.assertEqual(response.get("status").get("statusMessage"), expected)
+
+    def test_success_response_is_not_empty(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertIsNot(response, {})
+
+    def test_success_response_key_bundleAddress_is_(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertIsNot(response, {})
+
 """
 "Debo32tKqJBeZwHHgkvx"
 

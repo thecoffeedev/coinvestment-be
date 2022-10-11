@@ -30,6 +30,7 @@ class TestGenerateToken(unittest.TestCase):
     def test_token_length_is_not_more_than_21_characters(self):
         token = self.CController.generateToken()
         self.assertLess(len(token), 21)
+
     def test_token_length_is_not_21_characters(self):
         token = self.CController.generateToken()
         self.assertIsNot(len(token), 21)

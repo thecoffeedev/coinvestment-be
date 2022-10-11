@@ -84,8 +84,8 @@ class BundleController:
                 bundleDA = self.BDA.readBundleByBundleAddress(bundleFE.getBundleAddress())
                 if jsonReqData.get("customerID") != bundleDA.getCustomerID():
                     raise ValueError("Authorization Error")
-                elif "INACTIVE" != bundleDA.getStatus():
-                    raise ValueError("Bundle already sold")
+                # elif "INACTIVE" != bundleDA.getStatus():
+                #     raise ValueError("Bundle already sold")
                 else:
                     bundleTransactionDA = self.BDA.readBundleTransactionsByBundleAddress(bundleFE.getBundleAddress())
 
@@ -111,7 +111,7 @@ class BundleController:
                             },
                             "bundle": {
                                 "bundleAddress": bundleDA.getBundleAddress(),
-                                "bundleId": bundleDA.getBundleID(),
+                                "bundleID": bundleDA.getBundleID(),
                                 "customerID": bundleDA.getCustomerID(),
                                 "holdingPeriod": bundleDA.getHoldingPeriod(),
                                 "purchaseDatetime": Utility.unixTimestampToStrings(bundleDA.getPurchaseDatetime()),

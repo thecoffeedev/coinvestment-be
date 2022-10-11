@@ -566,8 +566,8 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
         self.BDA = BundleDataAccess(app)
 
     def tearDown(self):
-        self.BDA.testDropTables()
-
+        # self.BDA.testDropTables()
+        pass
     def test_failure_statusCode_missing_key_customerID(self):
         reqData = {
             "bundleAddress": "kv908kmPkhFImJrZ4R1i"
@@ -702,7 +702,7 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
-        self.assertTrue("bundleAddress" in response.keys())
+        self.assertTrue("bundleAddress" in response.get("bundle").keys())
 
     def test_success_response_key_bundleAddress_correct(self):
         reqData = {
@@ -710,7 +710,33 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
-        self.assertEqual(response.get("bundleAddress"), "kv908kmPkhFImJrZ4R1i")
+        self.assertEqual(response.get("bundle").get("bundleAddress"),
+                         "kv908kmPkhFImJrZ4R1i")
+
+    def test_success_response_key_bundleID_exists(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertTrue("bundleID" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_exists(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertTrue("customerID" in response.get("bundle").keys())
+
+    def test_success_response_key_customerID_is_correct(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertEqual(response.get("bundle").get("customerID"),
+                         "1WNJKpBpYfWwKIlvbaz0")
 
 """
 "Debo32tKqJBeZwHHgkvx"

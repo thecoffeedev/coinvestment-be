@@ -62,6 +62,19 @@ class Utility:
         return t.strftime("%d-%m-%Y") + " " + t.strftime("%H:%M:%S")
 
     @staticmethod
+    def maskString(strToMask, lenToMask):
+        if type(strToMask) != str:
+            raise ValueError("strToMask must be a string")
+        elif type(lenToMask) != int:
+            raise ValueError("lenToMask must be an int")
+        if lenToMask < 0:
+            raise ValueError("lenToMask must not be less than 0")
+        elif lenToMask > len(strToMask):
+            lenToMask = len(strToMask)
+
+        return "".join("*" for i in range(lenToMask)) + strToMask[lenToMask:]
+
+    @staticmethod
     def roundDecimals(decimalValue):
         return round(float(decimalValue), 4)
 
@@ -79,3 +92,5 @@ class Utility:
             return True
         else:
             return False
+
+

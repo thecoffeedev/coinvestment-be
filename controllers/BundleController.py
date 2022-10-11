@@ -23,7 +23,6 @@ class BundleController:
 
     def getAllAvailableBundles(self):
         try:
-            print("getAllAvailableBundles entry")
             availableBundlesDA = self.BDA.readAllAvailableBundles()
 
             availableBundlesDict = defaultdict(list)
@@ -56,15 +55,13 @@ class BundleController:
                 {
                     "status": {
                         "statusCode": "SUCCESS",
-                        "statusMessage": "Bundle sold successfully"
+                        "statusMessage": "All available bundles"
                     },
                     "availableBundles": availableBundles
                 }
-            print("response :", response)
             return response
 
         except Exception as e:
-            print("getAllAvailableBundles exception", e)
             response = \
                 {
                     "status": {
@@ -72,13 +69,10 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllAvailableBundles exception", response)
             return response
 
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
-            print("getAllBundleDetailsFromBundleAddress entry")
-            print("jsonReqData : ", jsonReqData)
             if not jsonReqData.get("customerID"):
                 raise ValueError("Customer ID not provided in request JSON")
             elif not jsonReqData.get("bundleAddress"):
@@ -109,8 +103,6 @@ class BundleController:
                         }
                         bundleTransactionList.append(bundleTransactionDict)
 
-                    print("bundleTransactionList :", bundleTransactionList)
-
                     response = \
                         {
                             "status": {
@@ -127,11 +119,9 @@ class BundleController:
                             },
                             "bundleTransaction": bundleTransactionList
                         }
-                    print("response :", response)
                     return response
 
         except Exception as e:
-            print("getAllBundleDetailsFromBundleAddress exception", e)
             response = \
                 {
                     "status": {
@@ -139,13 +129,10 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllBundleDetailsFromBundleAddress exception", response)
             return response
     
     def getAllBundlesFromCustomerID(self, jsonReqData):
         try:
-            print("getAllBundlesFromCustomerID entry")
-            print("jsonReqData : ", jsonReqData)
             if not jsonReqData.get("customerID"):
                 raise ValueError("Customer ID not provided in request JSON")
             else:
@@ -166,21 +153,17 @@ class BundleController:
                     }
                     bundleList.append(bundleDict)
 
-                print("bundleList :", bundleList)
-
                 response = \
                     {
                         "status": {
                             "statusCode": "SUCCESS",
-                            "statusMessage": "Units sold successfully"
+                            "statusMessage": "All bundles for customer"
                         },
                         "bundle": bundleList
                     }
-                print("response :", response)
                 return response
 
         except Exception as e:
-            print("getAllBundlesFromCustomerID exception", e)
             response = \
                 {
                     "status": {
@@ -188,15 +171,11 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("getAllBundlesFromCustomerID exception", response)
+
             return response
-        print("getAllBundlesFromCustomerID exit")
         
     def purchaseBundle(self, jsonReqData):
         try:
-            print("purchaseBundle entry")
-            print("jsonReqData : ", jsonReqData)
-
             bundleFE = Bundle()
             if not jsonReqData.get("customerID"):
                 raise ValueError("Customer ID not provided in request JSON")
@@ -249,8 +228,6 @@ class BundleController:
             bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
             bundleTransactionFE.setAction("BUY")
 
-            print("bundleFE : ", bundleFE.__dict__)
-            print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
             self.BDA.insertBundle(bundleFE)
             self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
 
@@ -282,7 +259,7 @@ class BundleController:
             return response
 
         except Exception as e:
-            print("purchaseBundle exception", e)
+
             response = \
                 {
                     "status": {
@@ -290,15 +267,11 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("purchaseBundle exception", response)
+
             return response
-        print("purchaseBundle exit")
 
     def sellBundle(self, jsonReqData):
         try:
-            print("sellBundle entry")
-            print("jsonReqData : ", jsonReqData)
-
             bundleFE = Bundle()
             bundleTransactionFE = BundleTransactionHistory()
             if not jsonReqData.get("customerID"):
@@ -352,8 +325,6 @@ class BundleController:
                     bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
                 bundleTransactionFE.setAction("SELL")
 
-                print("bundleFE : ", bundleFE.__dict__)
-                print("bundleTransactionFE : ", bundleTransactionFE.__dict__)
                 self.BDA.updateBundleStatus(bundleFE)
                 self.BDA.insertBundleTransactionHistory(bundleTransactionFE)
 
@@ -385,7 +356,7 @@ class BundleController:
                 return response
 
         except Exception as e:
-            print("sellBundle exception", e)
+
             response = \
                 {
                     "status": {
@@ -393,6 +364,5 @@ class BundleController:
                         "statusMessage": e.args[0]
                     }
                 }
-            print("sellBundle exception", response)
+
             return response
-        print("sellBundle exit")

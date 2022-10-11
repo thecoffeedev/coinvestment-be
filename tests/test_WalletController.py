@@ -134,6 +134,24 @@ class TestGetAllWalletDetailsFromWalletAddress(unittest.TestCase):
         expected = "No wallet exists"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
+    def test_success_code_wallet_available(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        expected = "SUCCESS"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_failure_code_wallet_unavailable(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIcT"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        expected = "FAILURE"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
     def test_success_response_walletAddress_key_present_in_res(self):
         jsonReqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx",
@@ -254,6 +272,21 @@ class TestGetAllWalletDetailsFromWalletAddress(unittest.TestCase):
         response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
         self.assertTrue("initialRate" in response.get("walletTransactions")[0].keys())
 
+    def test_success_response_key_customerID_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        self.assertEqual("Debo32tKqJBeZwHHgkvx", response.get("wallet").get(("customerID")))
+
+    def test_success_response_key_walletAddress_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        self.assertEqual("hrD3IxwVUWloVP0nrIct", response.get("wallet").get(("walletAddress")))
 
 
 class TestGetAllWalletsFromCustomerID(unittest.TestCase):
@@ -353,6 +386,37 @@ class TestGetAllWalletsFromCustomerID(unittest.TestCase):
         }
         response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
         self.assertTrue("holdingPeriod" in response.get("wallet")[0].keys())
+
+    def test_success_response_key_customerID_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
+        self.assertEqual("Debo32tKqJBeZwHHgkvx", response.get("wallet")[0].get(("customerID")))
+
+    def test_failure_code_wallets_not_present_for_customerID(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvX"
+        }
+        response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
+        expected = "FAILURE"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_code_wallets_list(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
+        expected = "SUCCESS"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_message_wallets_list(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
+        expected = "All wallets for customer"
+        self.assertEqual(expected, response.get("status")["statusMessage"])
 
 
 class TestPurchaseWallet(unittest.TestCase):
@@ -969,6 +1033,147 @@ class TestPurchaseWallet(unittest.TestCase):
         response = self.wController.purchaseWallet(jsonReqData)
         self.assertEqual(0.0, response["walletTransaction"].get("unitsSold"))
 
+    def test_success_response_key_customerID_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual("Debo32tKqJBeZwHHgkvx", response.get("wallet").get(("customerID")))
+
+    def test_success_response_key_initialBalance_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual(1.9492, response.get("wallet").get(("initialBalance")))
+
+    def test_success_response_key_cryptocurrencyCode_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual("bitcoin", response.get("wallet").get(("cryptocurrencyCode")))
+
+    def test_success_response_key_holdingPeriod_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual(4, response.get("wallet").get(("holdingPeriod")))
+
+    def test_success_response_key_initialRate_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual(38291.34, response.get("walletTransaction").get(("initialRate")))
+
+    def test_success_response_key_amount_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual(74638.99, response.get("walletTransaction").get(("amount")))
+
+    def test_success_response_key_cardNumber_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual("************1963", response.get("walletTransaction").get(("cardNumber")))
+
+    def test_success_response_key_expiry_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual("**/23", response.get("walletTransaction").get(("expiry")))
+
+    def test_success_code_cryptocurrency_purchased(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        expected = "SUCCESS"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_message_cryptocurrency_purchased(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        expected = "Cryptocurrency purchased"
+        self.assertEqual(expected, response.get("status")["statusMessage"])
 
 
 class TestSellWallet(unittest.TestCase):
@@ -1146,7 +1351,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amt":74638.99
+            "amt": 38.2913
         }
         response = self.wController.sellWallet(jsonReqData)
         self.assertEqual("FAILURE", response.get("status")["statusCode"])
@@ -1157,7 +1362,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amt": 74638.99
+            "amt": 38.2913
         }
         response = self.wController.sellWallet(jsonReqData)
         expected = "Amount not provided in request JSON"
@@ -1169,7 +1374,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99
+            "amount": 38.2913
         }
         response = self.wController.sellWallet(jsonReqData)
         self.assertEqual("FAILURE", response.get("status")["statusCode"])
@@ -1180,7 +1385,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99
+            "amount": 38.2913
         }
         response = self.wController.sellWallet(jsonReqData)
         expected = "Card Number not provided in request JSON"
@@ -1192,7 +1397,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "card": 7281726537281963
         }
         response = self.wController.sellWallet(jsonReqData)
@@ -1204,7 +1409,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "card": 7281726537281963
         }
         response = self.wController.sellWallet(jsonReqData)
@@ -1217,7 +1422,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963"
         }
         response = self.wController.sellWallet(jsonReqData)
@@ -1229,7 +1434,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963"
         }
         response = self.wController.sellWallet(jsonReqData)
@@ -1242,7 +1447,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount":74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "exp": "12/23"
         }
@@ -1255,7 +1460,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "exp": "12/23"
         }
@@ -1269,7 +1474,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1282,7 +1487,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1295,7 +1500,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1308,7 +1513,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1321,7 +1526,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1334,7 +1539,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1347,7 +1552,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1360,7 +1565,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1373,7 +1578,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1386,7 +1591,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1399,7 +1604,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1412,7 +1617,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1425,7 +1630,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1438,7 +1643,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1451,7 +1656,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.001,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1464,7 +1669,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.0,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1477,7 +1682,7 @@ class TestSellWallet(unittest.TestCase):
             "walletAddress": "hrD3IxwVUWloVP0nrIct",
             "unitsSold": 0.0,
             "initialRate": 38291.34,
-            "amount": 74638.99,
+            "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
@@ -1487,11 +1692,136 @@ class TestSellWallet(unittest.TestCase):
 
     def test_failure_msg_authorization_error_walletAddress_does_not_belong_to_logged_in_customer(self):
         jsonReqData = {
-            "customerID": "1WNJKpBpYfWwKIlvbaz0",
-            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "jNrxO4OyXgdqum0wj2LV",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
         }
-        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        response = self.wController.sellWallet(jsonReqData)
         expected = "Authorization Error"
+        self.assertEqual(expected, response.get("status")["statusMessage"])
+
+    def test_failure_code_authorization_error_walletAddress_does_not_belong_to_logged_in_customer(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvX",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        expected = "FAILURE"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_response_key_customerID_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual("Debo32tKqJBeZwHHgkvx", response.get("wallet").get(("customerID")))
+
+    def test_success_response_key_walletAddress_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual("hrD3IxwVUWloVP0nrIct", response.get("wallet").get(("walletAddress")))
+
+    def test_success_response_key_initialRate_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual(38291.34, response.get("walletTransaction").get(("initialRate")))
+
+    def test_success_response_key_amount_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual(38.2913, response.get("walletTransaction").get(("amount")))
+
+    def test_success_response_key_cardNumber_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual("************1963", response.get("walletTransaction").get(("cardNumber")))
+
+    def test_success_response_key_expiry_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual("**/23", response.get("walletTransaction").get(("expiry")))
+
+    def test_success_code_units_sold(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        expected = "SUCCESS"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_message_units_sold(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        expected = "Units sold successfully"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
 

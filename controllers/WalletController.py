@@ -214,7 +214,7 @@ class WalletController:
             response = \
                 {
                     "status": {
-                        "statusCode": "SUCCESS/FAILURE",
+                        "statusCode": "SUCCESS",
                         "statusMessage": "Cryptocurrency purchased"
                     },
                     "wallet": {
@@ -319,7 +319,7 @@ class WalletController:
                 response = \
                     {
                         "status": {
-                            "statusCode": "SUCCESS/FAILURE",
+                            "statusCode": "SUCCESS",
                             "statusMessage": "Units sold successfully"
                         },
                         "wallet": {

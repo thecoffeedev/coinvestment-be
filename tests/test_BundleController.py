@@ -696,13 +696,21 @@ class TestGetAllBundleDetailsFromBundleAddress(unittest.TestCase):
         response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
         self.assertIsNot(response, {})
 
-    def test_success_response_key_bundleAddress_is_(self):
+    def test_success_response_key_bundleAddress_exists(self):
         reqData = {
             "bundleAddress": "kv908kmPkhFImJrZ4R1i",
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
-        self.assertIsNot(response, {})
+        self.assertTrue("bundleAddress" in response.keys())
+
+    def test_success_response_key_bundleAddress_correct(self):
+        reqData = {
+            "bundleAddress": "kv908kmPkhFImJrZ4R1i",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundleDetailsFromBundleAddress(reqData)
+        self.assertEqual(response.get("bundleAddress"), "kv908kmPkhFImJrZ4R1i")
 
 """
 "Debo32tKqJBeZwHHgkvx"

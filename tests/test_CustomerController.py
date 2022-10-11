@@ -226,7 +226,7 @@ class TestSignUp(unittest.TestCase):
         expected = "SUCCESS"
         self.assertEqual(response.get("status")["statusCode"], expected)
 
-    def test_success_response_customerID_key_good_req(self):
+    def test_success_response_key_customerID_exists(self):
         reqData = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password",
@@ -455,7 +455,7 @@ class TestSignIn(unittest.TestCase):
         expected = "Successfully signed in customer"
         self.assertEqual(response.get("status")["statusMessage"], expected)
 
-    def test_success_response_customerID_key_good_req(self):
+    def test_success_response_key_customerID_exists(self):
         reqData = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password",
@@ -469,7 +469,7 @@ class TestSignIn(unittest.TestCase):
         response = self.CController.signIn(reqData2)
         self.assertTrue("customerID" in response.keys())
 
-    def test_success_response_currentSignInDatetime_key_good_req(self):
+    def test_success_response_key_currentSignInDatetime_exists(self):
         reqData = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password",
@@ -483,7 +483,7 @@ class TestSignIn(unittest.TestCase):
         response = self.CController.signIn(reqData2)
         self.assertTrue("currentSignInDatetime" in response.keys())
 
-    def test_success_response_previousSignInDatetime_key_good_req(self):
+    def test_success_response_key_previousSignInDatetime_exists(self):
         reqData = {
             "emailAddress": "alan.turing@hotmail.com",
             "password": "password",

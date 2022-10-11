@@ -96,7 +96,7 @@ class TestUnitsSold(unittest.TestCase):
             self.newWalletTransactionHistory.setUnitsSold(None)
 
     def test_unitsSold_must_not_be_none_when_set(self):
-        self.newWalletTransactionHistory.setUnitsSold(5)
+        self.newWalletTransactionHistory.setUnitsSold(5.0)
         self.assertIsNotNone(self.newWalletTransactionHistory.getUnitsSold())
 
     def test_unitsSold_must_not_be_str(self):
@@ -104,19 +104,19 @@ class TestUnitsSold(unittest.TestCase):
             self.newWalletTransactionHistory.setUnitsSold("12345678901234567890")
 
     def test_unitsSold_must_not_be_a_negative_int(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.newWalletTransactionHistory.setUnitsSold(-1)
 
     def test_unitsSold_must_not_be_a_negative_float(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             self.newWalletTransactionHistory.setUnitsSold(-0.01)
 
-    def test_unitsSold_must_not_be_a_positive_float_whole_number(self):
+    def test_unitsSold_must_not_be_a_positive_int_number(self):
         with self.assertRaises(TypeError):
-            self.newWalletTransactionHistory.setUnitsSold(1.00)
+            self.newWalletTransactionHistory.setUnitsSold(1)
 
     def test_unitsSold_must_not_be_a_negative_float_whole_number(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             self.newWalletTransactionHistory.setUnitsSold(-1.00)
 
     def test_unitsSold_must_not_be_a_true_bool(self):
@@ -127,14 +127,14 @@ class TestUnitsSold(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.newWalletTransactionHistory.setUnitsSold(False)
 
-    def test_unitsSold_must_be_int(self):
-        self.newWalletTransactionHistory.setUnitsSold(1)
-        self.assertIsInstance(self.newWalletTransactionHistory.getUnitsSold(), int)
+    def test_unitsSold_must_be_float(self):
+        self.newWalletTransactionHistory.setUnitsSold(1.0)
+        self.assertIsInstance(self.newWalletTransactionHistory.getUnitsSold(), float)
 
     def test_unitsSold_must_be_set_correctly_at_initilization_when_provided_zero(self):
-        self.newWalletTransactionHistory = WalletTransactionHistory(unitsSold=0)
-        self.assertEqual(self.newWalletTransactionHistory.getUnitsSold(), 0)
+        self.newWalletTransactionHistory = WalletTransactionHistory(unitsSold=0.0)
+        self.assertEqual(self.newWalletTransactionHistory.getUnitsSold(), 0.0)
 
     def test_unitsSold_must_be_set_correctly_at_initilization_when_provided(self):
-        self.newWalletTransactionHistory = WalletTransactionHistory(unitsSold=5)
-        self.assertEqual(self.newWalletTransactionHistory.getUnitsSold(), 5)
+        self.newWalletTransactionHistory = WalletTransactionHistory(unitsSold=5.0)
+        self.assertEqual(self.newWalletTransactionHistory.getUnitsSold(), 5.0)

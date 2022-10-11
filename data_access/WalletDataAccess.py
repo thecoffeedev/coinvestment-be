@@ -194,7 +194,6 @@ class WalletDataAccess:
         cur.execute("SELECT * FROM Wallet where WalletAddress = %s", walletAddress)
         rowCount = cur.rowcount
         wallet = cur.fetchone()
-        print(wallet)
         cur.close()
         con.commit()
         con.close()

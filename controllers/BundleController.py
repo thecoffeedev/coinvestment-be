@@ -12,6 +12,7 @@ class BundleController:
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
 
+
     def getBundleNameByBundleID(self, bundleID):
         dict = {"1": ["Alpha", "Low risk", "Short term"], "2": ["Beta", "Medium risk", "Short term"],
                 "3": ["Mu", "Low risk", "Medium term"], "4": ["Omega", "Medium risk", "Medium term"],
@@ -129,7 +130,7 @@ class BundleController:
                     }
                 }
             return response
-    
+
     def getAllBundlesFromCustomerID(self, jsonReqData):
         try:
             if "customerID" not in jsonReqData.keys():
@@ -139,16 +140,31 @@ class BundleController:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
                 bundleDA = self.BDA.readBundlesByCustomerID(bundleFE.getCustomerID())
+                purchaseBundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(bundleDA[0].getBundleAddress())
+                allAvailableBundlesRes = self.getAllAvailableBundles();
+                allAvailableBundlesList = allAvailableBundlesRes.get("availableBundles")
 
                 bundleList = []
                 for bundleObj in bundleDA:
+                    availableBundleObj = {}
+                    for availableBundle in allAvailableBundlesList:
+                        if bundleObj.getBundleID() == availableBundle.get("bundleID"):
+                            availableBundleObj = availableBundle
+                            break
+
                     bundleDict = {
                         "bundleAddress": bundleObj.getBundleAddress(),
                         "bundleID": bundleObj.getBundleID(),
                         "customerID": bundleObj.getCustomerID(),
                         "holdingPeriod": bundleObj.getHoldingPeriod(),
                         "purchaseDatetime": Utility.unixTimestampToStrings(bundleObj.getPurchaseDatetime()),
-                        "status": bundleObj.getStatus()
+                        "status": bundleObj.getStatus(),
+                        "amount": Utility.roundDecimals(purchaseBundleTransactionDA.getAmount()),
+                        "bundleName": availableBundleObj.get("bundleName"),
+                        "riskLevel": availableBundleObj.get("riskLevel"),
+                        "term": availableBundleObj.get("term"),
+                        "minimumHoldingPeriod": availableBundleObj.get("minimumHoldingPeriod"),
+                        "bundleCryptocurrencies": availableBundleObj.get("bundleCryptocurrencies")
                     }
                     bundleList.append(bundleDict)
 

@@ -206,32 +206,32 @@
 > * `bundleCryptocurrencies` is a list of the cryptocurrencies in that bundle
 ### Bundles 
 
-| ID  | code | percent | minimum holding |
-|:----|:-----|--------:|----------------:|
-| 1   | btc  |      50 |               6 |
-| 1   | eth  |      50 |               6 |
-| 2   | bch  |      25 |              12 |
-| 2   | eth  |      15 |              12 |
-| 2   | xrp  |      15 |              12 |
-| 2   | ltc  |      25 |              12 |
-| 2   | xmr  |      20 |              12 |
-| 3   | doge |      20 |              12 |
-| 3   | shib |      20 |              12 |
-| 3   | etc  |      30 |              12 |
-| 3   | ape  |      30 |              12 |
-| 4   | link |      20 |              12 |
-| 4   | mana |      20 |              12 |
-| 4   | qnt  |      20 |              12 |
-| 4   | wbtc |      20 |              12 |
-| 4   | usdc |      20 |              12 |
-| 5   | dai  |      20 |              12 |
-| 5   | bnb  |      20 |              12 |
-| 5   | sol  |      20 |              12 |
-| 6   | algo |      20 |              18 |     
-| 6   | busd |      20 |              18 |
-| 6   | flow |      20 |              18 |
-| 6   | fil  |      20 |              18 |
-| 6   | dot  |      20 |              18 |
+| ID  | code               | percent | minimum holding |
+|:----|:-------------------|--------:|----------------:|
+| 1   | bitcoin            |      50 |               6 |
+| 1   | ethereum           |      50 |               6 |
+| 2   | bitcoin-cash       |      25 |              12 |
+| 2   | tetcher            |      15 |              12 |
+| 2   | ripple             |      15 |              12 |
+| 2   | litecoin           |      25 |              12 |
+| 2   | monero             |      20 |              12 |
+| 3   | dogecoin           |      20 |              12 |
+| 3   | shiba-inu          |      20 |              12 |
+| 3   | ethereum-classic   |      30 |              12 |
+| 3   | apecoin            |      30 |              12 |
+| 4   | chainlink          |      20 |              12 |
+| 4   | decentraland       |      20 |              12 |
+| 4   | quant-network      |      20 |              12 |
+| 4   | wrapped-bitcoin    |      20 |              12 |
+| 4   | usd-coin           |      20 |              12 |
+| 5   | dai                |      20 |              12 |
+| 5   | binancecoin        |      20 |              12 |
+| 5   | solana             |      20 |              12 |
+| 6   | algorand           |      20 |              18 |     
+| 6   | binance-usd        |      20 |              18 |
+| 6   | flow               |      20 |              18 |
+| 6   | filecoin           |      20 |              18 |
+| 6   | polkadot           |      20 |              18 |
 
 - - - - -
 # Customer account

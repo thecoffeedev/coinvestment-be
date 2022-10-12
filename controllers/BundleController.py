@@ -13,9 +13,9 @@ class BundleController:
         self.BDA.insertDayZeroData()
 
     def getBundleNameByBundleID(self, bundleID):
-        dict = {'1': ('Alpha', 'Low risk/Short term'), '2': ('Beta', 'Medium risk/Short term'),
-                '3': ('Mu', 'Low risk/Medium term'), '4': ('Omega', 'Medium risk/Medium term'),
-                '5': ('Pi', 'Medium risk/Long term'), '6': ('Sigma', 'High risk/Long term')}
+        dict = {"1": ["Alpha", "Low risk", "Short term"], "2": ["Beta", "Medium risk", "Short term"],
+                "3": ["Mu", "Low risk", "Medium term"], "4": ["Omega", "Medium risk", "Medium term"],
+                "5": ["Pi", "Medium risk", "Long term"], "6": ["Sigma", "High risk", "Long term"]}
         if bundleID in dict.keys():
             return dict[bundleID]
         else:
@@ -45,6 +45,7 @@ class BundleController:
                 availableBundle = {
                     "bundleName": bundleNameDict[0],
                     "riskLevel": bundleNameDict[1],
+                    "term": bundleNameDict[2],
                     "minimumHoldingPeriod": availableBundlesDict[bundleGroup][0][3],
                     "bundleID": availableBundlesDict[bundleGroup][0][0],
                     "bundleCryptocurrencies": bundleCryptocurrenciesList

@@ -21,13 +21,13 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
         bundle = self.BController.getBundleNameByBundleID("1")
         self.assertNotIsInstance(bundle, set)
 
-    def test_does_not_return_a_list(self):
+    def test_does_not_return_a_tuple(self):
         bundle = self.BController.getBundleNameByBundleID("1")
-        self.assertNotIsInstance(bundle, list)
+        self.assertNotIsInstance(bundle, tuple)
 
-    def test_does_return_a_tuple(self):
+    def test_does_return_a_list(self):
         bundle = self.BController.getBundleNameByBundleID("1")
-        self.assertIsInstance(bundle, tuple)
+        self.assertIsInstance(bundle, list)
 
     def test_does_not_return_empty_tuple(self):
         bundle = self.BController.getBundleNameByBundleID("1")
@@ -47,7 +47,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_1(self):
         bundle = self.BController.getBundleNameByBundleID("1")
-        self.assertEqual(bundle[1], "Low risk/Short term")
+        self.assertEqual(bundle[1], "Low risk")
+
+    def test_correct_value_term_for_key_1(self):
+        bundle = self.BController.getBundleNameByBundleID("1")
+        self.assertEqual(bundle[2], "Short term")
 
     def test_correct_value_name_for_key_2(self):
         bundle = self.BController.getBundleNameByBundleID("2")
@@ -55,7 +59,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_2(self):
         bundle = self.BController.getBundleNameByBundleID("2")
-        self.assertEqual(bundle[1], "Medium risk/Short term")
+        self.assertEqual(bundle[1], "Medium risk")
+
+    def test_correct_value_term_for_key_2(self):
+        bundle = self.BController.getBundleNameByBundleID("2")
+        self.assertEqual(bundle[2], "Short term")
 
     def test_correct_value_name_for_key_3(self):
         bundle = self.BController.getBundleNameByBundleID("3")
@@ -63,7 +71,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_3(self):
         bundle = self.BController.getBundleNameByBundleID("3")
-        self.assertEqual(bundle[1], "Low risk/Medium term")
+        self.assertEqual(bundle[1], "Low risk")
+
+    def test_correct_value_term_for_key_3(self):
+        bundle = self.BController.getBundleNameByBundleID("3")
+        self.assertEqual(bundle[2], "Medium term")
 
     def test_correct_value_name_for_key_4(self):
         bundle = self.BController.getBundleNameByBundleID("4")
@@ -71,7 +83,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_4(self):
         bundle = self.BController.getBundleNameByBundleID("4")
-        self.assertEqual(bundle[1], "Medium risk/Medium term")
+        self.assertEqual(bundle[1], "Medium risk")
+
+    def test_correct_value_term_for_key_4(self):
+        bundle = self.BController.getBundleNameByBundleID("4")
+        self.assertEqual(bundle[2], "Medium term")
 
     def test_correct_value_name_for_key_5(self):
         bundle = self.BController.getBundleNameByBundleID("5")
@@ -79,7 +95,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_5(self):
         bundle = self.BController.getBundleNameByBundleID("5")
-        self.assertEqual(bundle[1], "Medium risk/Long term")
+        self.assertEqual(bundle[1], "Medium risk")
+
+    def test_correct_value_term_for_key_5(self):
+        bundle = self.BController.getBundleNameByBundleID("5")
+        self.assertEqual(bundle[2], "Long term")
 
     def test_correct_value_name_for_key_6(self):
         bundle = self.BController.getBundleNameByBundleID("6")
@@ -87,7 +107,11 @@ class TestGetBundleNameByBundleID(unittest.TestCase):
 
     def test_correct_value_risk_for_key_6(self):
         bundle = self.BController.getBundleNameByBundleID("6")
-        self.assertEqual(bundle[1], "High risk/Long term")
+        self.assertEqual(bundle[1], "High risk")
+
+    def test_correct_value_term_for_key_6(self):
+        bundle = self.BController.getBundleNameByBundleID("6")
+        self.assertEqual(bundle[2], "Long term")
 
 
 class TestGetAllAvailableBundles(unittest.TestCase):
@@ -127,8 +151,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_1(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "Low risk/Short term"
+        expected = "Low risk"
         self.assertEqual(bundles.get("availableBundles")[0].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_1(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Short term"
+        self.assertEqual(bundles.get("availableBundles")[0].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_1(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -174,8 +203,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_2(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "Medium risk/Short term"
+        expected = "Medium risk"
         self.assertEqual(bundles.get("availableBundles")[1].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_2(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Short term"
+        self.assertEqual(bundles.get("availableBundles")[1].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_2(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -264,8 +298,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_3(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "Low risk/Medium term"
+        expected = "Low risk"
         self.assertEqual(bundles.get("availableBundles")[2].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_3(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Medium term"
+        self.assertEqual(bundles.get("availableBundles")[2].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_3(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -340,8 +379,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_4(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "Medium risk/Medium term"
+        expected = "Medium risk"
         self.assertEqual(bundles.get("availableBundles")[3].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_4(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Medium term"
+        self.assertEqual(bundles.get("availableBundles")[3].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_4(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -430,8 +474,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_5(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "Medium risk/Long term"
+        expected = "Medium risk"
         self.assertEqual(bundles.get("availableBundles")[4].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_5(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Long term"
+        self.assertEqual(bundles.get("availableBundles")[4].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_5(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -485,8 +534,13 @@ class TestGetAllAvailableBundles(unittest.TestCase):
 
     def test_riskLevel_is_correct_for_bundle_6(self):
         bundles = self.BController.getAllAvailableBundles()
-        expected = "High risk/Long term"
+        expected = "High risk"
         self.assertEqual(bundles.get("availableBundles")[5].get("riskLevel"), expected)
+
+    def test_term_is_correct_for_bundle_6(self):
+        bundles = self.BController.getAllAvailableBundles()
+        expected = "Long term"
+        self.assertEqual(bundles.get("availableBundles")[5].get("term"), expected)
 
     def test_bundleCryptocurrencies_is_correct_for_bundle_6(self):
         bundles = self.BController.getAllAvailableBundles()
@@ -877,6 +931,20 @@ class TestGetAllBundlesFromCustomerID(unittest.TestCase):
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
         self.assertTrue("status" in response.get("bundles")[0])
+
+    def test_success_reponse_cryptocurrencies_for_bundles(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        print(response)
+
+    def test_success_reponse_cryptocurrencies_for_bundles(self):
+        reqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        print(response)
 
 
 class TestPurchaseBundle(unittest.TestCase):

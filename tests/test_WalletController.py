@@ -34,6 +34,10 @@ class TestGetAllAvailableCryptocurrencies(unittest.TestCase):
         expected = "List of all available cryptocurrencies"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
+    def test_success_available_cryptocurrencies_instanceOf_list(self):
+        response = self.wController.getAllAvailableCryptocurrencies()
+        self.assertIsInstance(response.get("availableCryptocurrencies"), list)
+
 
 class TestGetAllWalletDetailsFromWalletAddress(unittest.TestCase):
 
@@ -151,6 +155,22 @@ class TestGetAllWalletDetailsFromWalletAddress(unittest.TestCase):
         response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
         expected = "FAILURE"
         self.assertEqual(expected, response.get("status")["statusCode"])
+
+    def test_success_wallet_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        self.assertIsInstance(response.get("wallet"), dict)
+
+    def test_success_walletTransaction_instanceOf_list(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct"
+        }
+        response = self.wController.getAllWalletDetailsFromWalletAddress(jsonReqData)
+        self.assertIsInstance(response.get("walletTransactions"), list)
 
     def test_success_response_walletAddress_key_present_in_res(self):
         jsonReqData = {
@@ -344,6 +364,13 @@ class TestGetAllWalletsFromCustomerID(unittest.TestCase):
         response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
         expected = "No wallet exists"
         self.assertEqual(expected, response.get("status")["statusMessage"])
+
+    def test_success_wallet_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx"
+        }
+        response = self.wController.getAllWalletsFromCustomerID(jsonReqData)
+        self.assertIsInstance(response.get("wallet"), list)
 
     def test_success_response_walletAddress_key_present_in_res(self):
         jsonReqData = {
@@ -767,6 +794,34 @@ class TestPurchaseWallet(unittest.TestCase):
         expected = "Expiry not provided in request JSON"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
+    def test_success_wallet_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertIsInstance(response.get("wallet"), dict)
+
+    def test_success_walletTransaction_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertIsInstance(response.get("walletTransaction"), dict)
+
     def test_success_response_walletAddress_key_present_in_res(self):
         jsonReqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx",
@@ -1175,6 +1230,20 @@ class TestPurchaseWallet(unittest.TestCase):
         expected = "Cryptocurrency purchased"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
+    def test_success_response_key_action_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        self.assertEqual("BUY", response.get("walletTransaction").get(("action")))
+
 
 class TestSellWallet(unittest.TestCase):
 
@@ -1467,6 +1536,32 @@ class TestSellWallet(unittest.TestCase):
         response = self.wController.sellWallet(jsonReqData)
         expected = "Expiry not provided in request JSON"
         self.assertEqual(expected, response.get("status")["statusMessage"])
+
+    def test_success_wallet_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertIsInstance(response.get("wallet"), dict)
+
+    def test_success_walletTransaction_instanceOf_dict(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertIsInstance(response.get("walletTransaction"), dict)
 
     def test_success_response_walletAddress_key_present_in_res(self):
         jsonReqData = {
@@ -1783,6 +1878,19 @@ class TestSellWallet(unittest.TestCase):
         response = self.wController.sellWallet(jsonReqData)
         self.assertEqual("************1963", response.get("walletTransaction").get(("cardNumber")))
 
+    def test_success_response_key_action_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": "hrD3IxwVUWloVP0nrIct",
+            "unitsSold": 0.001,
+            "initialRate": 38291.34,
+            "amount": 38.2913,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual("SELL", response.get("walletTransaction").get(("action")))
+
     def test_success_response_key_expiry_value_correct(self):
         jsonReqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx",
@@ -1810,18 +1918,57 @@ class TestSellWallet(unittest.TestCase):
         expected = "SUCCESS"
         self.assertEqual(expected, response.get("status")["statusCode"])
 
-    def test_success_message_units_sold(self):
+    def test_failure_code_unitsSold_exceeding_currentBalance(self):
         jsonReqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx",
-            "walletAddress": "hrD3IxwVUWloVP0nrIct",
-            "unitsSold": 0.001,
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
             "initialRate": 38291.34,
-            "amount": 38.2913,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": response.get("wallet").get("walletAddress"),
+            "unitsSold": 2.00,
+            "initialRate": 42710.34,
+            "amount": 85420.68,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
         response = self.wController.sellWallet(jsonReqData)
-        expected = "Units sold successfully"
+        expected = "FAILURE"
+        self.assertEqual(expected, response.get("status")["statusCode"])
+
+
+    def test_failure_message_unitsSold_exceeding_currentBalance(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": response.get("wallet").get("walletAddress"),
+            "unitsSold": 2.00,
+            "initialRate": 42710.34,
+            "amount": 85420.68,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        expected = "Units to sell must not be greater than the Current Balance"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
 

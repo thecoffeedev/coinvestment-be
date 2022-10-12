@@ -894,7 +894,7 @@ class TestGetAllBundlesFromCustomerID(unittest.TestCase):
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        self.assertTrue("customerID" in response.get("bundles")[0])
+        self.assertTrue("customerID" in response.get("bundles")[0].keys())
 
     def test_success_reponse_key_customerID_is_correct(self):
         reqData = {
@@ -909,42 +909,103 @@ class TestGetAllBundlesFromCustomerID(unittest.TestCase):
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        self.assertTrue("bundleID" in response.get("bundles")[0])
+        self.assertTrue("bundleID" in response.get("bundles")[0].keys())
 
     def test_success_reponse_key_purchaseDatetime_is_exists(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        self.assertTrue("bundleID" in response.get("bundles")[0])
+        self.assertTrue("purchaseDatetime" in response.get("bundles")[0].keys())
 
     def test_success_reponse_key_holdingPeriod_is_exists(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        self.assertTrue("holdingPeriod" in response.get("bundles")[0])
+        self.assertTrue("holdingPeriod" in response.get("bundles")[0].keys())
 
     def test_success_reponse_key_status_is_exists(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        self.assertTrue("status" in response.get("bundles")[0])
+        self.assertTrue("status" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_amount_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("amount" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_bundleName_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleName" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_riskLevel_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("riskLevel" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_term_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("term" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_minimumHoldingPeriod_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleCryptocurrencies" in response.get("bundles")[0].keys())
+
+    def test_success_reponse_key_cryptocurrencyCode_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("cryptocurrencyCode" in response.get("bundles")[0].get("bundleCryptocurrencies")[0].keys())
+
+    def test_success_reponse_key_cryptocurrencyName_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("cryptocurrencyName" in response.get("bundles")[0].get("bundleCryptocurrencies")[0].keys())
+
+    def test_success_reponse_key_percentage_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("percentage" in response.get("bundles")[0].get("bundleCryptocurrencies")[0].keys())
+
+    def test_success_reponse_key_bundleCryptocurrencies_is_exists(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0"
+        }
+        response = self.BController.getAllBundlesFromCustomerID(reqData)
+        self.assertTrue("bundleCryptocurrencies" in response.get("bundles")[0].keys())
 
     def test_success_reponse_cryptocurrencies_for_bundles(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        print(response)
 
     def test_success_reponse_cryptocurrencies_for_bundles(self):
         reqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx"
         }
         response = self.BController.getAllBundlesFromCustomerID(reqData)
-        print(response)
 
 
 class TestPurchaseBundle(unittest.TestCase):

@@ -1810,17 +1810,32 @@ class TestSellWallet(unittest.TestCase):
         expected = "SUCCESS"
         self.assertEqual(expected, response.get("status")["statusCode"])
 
+
     def test_success_message_units_sold(self):
         jsonReqData = {
             "customerID": "Debo32tKqJBeZwHHgkvx",
-            "walletAddress": "hrD3IxwVUWloVP0nrIct",
-            "unitsSold": 0.001,
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+        print(response)
+
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": response.get("wallet").get("walletAddress"),
+            "unitsSold": 19699.001,
             "initialRate": 38291.34,
             "amount": 38.2913,
             "cardNumber": "7281726537281963",
             "expiry": "12/23"
         }
         response = self.wController.sellWallet(jsonReqData)
+        print(response)
         expected = "Units sold successfully"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 

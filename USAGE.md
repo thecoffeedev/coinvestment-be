@@ -186,7 +186,10 @@
     "availableBundles": [
         {
             "bundleName": name of the bundle,
-            "minimumHoldingPeriod": in monthes,
+            "riskLevel": low risk/medium risk/high risk,
+            "term": short term/medium term/long term,
+            "minimumHoldingPeriod": in months,
+            "bundleID": bundle ID,
             "bundleCryptocurrencies": [
                 {
                     "cryptocurrencyCode": code,

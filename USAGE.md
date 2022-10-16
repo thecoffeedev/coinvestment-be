@@ -211,7 +211,7 @@
 | 1   | bitcoin            |      50 |               6 |
 | 1   | ethereum           |      50 |               6 |
 | 2   | bitcoin-cash       |      25 |              12 |
-| 2   | tetcher            |      15 |              12 |
+| 2   | tether             |      15 |              12 |
 | 2   | ripple             |      15 |              12 |
 | 2   | litecoin           |      25 |              12 |
 | 2   | monero             |      20 |              12 |

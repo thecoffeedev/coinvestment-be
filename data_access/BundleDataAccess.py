@@ -249,7 +249,7 @@ class BundleDataAccess:
         con = self.mysql.connect()
         cur = con.cursor()
         query = "SELECT * FROM BundleTransactionHistory " \
-                "WHERE BundleAddress = %s"
+                "WHERE BundleAddress = %s order by TransactionDatetime desc "
 
         cur.execute(query, bundleAddress)
         result = cur.fetchall()

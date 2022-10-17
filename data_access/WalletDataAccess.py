@@ -238,7 +238,7 @@ class WalletDataAccess:
     def readWalletTransactionsFromWalletAddress(self, walletAddress):
         con = self.mysql.connect()
         cur = con.cursor()
-        cur.execute("SELECT * FROM WalletTransactionHistory where WalletAddress = '"+walletAddress+"'")
+        cur.execute("SELECT * FROM WalletTransactionHistory where WalletAddress = '"+walletAddress+"' order by TransactionDatetime desc ")
         rowCount = cur.rowcount
         result = cur.fetchall()
         cur.close()

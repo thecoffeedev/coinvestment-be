@@ -391,7 +391,6 @@
 ### Request
 ```json
 {
-    "customerID": customerID,
     "initialBalance": initial balance,
     "cryptocurrencyCode": cryptocurrency code,
     "holdingPeriod": holding period,
@@ -401,6 +400,8 @@
     "expiry": expiry
 }
 ```
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -439,7 +440,6 @@
 ```json
 {
     "walletAddress": wallet address,
-    "customerID": customerID,
     "initialRate": initial rate,
     "amount": amount,
     "cardNumber": card number,
@@ -447,6 +447,8 @@
     "unitsSold": units sold
 }
 ```
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -482,7 +484,6 @@
 ### Request
 ```json
 {
-    "customerID": customerID,
     "bundleID": bundle ID,
     "holdingPeriod": holding period,
     "initialRate": initial rate,
@@ -491,6 +492,8 @@
     "expiry": expiry
 }
 ```
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {
@@ -528,7 +531,6 @@
 ```json
 {
     "bundleAddress": bundle address,
-    "customerID": customer ID,
     "bundleID": bundle ID,
     "initialRate": initial rate,
     "amount": amount,
@@ -536,6 +538,8 @@
     "expiry": expiry
 }
 ```
+> The token present in the authorization header is the 
+> method to confirm access to this route 
 ### Response
 ```json
 {

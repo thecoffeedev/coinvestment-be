@@ -29,13 +29,11 @@ BController = BundleController(app)
 
 sessionTokens = {}
 
+
 def validateToken(req):
-    print(req.headers.get("Authorization"))
-    print(sessionTokens.keys())
     if req.headers.get("Authorization") in sessionTokens.keys():
         # req["customerID"] = sessionTokens[req.headers.get("Authorization")]
         # customerID = sessionTokens[req.headers.get("Authorization")]
-        print("true")
         return True
     else:
         return False

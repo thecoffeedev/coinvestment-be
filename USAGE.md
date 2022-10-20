@@ -239,11 +239,6 @@
 
 ## _[GET]_ `/account/wallets`
 ### Request
-```json
-{
-    "customerID": customerID
-}
-```
 > The token present in the authorization header is the 
 > method to confirm access to this route  
 ### Response
@@ -272,11 +267,6 @@
 
 ## _[GET]_ `/account/bundles`
 ### Request
-```json
-{
-    "customerID": customerID
-}
-```
 > The token present in the authorization header is the 
 > method to confirm access to this route 
 ### Response
@@ -308,7 +298,6 @@
 ### Request
 ```json
 {
-    "customerID": customer ID,
     "walletAddress": the wallet address for which details are requested
 }
 ```
@@ -354,7 +343,6 @@
 ### Request
 ```json
 {
-    "customerID": customer ID,
     "bundleAddress": bundle address
 }
 ```

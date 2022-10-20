@@ -92,8 +92,8 @@ class CustomerController:
                 # Verify the plain text password against hash
                 if Utility.verifyPassword(jsonReqData.get("password"), customerDA.getPasswordHash()):
                     # Update the sign in times
-                    customerDA.setPreviousSignInDatetime = customerDA.getCurrentSignInDatetime()
-                    customerDA.setCurrentSignDatetime = int(time.time())
+                    customerDA.setPreviousSignInDatetime(customerDA.getCurrentSignInDatetime())
+                    customerDA.setCurrentSignInDatetime(int(time.time()))
                     # Then update the customer DB record previous and current sign in datetimes
                     self.CDA.updateCustomerSignInDatetimes(customerDA)
 

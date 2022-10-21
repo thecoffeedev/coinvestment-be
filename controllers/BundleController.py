@@ -335,9 +335,9 @@ class BundleController:
                 bundleTransactionFE.setBundleAddress(bundleFE.getBundleAddress())
                 bundleTransactionFE.setTransactionDatetime(int(time.time()))
                 if Utility.isWithinHoldingPeriod(bundleTransactionDA.getTransactionDatetime(), bundleDA.getHoldingPeriod()):
-                    bundleTransactionFE.setChargeApplied(Utility.calculateChargesApplied(bundleTransactionFE.getAmount()))
+                    bundleTransactionFE.setChargeApplied(Utility.calculateDeduction(bundleTransactionFE.getAmount(), float(0.10)))
                 else:
-                    bundleTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
+                    bundleTransactionFE.setChargeApplied(Utility.calculateDeduction(bundleTransactionFE.getAmount(), float(0.01)))
                 bundleTransactionFE.setAction("SELL")
 
                 self.BDA.updateBundleStatus(bundleFE)

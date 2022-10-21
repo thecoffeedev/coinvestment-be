@@ -308,9 +308,9 @@ class WalletController:
                 walletTransactionFE.setWalletAddress(walletFE.getWalletAddress())
                 walletTransactionFE.setTransactionDatetime(int(time.time()))
                 if Utility.isWithinHoldingPeriod(walletTransactionDA.getTransactionDatetime(), walletDA.getHoldingPeriod()):
-                    walletTransactionFE.setChargeApplied(Utility.calculateChargesApplied(walletTransactionFE.getAmount()))
+                    walletTransactionFE.setChargeApplied(Utility.calculateDeduction(walletTransactionFE.getAmount(), float(0.10)))
                 else:
-                    walletTransactionFE.setChargeApplied(Utility.roundDecimals(0.0))
+                    walletTransactionFE.setChargeApplied(Utility.calculateDeduction(walletTransactionFE.getAmount(), float(0.01)))
                 walletTransactionFE.setAction("SELL")
 
                 self.WDA.updateWalletCurrentBalance(walletFE)

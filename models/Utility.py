@@ -79,8 +79,8 @@ class Utility:
         return round(float(decimalValue), 4)
 
     @staticmethod
-    def calculateChargesApplied(amount):
-        return round(float(amount) * 0.10, 4)
+    def calculateDeduction(amount, charge):
+        return round(float(amount) * charge, 4)
     
     @staticmethod
     def isWithinHoldingPeriod(startDateTime, holdingPeriod):

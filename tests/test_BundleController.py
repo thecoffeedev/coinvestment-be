@@ -995,18 +995,6 @@ class TestGetAllBundlesFromCustomerID(unittest.TestCase):
         response = self.BController.getAllBundlesFromCustomerID(reqData)
         self.assertTrue("bundleCryptocurrencies" in response.get("bundles")[0].keys())
 
-    def test_success_reponse_cryptocurrencies_for_bundles(self):
-        reqData = {
-            "customerID": "1WNJKpBpYfWwKIlvbaz0"
-        }
-        response = self.BController.getAllBundlesFromCustomerID(reqData)
-
-    def test_success_reponse_cryptocurrencies_for_bundles(self):
-        reqData = {
-            "customerID": "Debo32tKqJBeZwHHgkvx"
-        }
-        response = self.BController.getAllBundlesFromCustomerID(reqData)
-
 
 class TestPurchaseBundle(unittest.TestCase):
 
@@ -1602,7 +1590,7 @@ class TestPurchaseBundle(unittest.TestCase):
         self.assertTrue("chargeApplied" in response.get("bundleTransaction").keys())
 
 
-    def test_success_response_key_chargeApplied_correct(self):
+    def test_success_response_key_chargeApplied_correct_value_zero(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
@@ -2528,6 +2516,43 @@ class TestSellBundle(unittest.TestCase):
         self.assertEqual(response.get("bundleTransaction")
                          .get("initialRate"),
                          expected)
+
+    def test_success_response_key_chargeApplied_calculated_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 6,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+
+        reqData = {
+            "bundleAddress": response.get("bundle").get("bundleAddress"),
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "5",
+            "initialRate": 56748.3421,
+            "amount": 89046.3456,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertEqual(8904.6346, response.get("bundleTransaction").get("chargeApplied"))
+
+    def test_success_response_key_fees_correct(self):
+        reqData = {
+            "bundleAddress": "1G6ftEHoxst84caX2EUd",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "5",
+            "initialRate": 56748.3421,
+            "amount": 89046.3456,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertEqual(890.4635, response.get("bundleTransaction").get("chargeApplied"))
 
 
 if __name__ == '__main__':

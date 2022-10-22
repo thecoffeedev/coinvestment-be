@@ -102,9 +102,18 @@ class BundleDataAccess:
             bundleThree.setPurchaseDatetime(1664645865)
             bundleThree.setStatus("ACTIVE")
 
+            bundleFour = Bundle()
+            bundleFour.setBundleAddress("1G6ftEHoxst84caX2EUd")
+            bundleFour.setBundleID("5")
+            bundleFour.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+            bundleFour.setHoldingPeriod(3)
+            bundleFour.setPurchaseDatetime(1654645865)
+            bundleFour.setStatus("ACTIVE")
+
             self.insertBundle(bundleOne)
             self.insertBundle(bundleTwo)
             self.insertBundle(bundleThree)
+            self.insertBundle(bundleFour)
 
         cur.execute("SELECT EXISTS (SELECT * FROM BundleTransactionHistory)")
         if not cur.fetchone()[0]:
@@ -142,9 +151,21 @@ class BundleDataAccess:
             bundleTransactionObjThree.setExpiry("03/23")
             bundleTransactionObjThree.setInitialRate(735.23)
 
+            bundleTransactionObjFour = BundleTransactionHistory()
+            bundleTransactionObjFour.setTransactionID("h0YrN10TzimnB05aYkCc")
+            bundleTransactionObjFour.setBundleAddress("1G6ftEHoxst84caX2EUd")
+            bundleTransactionObjFour.setAction("BUY")
+            bundleTransactionObjFour.setTransactionDatetime(1654645865)
+            bundleTransactionObjFour.setChargeApplied(0.00)
+            bundleTransactionObjFour.setAmount(89046.3456)
+            bundleTransactionObjFour.setCardNumber("4857037529348105")
+            bundleTransactionObjFour.setExpiry("03/23")
+            bundleTransactionObjFour.setInitialRate(56748.3421)
+
             self.insertBundleTransactionHistory(bundleTransactionObj)
             self.insertBundleTransactionHistory(bundleTransactionObjTwo)
             self.insertBundleTransactionHistory(bundleTransactionObjThree)
+            self.insertBundleTransactionHistory(bundleTransactionObjFour)
 
         cur.close()
         con.commit()

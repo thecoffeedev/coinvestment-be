@@ -79,8 +79,8 @@ class Utility:
         return round(float(decimalValue), 4)
 
     @staticmethod
-    def calculateChargesApplied(amount):
-        return round(float(amount) * 0.10, 4)
+    def calculateDeduction(amount, charge):
+        return round(float(amount) * charge, 4)
     
     @staticmethod
     def isWithinHoldingPeriod(startDateTime, holdingPeriod):
@@ -88,7 +88,7 @@ class Utility:
         endTime = startTime + relativedelta(months=holdingPeriod)
         currentTime = datetime.fromtimestamp(int(time.time()))
 
-        if currentTime > startTime and currentTime < endTime:
+        if currentTime >= startTime and currentTime <= endTime:
             return True
         else:
             return False

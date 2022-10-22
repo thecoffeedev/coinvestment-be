@@ -995,18 +995,6 @@ class TestGetAllBundlesFromCustomerID(unittest.TestCase):
         response = self.BController.getAllBundlesFromCustomerID(reqData)
         self.assertTrue("bundleCryptocurrencies" in response.get("bundles")[0].keys())
 
-    def test_success_reponse_cryptocurrencies_for_bundles(self):
-        reqData = {
-            "customerID": "1WNJKpBpYfWwKIlvbaz0"
-        }
-        response = self.BController.getAllBundlesFromCustomerID(reqData)
-
-    def test_success_reponse_cryptocurrencies_for_bundles(self):
-        reqData = {
-            "customerID": "Debo32tKqJBeZwHHgkvx"
-        }
-        response = self.BController.getAllBundlesFromCustomerID(reqData)
-
 
 class TestPurchaseBundle(unittest.TestCase):
 
@@ -1602,7 +1590,7 @@ class TestPurchaseBundle(unittest.TestCase):
         self.assertTrue("chargeApplied" in response.get("bundleTransaction").keys())
 
 
-    def test_success_response_key_chargeApplied_correct(self):
+    def test_success_response_key_chargeApplied_correct_value_zero(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",
@@ -2529,7 +2517,7 @@ class TestSellBundle(unittest.TestCase):
                          .get("initialRate"),
                          expected)
 
-    def test_success_response_key_chargeApplied_correct(self):
+    def test_success_response_key_chargeApplied_calculated_correct(self):
         reqData = {
             "customerID": "1WNJKpBpYfWwKIlvbaz0",
             "bundleID": "1",

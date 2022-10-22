@@ -21,7 +21,7 @@ class TestGetAllAvailableCryptocurrencies(unittest.TestCase):
         response = self.wController.getAllAvailableCryptocurrencies()
         self.assertTrue("cryptocurrencyName" in response.get("availableCryptocurrencies")[0].keys())
 
-    def test_success_response_cryptocurrencyCode_key_present_in_res(self):
+    def test_success_response_symbol_key_present_in_res(self):
         response = self.wController.getAllAvailableCryptocurrencies()
         self.assertTrue("symbol" in response.get("availableCryptocurrencies")[0].keys())
 

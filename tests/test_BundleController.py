@@ -2529,6 +2529,43 @@ class TestSellBundle(unittest.TestCase):
                          .get("initialRate"),
                          expected)
 
+    def test_success_response_key_chargeApplied_correct(self):
+        reqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "1",
+            "holdingPeriod": 6,
+            "initialRate": 22000.00,
+            "amount": 1000.00,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.purchaseBundle(reqData)
+
+        reqData = {
+            "bundleAddress": response.get("bundle").get("bundleAddress"),
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "5",
+            "initialRate": 56748.3421,
+            "amount": 89046.3456,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertEqual(8904.6346, response.get("bundleTransaction").get("chargeApplied"))
+
+    def test_success_response_key_fees_correct(self):
+        reqData = {
+            "bundleAddress": "1G6ftEHoxst84caX2EUd",
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "bundleID": "5",
+            "initialRate": 56748.3421,
+            "amount": 89046.3456,
+            "cardNumber": "1234567890123456",
+            "expiry": "12/24"
+        }
+        response = self.BController.sellBundle(reqData)
+        self.assertEqual(890.4635, response.get("bundleTransaction").get("chargeApplied"))
+
 
 if __name__ == '__main__':
     unittest.main()

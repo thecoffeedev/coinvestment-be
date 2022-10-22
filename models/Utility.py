@@ -88,7 +88,7 @@ class Utility:
         endTime = startTime + relativedelta(months=holdingPeriod)
         currentTime = datetime.fromtimestamp(int(time.time()))
 
-        if currentTime > startTime and currentTime < endTime:
+        if currentTime >= startTime and currentTime <= endTime:
             return True
         else:
             return False

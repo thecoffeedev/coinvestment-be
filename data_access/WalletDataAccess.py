@@ -109,6 +109,15 @@ class WalletDataAccess:
             walletOne.setHoldingPeriod(12)
             self.insertWallet(walletOne)
 
+            walletTwo = Wallet()
+            walletTwo.setCustomerID("1WNJKpBpYfWwKIlvbaz0")
+            walletTwo.setWalletAddress("t5vumA246YH7dX6k7Hfn")
+            walletTwo.setInitialBalance(1.4326)
+            walletTwo.setCurrentBalance(1.4326)
+            walletTwo.setCryptocurrencyCode('dogecoin')
+            walletTwo.setHoldingPeriod(5)
+            self.insertWallet(walletTwo)
+
         cur.execute("select exists (SELECT * FROM Wallet)")
         if not cur.fetchone()[0]:
             walletTransZero = WalletTransactionHistory()
@@ -135,8 +144,21 @@ class WalletDataAccess:
             walletTransOne.setWalletAddress("hrD3IxwVUWloVP0nrIct")
             walletTransOne.setUnitsSold(0.0)
 
+            walletTransTwo = WalletTransactionHistory()
+            walletTransTwo.setTransactionID("0ueLmcfLy8DPtMObBKEv")
+            walletTransTwo.setTransactionDatetime(1554541119)
+            walletTransTwo.setChargeApplied(0.0)
+            walletTransTwo.setAmount(36487.2188)
+            walletTransTwo.setAction("BUY")
+            walletTransTwo.setCardNumber("7436281956743846")
+            walletTransTwo.setExpiry("07/25")
+            walletTransTwo.setInitialRate(25469.23)
+            walletTransTwo.setWalletAddress("t5vumA246YH7dX6k7Hfn")
+            walletTransTwo.setUnitsSold(0.0)
+
             self.insertWalletTransactionHistory(walletTransZero)
             self.insertWalletTransactionHistory(walletTransOne)
+            self.insertWalletTransactionHistory(walletTransTwo)
 
         cur.close()
         con.commit()

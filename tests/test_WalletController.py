@@ -1971,6 +1971,43 @@ class TestSellWallet(unittest.TestCase):
         expected = "Units to sell must not be greater than the Current Balance"
         self.assertEqual(expected, response.get("status")["statusMessage"])
 
+    def test_success_response_chargeApplied_value_correct(self):
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "initialBalance": 1.9492,
+            "cryptocurrencyCode": "bitcoin",
+            "holdingPeriod": 4,
+            "initialRate": 38291.34,
+            "amount": 74638.99,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.purchaseWallet(jsonReqData)
+
+        jsonReqData = {
+            "customerID": "Debo32tKqJBeZwHHgkvx",
+            "walletAddress": response.get("wallet").get("walletAddress"),
+            "unitsSold": 1.9492,
+            "initialRate": 42710.34,
+            "amount": 83250.9947,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/23"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual(8325.0995, response.get("walletTransaction")["chargeApplied"])
+
+    def test_success_response_fees_value_correct(self):
+        jsonReqData = {
+            "customerID": "1WNJKpBpYfWwKIlvbaz0",
+            "walletAddress": "t5vumA246YH7dX6k7Hfn",
+            "unitsSold": 1.4326,
+            "initialRate": 42710.34,
+            "amount": 61186.8330,
+            "cardNumber": "7281726537281963",
+            "expiry": "12/25"
+        }
+        response = self.wController.sellWallet(jsonReqData)
+        self.assertEqual(611.8683, response.get("walletTransaction")["chargeApplied"])
 
 if __name__ == '__main__':
     unittest.main()

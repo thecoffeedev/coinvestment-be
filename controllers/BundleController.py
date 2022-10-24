@@ -1,5 +1,7 @@
-import requests
+# Uses the coingecko API to fetch data on cryptocurrencies
+# https://www.coingecko.com/en/api/documentation
 
+import requests
 from data_access.BundleDataAccess import BundleDataAccess
 from models.Utility import Utility
 from models.Bundle import Bundle
@@ -13,55 +15,28 @@ class BundleController:
         self.BDA = BundleDataAccess(app)
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
+        self.__bundleRisks = {}
 
     def __evaluateRiskLevel(self, bundleCoins):
         valToday = 0.0
-        valOneMonthAgo = 0.0
-        valTwoMonthAgo = 0.0
-        valThreeMonthAgo = 0.0
-        valFourMonthAgo = 0.0
-        valFiveMonthAgo = 0.0
-        valSixMonthAgo = 0.0
+        averageBundleVal = 0.0
 
         for coin in bundleCoins:
+            sixMonthValueSum = 0
             response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(0)))
-            valToday += response.json().get("market_data").get("current_price").get("gbp")
+                "https://api.coingecko.com/api/v3/coins/{}/ohlc?vs_currency=gbp&days=180".format(coin))
 
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(1)))
-            valOneMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+            valToday += response.json()[-2][4]
+            for i in range(0, 41):
+                sixMonthValueSum += response.json()[i][4]
+            averageBundleVal += sixMonthValueSum / 41
 
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(2)))
-            valTwoMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
-
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(3)))
-            valThreeMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
-
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(4)))
-            valFourMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
-
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(5)))
-            valFiveMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
-
-            response = requests.get(
-                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(6)))
-            valSixMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
-
-        averageSixMonth = (valOneMonthAgo + valTwoMonthAgo + valThreeMonthAgo
-                           + valFourMonthAgo + valFourMonthAgo + valFiveMonthAgo + valSixMonthAgo)
-
-        if valToday >= averageSixMonth * 1.1:
+        if valToday >= averageBundleVal * 1.1:
             return "Low risk"
-        elif valToday <= averageSixMonth * 0.9:
+        elif valToday <= averageBundleVal * 0.9:
             return "High risk"
         else:
             return "Medium risk"
-
 
     def getBundleNameByBundleID(self, bundleID):
         dict = {"1": ["Alpha", "Low risk", "Short term"], "2": ["Beta", "Medium risk", "Short term"],
@@ -96,10 +71,10 @@ class BundleController:
                     bundleCoins.append(bundleCryptocurrencies.get("cryptocurrencyCode"))
 
                 bundleNameDict = self.getBundleNameByBundleID(availableBundlesDict[bundleGroup][0][0])
+
                 try:
                     bundleRiskLevel = self.__evaluateRiskLevel(bundleCoins)
-                except Exception:
-                    print("Exception for bundleID: " + availableBundlesDict[bundleGroup][0][0])
+                except:
                     bundleRiskLevel = bundleNameDict[1]
 
                 availableBundle = {

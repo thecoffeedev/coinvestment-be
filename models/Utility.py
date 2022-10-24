@@ -1,7 +1,7 @@
 import random
 import string
 from passlib.hash import bcrypt
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import time
 
@@ -93,4 +93,8 @@ class Utility:
         else:
             return False
 
-
+    @staticmethod
+    def getPreviousDateString(previousMonths):
+        today = datetime.fromtimestamp(int(time.time()))
+        previousDate = today - relativedelta(months=previousMonths)
+        return previousDate.strftime("%d-%m-%Y")

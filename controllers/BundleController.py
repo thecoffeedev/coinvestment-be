@@ -15,7 +15,6 @@ class BundleController:
         self.BDA = BundleDataAccess(app)
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
-        self.__bundleRisks = {}
 
     def __evaluateRiskLevel(self, bundleCoins):
         valToday = 0.0
@@ -48,7 +47,6 @@ class BundleController:
             raise ValueError("Bundle ID does not exists")
 
     def getAllAvailableBundles(self):
-        # RISK LVL
         try:
             availableBundlesDA = self.BDA.readAllAvailableBundles()
 

@@ -1,3 +1,5 @@
+import requests
+
 from data_access.BundleDataAccess import BundleDataAccess
 from models.Utility import Utility
 from models.Bundle import Bundle
@@ -12,6 +14,54 @@ class BundleController:
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
 
+    def __evaluateRiskLevel(self, bundleCoins):
+        valToday = 0.0
+        valOneMonthAgo = 0.0
+        valTwoMonthAgo = 0.0
+        valThreeMonthAgo = 0.0
+        valFourMonthAgo = 0.0
+        valFiveMonthAgo = 0.0
+        valSixMonthAgo = 0.0
+
+        for coin in bundleCoins:
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(0)))
+            valToday += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(1)))
+            valOneMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(2)))
+            valTwoMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(3)))
+            valThreeMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(4)))
+            valFourMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(5)))
+            valFiveMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/history?date={}".format(coin, Utility.getPreviousDateString(6)))
+            valSixMonthAgo += response.json().get("market_data").get("current_price").get("gbp")
+
+        averageSixMonth = (valOneMonthAgo + valTwoMonthAgo + valThreeMonthAgo
+                           + valFourMonthAgo + valFourMonthAgo + valFiveMonthAgo + valSixMonthAgo)
+
+        if valToday >= averageSixMonth * 1.1:
+            return "Low risk"
+        elif valToday <= averageSixMonth * 0.9:
+            return "High risk"
+        else:
+            return "Medium risk"
+
 
     def getBundleNameByBundleID(self, bundleID):
         dict = {"1": ["Alpha", "Low risk", "Short term"], "2": ["Beta", "Medium risk", "Short term"],
@@ -22,6 +72,67 @@ class BundleController:
         else:
             raise ValueError("Bundle ID does not exists")
 
+    def getAllAvailableBundles(self):
+        # RISK LVL
+        try:
+            availableBundlesDA = self.BDA.readAllAvailableBundles()
+
+            availableBundlesDict = defaultdict(list)
+
+            for availableBundles in availableBundlesDA:
+                availableBundlesDict[availableBundles[0]].append(availableBundles)
+
+            availableBundles = []
+            for bundleGroup in availableBundlesDict:
+                bundleCryptocurrenciesList = []
+                bundleCoins = []
+                for cc in availableBundlesDict[bundleGroup]:
+                    bundleCryptocurrencies = {
+                        "cryptocurrencyCode": cc[1],
+                        "cryptocurrencyName": cc[4],
+                        "percentage": cc[2]
+                    }
+                    bundleCryptocurrenciesList.append(bundleCryptocurrencies)
+                    bundleCoins.append(bundleCryptocurrencies.get("cryptocurrencyCode"))
+
+                bundleNameDict = self.getBundleNameByBundleID(availableBundlesDict[bundleGroup][0][0])
+                try:
+                    bundleRiskLevel = self.__evaluateRiskLevel(bundleCoins)
+                except Exception:
+                    print("Exception for bundleID: " + availableBundlesDict[bundleGroup][0][0])
+                    bundleRiskLevel = bundleNameDict[1]
+
+                availableBundle = {
+                    "bundleName": bundleNameDict[0],
+                    "riskLevel": bundleRiskLevel,  # bundleNameDict[1],
+                    "term": bundleNameDict[2],
+                    "minimumHoldingPeriod": availableBundlesDict[bundleGroup][0][3],
+                    "bundleID": availableBundlesDict[bundleGroup][0][0],
+                    "bundleCryptocurrencies": bundleCryptocurrenciesList
+                }
+
+                availableBundles.append(availableBundle)
+            response = \
+                {
+                    "status": {
+                        "statusCode": "SUCCESS",
+                        "statusMessage": "All available bundles"
+                    },
+                    "availableBundles": availableBundles
+                }
+            return response
+
+        except Exception as e:
+            response = \
+                {
+                    "status": {
+                        "statusCode": "FAILURE",
+                        "statusMessage": e.args[0]
+                    }
+                }
+            return response
+
+    """
     def getAllAvailableBundles(self):
         try:
             availableBundlesDA = self.BDA.readAllAvailableBundles()
@@ -72,6 +183,8 @@ class BundleController:
                     }
                 }
             return response
+    """
+
 
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
@@ -141,7 +254,7 @@ class BundleController:
 
                 bundleDA = self.BDA.readBundlesByCustomerID(bundleFE.getCustomerID())
                 purchaseBundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(bundleDA[0].getBundleAddress())
-                allAvailableBundlesRes = self.getAllAvailableBundles();
+                allAvailableBundlesRes = self.getAllAvailableBundles()
                 allAvailableBundlesList = allAvailableBundlesRes.get("availableBundles")
 
                 bundleList = []

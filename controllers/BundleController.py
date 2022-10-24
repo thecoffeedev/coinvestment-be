@@ -105,60 +105,6 @@ class BundleController:
                 }
             return response
 
-    """
-    def getAllAvailableBundles(self):
-        try:
-            availableBundlesDA = self.BDA.readAllAvailableBundles()
-
-            availableBundlesDict = defaultdict(list)
-
-            for availableBundles in availableBundlesDA:
-                availableBundlesDict[availableBundles[0]].append(availableBundles)
-
-            availableBundles = []
-            for bundleGroup in availableBundlesDict:
-                bundleCryptocurrenciesList = []
-                for cc in availableBundlesDict[bundleGroup]:
-                    bundleCryptocurrencies = {
-                        "cryptocurrencyCode": cc[1],
-                        "cryptocurrencyName": cc[4],
-                        "percentage": cc[2]
-                    }
-                    bundleCryptocurrenciesList.append(bundleCryptocurrencies)
-
-                bundleNameDict = self.getBundleNameByBundleID(availableBundlesDict[bundleGroup][0][0])
-                availableBundle = {
-                    "bundleName": bundleNameDict[0],
-                    "riskLevel": bundleNameDict[1],
-                    "term": bundleNameDict[2],
-                    "minimumHoldingPeriod": availableBundlesDict[bundleGroup][0][3],
-                    "bundleID": availableBundlesDict[bundleGroup][0][0],
-                    "bundleCryptocurrencies": bundleCryptocurrenciesList
-                }
-                # /coins/{id}/history 180days, 90days, 30days
-                availableBundles.append(availableBundle)
-            response = \
-                {
-                    "status": {
-                        "statusCode": "SUCCESS",
-                        "statusMessage": "All available bundles"
-                    },
-                    "availableBundles": availableBundles
-                }
-            return response
-
-        except Exception as e:
-            response = \
-                {
-                    "status": {
-                        "statusCode": "FAILURE",
-                        "statusMessage": e.args[0]
-                    }
-                }
-            return response
-    """
-
-
     def getAllBundleDetailsFromBundleAddress(self, jsonReqData):
         try:
             if "customerID" not in jsonReqData.keys():

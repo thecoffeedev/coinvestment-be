@@ -1,3 +1,7 @@
+# Uses the coingecko API to fetch data on cryptocurrencies
+# https://www.coingecko.com/en/api/documentation
+
+import requests
 from data_access.BundleDataAccess import BundleDataAccess
 from models.Utility import Utility
 from models.Bundle import Bundle
@@ -12,6 +16,26 @@ class BundleController:
         self.BDA.createTables()
         self.BDA.insertDayZeroData()
 
+    def __evaluateRiskLevel(self, bundleCoins):
+        valToday = 0.0
+        averageBundleVal = 0.0
+
+        for coin in bundleCoins:
+            sixMonthValueSum = 0
+            response = requests.get(
+                "https://api.coingecko.com/api/v3/coins/{}/ohlc?vs_currency=gbp&days=180".format(coin))
+
+            valToday += response.json()[-2][4]
+            for i in range(0, 41):
+                sixMonthValueSum += response.json()[i][4]
+            averageBundleVal += sixMonthValueSum / 41
+
+        if valToday >= averageBundleVal * 1.1:
+            return "Low risk"
+        elif valToday <= averageBundleVal * 0.9:
+            return "High risk"
+        else:
+            return "Medium risk"
 
     def getBundleNameByBundleID(self, bundleID):
         dict = {"1": ["Alpha", "Low risk", "Short term"], "2": ["Beta", "Medium risk", "Short term"],
@@ -34,6 +58,7 @@ class BundleController:
             availableBundles = []
             for bundleGroup in availableBundlesDict:
                 bundleCryptocurrenciesList = []
+                bundleCoins = []
                 for cc in availableBundlesDict[bundleGroup]:
                     bundleCryptocurrencies = {
                         "cryptocurrencyCode": cc[1],
@@ -41,17 +66,24 @@ class BundleController:
                         "percentage": cc[2]
                     }
                     bundleCryptocurrenciesList.append(bundleCryptocurrencies)
+                    bundleCoins.append(bundleCryptocurrencies.get("cryptocurrencyCode"))
 
                 bundleNameDict = self.getBundleNameByBundleID(availableBundlesDict[bundleGroup][0][0])
+
+                try:
+                    bundleRiskLevel = self.__evaluateRiskLevel(bundleCoins)
+                except:
+                    bundleRiskLevel = bundleNameDict[1]
+
                 availableBundle = {
                     "bundleName": bundleNameDict[0],
-                    "riskLevel": bundleNameDict[1],
+                    "riskLevel": bundleRiskLevel,  # bundleNameDict[1],
                     "term": bundleNameDict[2],
                     "minimumHoldingPeriod": availableBundlesDict[bundleGroup][0][3],
                     "bundleID": availableBundlesDict[bundleGroup][0][0],
                     "bundleCryptocurrencies": bundleCryptocurrenciesList
                 }
-                # /coins/{id}/history 180days, 90days, 30days
+
                 availableBundles.append(availableBundle)
             response = \
                 {
@@ -140,7 +172,6 @@ class BundleController:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
                 bundleDA = self.BDA.readBundlesByCustomerID(bundleFE.getCustomerID())
-
                 allAvailableBundlesRes = self.getAllAvailableBundles()
                 allAvailableBundlesList = allAvailableBundlesRes.get("availableBundles")
 

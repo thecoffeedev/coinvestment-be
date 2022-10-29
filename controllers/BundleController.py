@@ -172,7 +172,6 @@ class BundleController:
                 bundleFE.setCustomerID(jsonReqData.get("customerID"))
 
                 bundleDA = self.BDA.readBundlesByCustomerID(bundleFE.getCustomerID())
-                purchaseBundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(bundleDA[0].getBundleAddress())
                 allAvailableBundlesRes = self.getAllAvailableBundles()
                 allAvailableBundlesList = allAvailableBundlesRes.get("availableBundles")
 
@@ -183,6 +182,8 @@ class BundleController:
                         if bundleObj.getBundleID() == availableBundle.get("bundleID"):
                             availableBundleObj = availableBundle
                             break
+                    purchaseBundleTransactionDA = self.BDA.readPurchaseBundleTransactionFromBundleAddress(
+                        bundleObj.getBundleAddress())
 
                     bundleDict = {
                         "bundleAddress": bundleObj.getBundleAddress(),
@@ -199,7 +200,7 @@ class BundleController:
                         "bundleCryptocurrencies": availableBundleObj.get("bundleCryptocurrencies")
                     }
                     bundleList.append(bundleDict)
-
+                print(bundleList)
                 response = \
                     {
                         "status": {
